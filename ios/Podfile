@@ -1,0 +1,38 @@
+# Podfile content
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '9.0'
+
+target 'NewsBoard' do
+    pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+    pod 'React', path: '../node_modules/react-native', :subspecs => [
+        'Core',
+        'RCTActionSheet',
+        'RCTAnimation',
+        'RCTGeolocation',
+        'RCTImage',
+        'RCTLinkingIOS',
+        'RCTNetwork',
+        'RCTSettings',
+        'RCTText',
+        'RCTVibration',
+        'RCTWebSocket',
+        'DevSupport'
+    ]
+
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+  pod 'Firebase/Core'
+
+end
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == "react-native-google-maps"
+            target.build_configurations.each do |config|
+                config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+            end
+        end
+        if target.name == "React"
+          target.remove_from_project
+        end
+    end
+end

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "410439655220",
+    "firebase_url": "https://duocquocgia-3fe52.firebaseio.com",
+    "project_id": "duocquocgia-3fe52",
+    "storage_bucket": "duocquocgia-3fe52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410439655220:android:435d003884ab1fcc",
+        "android_client_info": {
+          "package_name": "vn.duocquocgia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410439655220-001flhrrq49ss6i1n7564f2k2qikvo8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PM-pYqrWxFCZs_fJo4T-efRoWT7iMYI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
