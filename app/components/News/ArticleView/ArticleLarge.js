@@ -19,7 +19,7 @@ export default class ArticleLarge extends React.PureComponent {
     const { source: { image, title, domain, collected_time } } = this.props;
     const timeFomat = moment.duration(moment().diff(moment(collected_time)));
     let date = null;
-    // console.warn(timeFomat.asHours());
+
     if (timeFomat.asHours() > 24) {
       date = moment(collected_time).format('DD/MM/YYYY');
     } else {
@@ -28,11 +28,15 @@ export default class ArticleLarge extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <View>
-          <Image
-            style={styles.image}
-            source={{ uri: image === null ? imageUrl.emptyImage : image }}
-          />
+        <View style={styles.wrapImage}>
+          {image === undefined ?
+            (<View style={styles.imageEmpty}>
+              <Text style={styles.txtEmpty}>{domain.slice(0, 2)}</Text>
+            </View>) :
+            (<Image
+              style={styles.image}
+              source={{ uri: image === null ? imageUrl.emptyImage : image }}
+            />)}
         </View>
         <View>
           <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
@@ -47,17 +51,31 @@ const styles = StyleSheet.create({
   container: {
     padding: Scale.getSize(10)
   },
-  // wrapImage: {
-  //   shadowOffset: { width: 0, height: Scale.getSize(1) },
-  //   shadowColor: '#777',
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: Scale.getSize(3),
-  //   elevation: Scale.getSize(1)
-  // },
+  wrapImage: {
+    backgroundColor: '#fff',
+    shadowOffset: { width: 0, height: Scale.getSize(1) },
+    shadowColor: '#777',
+    shadowOpacity: 0.3,
+    shadowRadius: Scale.getSize(3),
+    elevation: Scale.getSize(1)
+  },
   image: {
     height: IMAGE_SIZE,
     width: IMAGE_SIZE,
     borderRadius: 4
+  },
+  imageEmpty: {
+    height: IMAGE_SIZE,
+    width: IMAGE_SIZE,
+    borderRadius: 4,
+    backgroundColor: '#00FFFF',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txtEmpty: {
+    fontSize: Scale.getSize(40),
+    color: platform.primaryBlue,
+    fontWeight: '800'
   },
   titleArticle: {
     width: IMAGE_SIZE,

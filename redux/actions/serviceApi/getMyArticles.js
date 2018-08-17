@@ -1,17 +1,16 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from './../../utils';
 
-export const guiphanhoi = (info) => {
-  const action = createAction('GUI_PHAN_HOI');
+export const getMyArticles = () => {
+  const action = createAction('GET_MY_ARTICLES');
 
   return (dispatch, getState) => {
     const state = getState();
 
     const request = {
-      data: info,
       headers: buildHeaders(state),
-      method: 'POST',
-      url: '/cong_tra_cuu_thuoc/lien_he'
+      method: 'GET',
+      url: '/v4/cart'
     };
     dispatch(action({ request }));
   };

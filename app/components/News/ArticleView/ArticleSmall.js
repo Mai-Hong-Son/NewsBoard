@@ -15,11 +15,15 @@ export default class ArticleSmall extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <View>
-          <Image
-            style={styles.image}
-            source={{ uri: image === null ? imageUrl.emptyImage : image }}
-          />
+        <View style={styles.wrapImage}>
+          {image === undefined ?
+            (<View style={styles.imageEmpty}>
+              <Text style={styles.txtEmpty}>{domain.slice(0, 2)}</Text>
+            </View>) :
+            (<Image
+              style={styles.image}
+              source={{ uri: image === null ? imageUrl.emptyImage : image }}
+            />)}
         </View>
         <View style={styles.wrapTxtBox}>
           <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
@@ -36,17 +40,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  // wrapImage: {
-  //   shadowOffset: { width: 0, height: Scale.getSize(1) },
-  //   shadowColor: '#777',
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: Scale.getSize(3),
-  //   elevation: Scale.getSize(1)
-  // },
+  wrapImage: {
+    backgroundColor: '#fff',
+    shadowOffset: { width: 0, height: Scale.getSize(1) },
+    shadowColor: '#777',
+    shadowOpacity: 0.3,
+    shadowRadius: Scale.getSize(3),
+    elevation: Scale.getSize(1)
+  },
   image: {
     height: IMAGE_SIZE,
     width: IMAGE_SIZE,
     borderRadius: 4
+  },
+  imageEmpty: {
+    height: IMAGE_SIZE,
+    width: IMAGE_SIZE,
+    borderRadius: 4,
+    backgroundColor: '#00FFFF',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txtEmpty: {
+    fontSize: Scale.getSize(20),
+    color: platform.primaryBlue,
+    fontWeight: '800'
   },
   wrapTxtBox: {
     width: TXT_BOX_SIZE

@@ -5,9 +5,9 @@ import { timkiemthuoc } from './serviceApi/timkiemthuoc';
 import { getPostDetail } from './serviceApi/getPostDetail';
 import { getCategories } from './serviceApi/getCategories';
 import { truyxuathandung } from './serviceApi/truyxuathandung';
-import { getthuoctheoloai } from './serviceApi/getthuoctheoloai';
+import { saveArticle } from './serviceApi/saveArticle';
 import { getArticles } from './serviceApi/getAriticles';
-import { guiphanhoi } from './serviceApi/guiphanhoi';
+import { getMyArticles } from './serviceApi/getMyArticles';
 import { navigateMainTab } from './navigations';
 
 export {
@@ -18,8 +18,8 @@ export {
   getPostDetail,
   getCategories,
   truyxuathandung,
-  getthuoctheoloai,
+  saveArticle,
   getArticles,
   navigateMainTab,
-  guiphanhoi
+  getMyArticles
 };

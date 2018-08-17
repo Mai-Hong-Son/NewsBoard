@@ -24,6 +24,7 @@ import Header from '../../Reusables/Header';
 import ImageUrls from '../../../assets/images';
 
 import { MyTabBar } from './myTabBar';
+import Scale from '../../../theme/scale';
 
 export const RootTabs = createBottomTabNavigator(
   {
@@ -72,7 +73,7 @@ export const RootTabs = createBottomTabNavigator(
           iconName = ImageUrls.menubars[4];
         }
 
-        return <Image source={iconName} style={{ width: 27, height: 27, tintColor }} />;
+        return <Image source={iconName} style={{ width: Scale.getSize(27), height: Scale.getSize(27), tintColor }} />;
       }
     }),
     tabBarComponent: MyTabBar,

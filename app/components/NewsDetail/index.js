@@ -4,8 +4,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  ActivityIndicator,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
@@ -14,42 +14,121 @@ import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import Header from '../Reusables/Header';
+import { Loading } from '../Reusables/Loading';
 
 @connect(
   state => ({
-    postDetail: state.postDetail
+    postDetail: state.postDetail,
+    saveArticleStatus: state.saveArticleStatus
   }),
   { ...commonActions }
 )
 export default class NewsDetail extends React.PureComponent {
   state = {
-    loading: true
+    loading: true,
+    isClickSave: false
   }
 
   componentDidMount() {
-    const { navigation: { state: { params: { idPost } } } } = this.props;
+    const { navigation: { state: { params: { _id } } } } = this.props;
 
-    this.props.getPostDetail(idPost);
+    this.props.getPostDetail(_id);
+    this.props.getMyArticles();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { postDetail: { data } } = nextProps;
+    const { postDetail: { data }, saveArticleStatus: { error } } = nextProps;
+
+    if (data !== {}) {
+      this.setState({
+        loading: false
+      });
+    }
+
+    if (!error && this.state.isClickSave) {
+      Alert.alert(
+        'Thông báo',
+        'Bạn đã lưu thành công',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.setState({
+              isClickSave: false
+            })
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+
+    if (error && this.state.isClickSave) {
+      Alert.alert(
+        'Thông báo',
+        'Bài này đã được lưu',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.setState({
+              isClickSave: false
+            })
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
+  onSaveAricle = () => {
+    const { navigation: { state: { params: { _source, _id } } } } = this.props;
+    const { lang, domain, title, logo, image, url, time, collected_time } = _source;
 
     this.setState({
-      loading: false
+      isClickSave: true
+    });
+
+    this.props.saveArticle({
+      id: _id,
+      lang,
+      domain,
+      title,
+      logo,
+      image,
+      url,
+      time,
+      collected_time
     });
   }
 
   render() {
     const { loading } = this.state;
 
-    if (loading) return <ActivityIndicator />;
+    if (loading) {
+      return (
+        <View style={styles.container}>
+          <Header
+            title=''
+            type='stack'
+            navigation={navigation}
+            iconName='flag'
+            onPress={this.onSaveAricle}
+            isSave={this.props.saveArticleStatus.isSave}
+          />
+          <Loading />
+        </View>
+      );
+    }
 
     const { postDetail: { data: { body, domain, title, logo, time, subcontent } }, navigation } = this.props;
 
     return (
       <View style={styles.container}>
-        <Header title='' type='stack' navigation={navigation} iconName='flag' />
+        <Header
+          title=''
+          type='stack'
+          navigation={navigation}
+          iconName='flag'
+          onPress={this.onSaveAricle}
+        />
         <ScrollView>
           <View style={styles.wrapContentStyle}>
             <Text style={styles.titleStyle}>{title}</Text>
@@ -80,7 +159,8 @@ export default class NewsDetail extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center'
   },
   titleStyle: {
     fontSize: Scale.getSize(22),

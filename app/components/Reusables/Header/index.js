@@ -6,13 +6,18 @@ import FullGradient from '..//FullGradient';
 
 // theme component
 import platform from '../../../theme/platform';
-// import Scale from '../theme/scale';
+import Scale from '../../../theme/scale';
 
 export default class Header extends React.PureComponent {
   render() {
     const { navigation, title, iconName, type } = this.props;
     const iconLeft = type !== 'stack' ? 'align-left' : 'angle-left';
-    const sizeBtnLeft = type !== 'stack' ? 32 : 40;
+    const sizeBtnLeft = type !== 'stack' ? Scale.getSize(32) : Scale.getSize(40);
+    let color = platform.containerBg;
+
+    if (iconName === 'flag' && this.props.isSave) {
+      color = '#000';
+    }
 
     return (
       <FullGradient
@@ -27,7 +32,7 @@ export default class Header extends React.PureComponent {
           </TouchableOpacity>
           <Text style={styles.txtNews}>{title.toUpperCase()}</Text>
           <TouchableOpacity onPress={() => this.props.onPress()}>
-            <Icon name={iconName} color={platform.containerBg} size={32} />
+            <Icon name={iconName} color={color} size={Scale.getSize(32)} />
           </TouchableOpacity>
         </View>
       </FullGradient>
@@ -37,10 +42,10 @@ export default class Header extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
+    height: Scale.getSize(80),
     width: platform.deviceWidth,
     justifyContent: 'flex-end',
-    paddingBottom: 15
+    paddingBottom: Scale.getSize(15)
   },
   wrapContentHeader: {
     flexDirection: 'row',
@@ -52,6 +57,6 @@ const styles = StyleSheet.create({
   txtNews: {
     color: platform.containerBg,
     fontWeight: platform.fontWeightTitle,
-    fontSize: 16
+    fontSize: Scale.getSize(16)
   }
 });

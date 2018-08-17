@@ -53,10 +53,7 @@
 		DF0B4B932105C2EC003B6962 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF0B4B922105C2EC003B6962 /* Images.xcassets */; };
 		DF39C65820E3982900F20EDE /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF39C62D20E3981E00F20EDE /* libBVLinearGradient.a */; };
 		FA15496F20F4A7A3000A831B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA15496E20F4A7A2000A831B /* GoogleService-Info.plist */; };
-		FA31A39F20E393330036E64A /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA31A39E20E393260036E64A /* libRNImagePicker.a */; };
 		FA31A3A020E393390036E64A /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA31A39820E393110036E64A /* libReactNativePermissions.a */; };
-		FA31A40F20E492900036E64A /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA31A40C20E492210036E64A /* libRNCamera.a */; };
-		FAF3EAFF20ECD2CB0085D5C9 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF3EAFC20ECD2A50085D5C9 /* libRNFetchBlob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -368,27 +365,6 @@
 			remoteGlobalIDString = 9D23B34F1C767B80008B4819;
 			remoteInfo = ReactNativePermissions;
 		};
-		FA31A39D20E393260036E64A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FA31A39920E393260036E64A /* RNImagePicker.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
-			remoteInfo = RNImagePicker;
-		};
-		FA31A40B20E492210036E64A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FA31A3DF20E492210036E64A /* RNCamera.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4107012F1ACB723B00C6AA39;
-			remoteInfo = RNCamera;
-		};
-		FAF3EAFB20ECD2A50085D5C9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FAF3EACE20ECD2A50085D5C9 /* RNFetchBlob.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A15C300E1CD25C330074CB35;
-			remoteInfo = RNFetchBlob;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -438,9 +414,6 @@
 		E36A5B13A125492C8592D05D /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		FA15496E20F4A7A2000A831B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "NewsBoard/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA31A39320E393110036E64A /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../node_modules/react-native-permissions/ios/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
-		FA31A39920E393260036E64A /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
-		FA31A3DF20E492210036E64A /* RNCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
-		FAF3EACE20ECD2A50085D5C9 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -456,11 +429,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAF3EAFF20ECD2CB0085D5C9 /* libRNFetchBlob.a in Frameworks */,
-				FA31A40F20E492900036E64A /* libRNCamera.a in Frameworks */,
 				DF39C65820E3982900F20EDE /* libBVLinearGradient.a in Frameworks */,
 				FA31A3A020E393390036E64A /* libReactNativePermissions.a in Frameworks */,
-				FA31A39F20E393330036E64A /* libRNImagePicker.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -652,10 +622,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				FAF3EACE20ECD2A50085D5C9 /* RNFetchBlob.xcodeproj */,
-				FA31A3DF20E492210036E64A /* RNCamera.xcodeproj */,
 				DF39C62720E3981E00F20EDE /* BVLinearGradient.xcodeproj */,
-				FA31A39920E393260036E64A /* RNImagePicker.xcodeproj */,
 				FA31A39320E393110036E64A /* ReactNativePermissions.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -786,30 +753,6 @@
 			isa = PBXGroup;
 			children = (
 				FA31A39820E393110036E64A /* libReactNativePermissions.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FA31A39A20E393260036E64A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FA31A39E20E393260036E64A /* libRNImagePicker.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FA31A3E020E492210036E64A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FA31A40C20E492210036E64A /* libRNCamera.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FAF3EACF20ECD2A50085D5C9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FAF3EAFC20ECD2A50085D5C9 /* libRNFetchBlob.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -989,20 +932,8 @@
 					ProjectRef = FA31A39320E393110036E64A /* ReactNativePermissions.xcodeproj */;
 				},
 				{
-					ProductGroup = FA31A3E020E492210036E64A /* Products */;
-					ProjectRef = FA31A3DF20E492210036E64A /* RNCamera.xcodeproj */;
-				},
-				{
-					ProductGroup = FAF3EACF20ECD2A50085D5C9 /* Products */;
-					ProjectRef = FAF3EACE20ECD2A50085D5C9 /* RNFetchBlob.xcodeproj */;
-				},
-				{
 					ProductGroup = FA1548DB20F48E45000A831B /* Products */;
 					ProjectRef = 41D847A166D241C2B01AB660 /* RNFirebase.xcodeproj */;
-				},
-				{
-					ProductGroup = FA31A39A20E393260036E64A /* Products */;
-					ProjectRef = FA31A39920E393260036E64A /* RNImagePicker.xcodeproj */;
 				},
 				{
 					ProductGroup = FA31A36920E392C80036E64A /* Products */;
@@ -1312,27 +1243,6 @@
 			fileType = archive.ar;
 			path = libReactNativePermissions.a;
 			remoteRef = FA31A39720E393110036E64A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FA31A39E20E393260036E64A /* libRNImagePicker.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNImagePicker.a;
-			remoteRef = FA31A39D20E393260036E64A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FA31A40C20E492210036E64A /* libRNCamera.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNCamera.a;
-			remoteRef = FA31A40B20E492210036E64A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FAF3EAFC20ECD2A50085D5C9 /* libRNFetchBlob.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNFetchBlob.a;
-			remoteRef = FAF3EAFB20ECD2A50085D5C9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

@@ -83,12 +83,32 @@ export default class News extends React.Component {
     });
   }
 
+  onRefresh = () => {
+    this.setState({
+      isLoading: true
+    });
+
+    this.props.getArticles({
+      source: [],
+      domain: [],
+      category: [],
+      country: [],
+      region: [],
+      lang: [],
+      search: '',
+      from: '',
+      to: '',
+      page_number: 1,
+      time: ''
+    });
+  }
+
   renderArticleItem = ({ item }) => {
     const { _source, _id } = item;
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { idPost: _id })}>
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _source, _id })}>
         {this.state.changeView ? <ArticleSmall source={_source} /> : <ArticleLarge source={_source} />}
       </TouchableOpacity>
     );
@@ -121,6 +141,8 @@ export default class News extends React.Component {
     const { isLoading } = this.state;
     const content = isLoading ? <ActivityIndicator /> : (<FlatList
       data={data.items}
+      refreshing={isLoading}
+      onRefresh={this.onRefresh}
       renderItem={this.renderArticleGroup}
       keyExtractor={(item) => item.key.toString()}
       extraData={this.state.changeView}

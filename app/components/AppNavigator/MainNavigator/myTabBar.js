@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import FullGradient from '../../Reusables/FullGradient';
+import Scale from '../../../theme/scale';
 
-const TAB_BAR_HEIGHT = 60;
-const BARCODE_BUTTON_MARGIN = 10;
+const TAB_BAR_HEIGHT = Scale.getSize(60);
+const BARCODE_BUTTON_MARGIN = Scale.getSize(10);
 
 export class MyTabBar extends React.Component {
   renderTabBarButton = (route, idx) => {
@@ -96,17 +97,17 @@ const styles = StyleSheet.create({
     marginTop: BARCODE_BUTTON_MARGIN
   },
   txtTabBar: {
-    fontSize: 11,
+    fontSize: Scale.getSize(11),
     fontWeight: 'bold',
-    marginTop: 4
+    marginTop: Scale.getSize(4)
   },
   btnBarCode: {
     backgroundColor: '#4D80E6',
-    width: 60,
+    width: Scale.getSize(60),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: BARCODE_BUTTON_MARGIN,
-    height: 60,
-    borderRadius: 30
+    height: Scale.getSize(60),
+    borderRadius: Scale.getSize(30)
   }
 });

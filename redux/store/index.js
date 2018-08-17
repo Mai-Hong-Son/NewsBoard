@@ -14,9 +14,9 @@ import {
   postDetail,
   categories,
   ketquatruyxuathandung,
-  thuoctheoloai,
+  saveArticleStatus,
   articles,
-  ketquaguiphanhoi,
+  myArticles,
   statusBack
 } from './../reducers/index';
 
@@ -39,9 +39,9 @@ export default function buildStore() {
     postDetail,
     categories,
     ketquatruyxuathandung,
-    thuoctheoloai,
+    saveArticleStatus,
     articles,
-    ketquaguiphanhoi,
+    myArticles,
     statusBack
   });
 
