@@ -34,7 +34,9 @@ export default class Save extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getMyArticles();
+    this.props.navigation.addListener('willFocus', () => {
+      this.props.getMyArticles();
+    });
   }
 
   componentWillReceiveProps(nextProps) {

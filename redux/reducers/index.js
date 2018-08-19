@@ -1,5 +1,5 @@
 import { tokenAccess } from './auth';
-import { thuocmoicapnhat } from './serviceApi/thuocmoicapnhat';
+import { languages } from './serviceApi/dataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
 import { ketquatimkiem } from './serviceApi/timkiemthuoc';
 import { postDetail } from './serviceApi/postDetail';
@@ -18,7 +18,7 @@ const statusBack = (state = null, action) => {
 
 export {
   tokenAccess,
-  thuocmoicapnhat,
+  languages,
   truyxuathoadon,
   ketquatimkiem,
   postDetail,

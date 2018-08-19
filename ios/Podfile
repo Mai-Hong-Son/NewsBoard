@@ -21,7 +21,7 @@ target 'NewsBoard' do
     ]
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-  pod 'Firebase/Core'
+#  pod 'Firebase/Core'
 
 end
 post_install do |installer|

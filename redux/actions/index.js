@@ -1,5 +1,5 @@
 import { login } from './auth';
-import { laythuocmoicapnhat } from './serviceApi/thuocmoicapnhat';
+import { getLanguages } from './serviceApi/getDataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
 import { timkiemthuoc } from './serviceApi/timkiemthuoc';
 import { getPostDetail } from './serviceApi/getPostDetail';
@@ -12,7 +12,7 @@ import { navigateMainTab } from './navigations';
 
 export {
   login,
-  laythuocmoicapnhat,
+  getLanguages,
   truyxuathoadon,
   timkiemthuoc,
   getPostDetail,

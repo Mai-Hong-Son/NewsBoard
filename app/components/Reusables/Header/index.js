@@ -13,11 +13,6 @@ export default class Header extends React.PureComponent {
     const { navigation, title, iconName, type } = this.props;
     const iconLeft = type !== 'stack' ? 'align-left' : 'angle-left';
     const sizeBtnLeft = type !== 'stack' ? Scale.getSize(32) : Scale.getSize(40);
-    let color = platform.containerBg;
-
-    if (iconName === 'flag' && this.props.isSave) {
-      color = '#000';
-    }
 
     return (
       <FullGradient
@@ -32,7 +27,7 @@ export default class Header extends React.PureComponent {
           </TouchableOpacity>
           <Text style={styles.txtNews}>{title.toUpperCase()}</Text>
           <TouchableOpacity onPress={() => this.props.onPress()}>
-            <Icon name={iconName} color={color} size={Scale.getSize(32)} />
+            <Icon name={iconName} color={platform.containerBg} size={Scale.getSize(32)} />
           </TouchableOpacity>
         </View>
       </FullGradient>
@@ -42,7 +37,7 @@ export default class Header extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    height: Scale.getSize(80),
+    height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
     width: platform.deviceWidth,
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15)

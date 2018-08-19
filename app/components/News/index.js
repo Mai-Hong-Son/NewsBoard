@@ -12,15 +12,24 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import moment from 'moment';
+
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import Header from '../Reusables/Header';
+import SafeArea from '../../theme/SafeArea';
 import ButtonFilter from './elements/ButtonFilter';
 import ArticleLarge from './ArticleView/ArticleLarge';
 import ArticleSmall from './ArticleView/ArticleSmall';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+
+const LANGUAGE_FILTER = 'Ngôn ngữ';
+const NATION_FILTER = 'Quốc gia';
+const AREA_FILTER = 'Khu vực';
+const SOURCE_FILTER = 'Loại nguồn';
 
 @connect(
   state => ({
@@ -33,7 +42,21 @@ import Scale from '../../theme/scale';
 export default class News extends React.Component {
   state = {
     changeView: false,
-    isLoading: true
+    isLoading: true,
+    startDateTimePickerVisible: false,
+    endDateTimePickerVisible: false,
+    toggleButtonPicker: true,
+
+    fromDate: '',
+    toDate: '',
+    source: [],
+    domain: [],
+    category: [],
+    country: [],
+    region: [],
+    lang: [],
+    search: '',
+    time: ''
   }
 
   componentDidMount() {
@@ -103,6 +126,111 @@ export default class News extends React.Component {
     });
   }
 
+  onNavigateFilter = (title) => {
+    this.props.navigation.navigate('Filter', {
+      title,
+      dataFilter: this.state.lang,
+      onSubmit: (lang) => {
+        const {
+          fromDate: from,
+          toDate: to,
+          source,
+          domain,
+          category,
+          country,
+          region,
+          search,
+          time
+        } = this.state;
+        this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+      }
+    });
+  }
+
+  getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time) => {
+    this.setState({
+      isLoading: true,
+      fromDate: from,
+      toDate: to,
+      source,
+      domain,
+      category,
+      country,
+      region,
+      lang,
+      search,
+      time
+    }, () => {
+      const {
+        fromDate,
+        toDate,
+        source: sourceArticles,
+        domain: domainArticles,
+        category: categoryArticles,
+        country: countryArticles,
+        region: regionArticles,
+        lang: langArticles,
+        search: searchArticles,
+        time: timeArticles
+      } = this.state;
+
+      this.props.getArticles({
+        source: sourceArticles,
+        domain: domainArticles,
+        category: categoryArticles,
+        country: countryArticles,
+        region: regionArticles,
+        lang: langArticles,
+        search: searchArticles,
+        from: fromDate,
+        to: toDate,
+        page_number: 1,
+        time: timeArticles
+      });
+    });
+  }
+
+  showStartDateTimePicker = () => this.setState({ startDateTimePickerVisible: true });
+
+  showEndDateTimePicker = () => this.setState({ endDateTimePickerVisible: true });
+
+  hideStartDateTimePicker = () => this.setState({ startDateTimePickerVisible: false });
+
+  hideEndDateTimePicker = () => this.setState({ endDateTimePickerVisible: false });
+
+  handleStartDatePicked = (date) => {
+    this.setState({
+      fromDate: moment(date).format('YYYY-MM-DDTHH:mm:ss'),
+      toggleButtonPicker: !this.state.toggleButtonPicker
+    });
+
+    this.hideStartDateTimePicker();
+  };
+
+  handleEndDatePicked = (date) => {
+    this.setState({
+      toDate: moment(date).format('YYYY-MM-DDTHH:mm:ss'),
+      toggleButtonPicker: !this.state.toggleButtonPicker
+    }, () => {
+      const {
+        fromDate,
+        toDate,
+        source,
+        domain,
+        category,
+        country,
+        region,
+        lang,
+        search,
+        time
+      } = this.state;
+
+      this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, fromDate, toDate, time);
+    });
+
+    this.hideEndDateTimePicker();
+  };
+
   renderArticleItem = ({ item }) => {
     const { _source, _id } = item;
     const { navigation: { navigate } } = this.props;
@@ -136,20 +264,32 @@ export default class News extends React.Component {
     );
   }
 
-  render() {
-    const { navigation, articles: { data } } = this.props;
-    const { isLoading } = this.state;
-    const content = isLoading ? <ActivityIndicator /> : (<FlatList
-      data={data.items}
-      refreshing={isLoading}
+  renderFlatlist = data => {
+    if (data.length === 0) {
+      return (
+        <View style={styles.wrapEmptyArticles}>
+          <Text style={styles.txtEmptyArticle}>{'Không có bài tin nào'}</Text>
+        </View>
+      );
+    }
+    return (<FlatList
+      data={data}
+      refreshing={this.state.isLoading}
       onRefresh={this.onRefresh}
+      key={(this.state.changeView ? 'h' : 'v')}
       renderItem={this.renderArticleGroup}
       keyExtractor={(item) => item.key.toString()}
       extraData={this.state.changeView}
     />);
+  }
+
+  render() {
+    const { navigation, articles: { data } } = this.props;
+    const { isLoading, toggleButtonPicker } = this.state;
+    const content = isLoading ? <ActivityIndicator /> : this.renderFlatlist(data.items);
 
     return (
-      <View style={styles.container}>
+      <SafeArea>
         <StatusBar barStyle="light-content" />
         <Header
           title={'Tin tức'}
@@ -159,7 +299,7 @@ export default class News extends React.Component {
         />
         <View style={styles.contentStyle}>
           <View style={styles.wrapFilterList}>
-            <TouchableOpacity onPress={() => null}>
+            <TouchableOpacity onPress={toggleButtonPicker ? this.showStartDateTimePicker : this.showEndDateTimePicker}>
               <View style={styles.btnTimePicker}>
                 <Icon name='ios-alarm' size={24} color={platform.primaryBlue} />
               </View>
@@ -168,23 +308,36 @@ export default class News extends React.Component {
               horizontal
               showsHorizontalScrollIndicator={false}
             >
-              <ButtonFilter title='Ngôn ngữ' onPress={() => null} />
-              <ButtonFilter title='Quốc gia' onPress={() => null} />
-              <ButtonFilter title='Khu vực' onPress={() => null} />
-              <ButtonFilter title='Loại nguồn' onPress={() => null} />
+              <ButtonFilter title={LANGUAGE_FILTER} onPress={() => this.onNavigateFilter(LANGUAGE_FILTER)} />
+              <ButtonFilter title={NATION_FILTER} onPress={() => this.onNavigateFilter(NATION_FILTER)} />
+              <ButtonFilter title={AREA_FILTER} onPress={() => this.onNavigateFilter(AREA_FILTER)} />
+              <ButtonFilter title={SOURCE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_FILTER)} />
             </ScrollView>
           </View>
           {content}
         </View>
-      </View>
+        <DateTimePicker
+          titleIOS={'Chọn thời gian bắt đầu'}
+          confirmTextIOS={'Xác nhận'}
+          cancelTextIOS={'Hủy'}
+          isVisible={this.state.startDateTimePickerVisible}
+          onConfirm={this.handleStartDatePicked}
+          onCancel={this.hideStartDateTimePicker}
+        />
+        <DateTimePicker
+          titleIOS={'Chọn thời gian kết thúc'}
+          confirmTextIOS={'Xác nhận'}
+          cancelTextIOS={'Hủy'}
+          isVisible={this.state.endDateTimePickerVisible}
+          onConfirm={this.handleEndDatePicked}
+          onCancel={this.hideEndDateTimePicker}
+        />
+      </SafeArea>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
   contentStyle: {
     flex: 1,
     backgroundColor: 'rgb(250,250,250)'
@@ -216,5 +369,14 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(10),
     fontWeight: '800',
     color: 'rgb(82,82,82)'
+  },
+  wrapEmptyArticles: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txtEmptyArticle: {
+    fontSize: Scale.getSize(18),
+    fontWeight: '700'
   }
 });

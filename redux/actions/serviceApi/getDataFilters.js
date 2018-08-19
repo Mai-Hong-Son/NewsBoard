@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from './../../utils';
 
-export const laythuocmoicapnhat = () => {
-  const action = createAction('GET_THUOC_MOI_CAP_NHAT');
+export const getLanguages = () => {
+  const action = createAction('GET_LANGUGES');
 
   return (dispatch, getState) => {
     const state = getState();
@@ -10,9 +10,9 @@ export const laythuocmoicapnhat = () => {
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/cong_tra_cuu_thuoc/thuoc_moi_cap_nhat',
+      url: '/languages/me'
     };
 
     dispatch(action({ request }));
   };
-}
+};

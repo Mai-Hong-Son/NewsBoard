@@ -8,7 +8,7 @@ import { middleware } from './../../app/components/AppNavigator/index';
 import { navReducer, mainRouter } from './../../app/components/AppNavigator/reducer';
 import {
   tokenAccess,
-  thuocmoicapnhat,
+  languages,
   truyxuathoadon,
   ketquatimkiem,
   postDetail,
@@ -33,7 +33,7 @@ export default function buildStore() {
     navReducer,
     mainRouter,
     tokenAccess,
-    thuocmoicapnhat,
+    languages,
     truyxuathoadon,
     ketquatimkiem,
     postDetail,

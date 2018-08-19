@@ -8,7 +8,7 @@ class ButtonFilter extends React.PureComponent {
     const { title } = this.props;
 
     return (
-      <TouchableOpacity onPress={this.props.onPress()}>
+      <TouchableOpacity onPress={() => this.props.onPress()}>
         <View style={styles.buttonFilter}>
           <Text style={styles.txtButtonFilter}>{title}</Text>
           <View>

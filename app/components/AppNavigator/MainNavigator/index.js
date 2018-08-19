@@ -16,9 +16,10 @@ import Newspaper from '../../Newspaper';
 
 // Components
 import NewsDetail from '../../NewsDetail';
+import Filter from '../../News/Filter';
 
 // theme component
-import Header from '../../Reusables/Header';
+// import Header from '../../Reusables/Header';
 
 // assets
 import ImageUrls from '../../../assets/images';
@@ -90,6 +91,9 @@ export const RootStacks = createStackNavigator(
     },
     NewsDetail: {
       screen: NewsDetail
+    },
+    Filter: {
+      screen: Filter
     }
   },
   {

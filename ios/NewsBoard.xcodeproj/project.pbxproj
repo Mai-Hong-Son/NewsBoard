@@ -344,13 +344,6 @@
 			remoteGlobalIDString = 64AA15081EF7F30100718508;
 			remoteInfo = "BVLinearGradient-tvOS";
 		};
-		FA1548DE20F48E46000A831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 41D847A166D241C2B01AB660 /* RNFirebase.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNFirebase;
-		};
 		FA31A39120E392C80036E64A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3A62573709B44F6CA72C8078 /* RNVectorIcons.xcodeproj */;
@@ -395,7 +388,6 @@
 		2D02E4901E0B4A5D006451C7 /* NewsBoard-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NewsBoard-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A62573709B44F6CA72C8078 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
-		41D847A166D241C2B01AB660 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		67B2524876F3C8EE347BE4B5 /* Pods-NewsBoard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsBoard.release.xcconfig"; path = "Pods/Target Support Files/Pods-NewsBoard/Pods-NewsBoard.release.xcconfig"; sourceTree = "<group>"; };
 		740790CE351F42D79FC3C9FA /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -637,7 +629,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				3A62573709B44F6CA72C8078 /* RNVectorIcons.xcodeproj */,
-				41D847A166D241C2B01AB660 /* RNFirebase.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -720,14 +711,6 @@
 			children = (
 				DF39C62D20E3981E00F20EDE /* libBVLinearGradient.a */,
 				DF39C62F20E3981E00F20EDE /* libBVLinearGradient.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FA1548DB20F48E45000A831B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FA1548DF20F48E46000A831B /* libRNFirebase.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -930,10 +913,6 @@
 				{
 					ProductGroup = FA31A39420E393110036E64A /* Products */;
 					ProjectRef = FA31A39320E393110036E64A /* ReactNativePermissions.xcodeproj */;
-				},
-				{
-					ProductGroup = FA1548DB20F48E45000A831B /* Products */;
-					ProjectRef = 41D847A166D241C2B01AB660 /* RNFirebase.xcodeproj */;
 				},
 				{
 					ProductGroup = FA31A36920E392C80036E64A /* Products */;
@@ -1222,13 +1201,6 @@
 			fileType = archive.ar;
 			path = libBVLinearGradient.a;
 			remoteRef = DF39C62E20E3981E00F20EDE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FA1548DF20F48E46000A831B /* libRNFirebase.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNFirebase.a;
-			remoteRef = FA1548DE20F48E46000A831B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FA31A39220E392C80036E64A /* libRNVectorIcons.a */ = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import platform from '../../theme/platform';
+import platform from './platform';
 
 const SafeArea = ({ testID = 'safearea', children, style }) => {
   if (!platform.isIphoneX) {
