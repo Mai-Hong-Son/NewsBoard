@@ -127,24 +127,71 @@ export default class News extends React.Component {
   }
 
   onNavigateFilter = (title) => {
-    this.props.navigation.navigate('Filter', {
-      title,
-      dataFilter: this.state.lang,
-      onSubmit: (lang) => {
-        const {
-          fromDate: from,
-          toDate: to,
-          source,
-          domain,
-          category,
-          country,
-          region,
-          search,
-          time
-        } = this.state;
-        this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
-      }
-    });
+    switch (title) {
+      case LANGUAGE_FILTER:
+        this.props.navigation.navigate('Filter', {
+          title,
+          dataFilter: this.state.lang,
+          onSubmit: (lang) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              source,
+              domain,
+              category,
+              country,
+              region,
+              search,
+              time
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+          }
+        });
+        break;
+      case NATION_FILTER:
+        this.props.navigation.navigate('Filter', {
+          title,
+          dataFilter: this.state.country,
+          onSubmit: (country) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              source,
+              domain,
+              category,
+              lang,
+              region,
+              search,
+              time
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+          }
+        });
+        break;
+      case AREA_FILTER:
+        this.props.navigation.navigate('Filter', {
+          title,
+          dataFilter: this.state.region,
+          onSubmit: (region) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              source,
+              domain,
+              category,
+              country,
+              lang,
+              search,
+              time
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
   }
 
   getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time) => {

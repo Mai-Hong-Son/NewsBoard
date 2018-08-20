@@ -9,6 +9,8 @@ import { navReducer, mainRouter } from './../../app/components/AppNavigator/redu
 import {
   tokenAccess,
   languages,
+  regions,
+  countries,
   truyxuathoadon,
   ketquatimkiem,
   postDetail,
@@ -34,6 +36,8 @@ export default function buildStore() {
     mainRouter,
     tokenAccess,
     languages,
+    regions,
+    countries,
     truyxuathoadon,
     ketquatimkiem,
     postDetail,

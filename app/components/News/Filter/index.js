@@ -18,7 +18,9 @@ import platform from '../../../theme/platform';
 
 @connect(
   state => ({
-    languages: state.languages
+    languages: state.languages,
+    regions: state.regions,
+    countries: state.countries
   }),
   { ...commonActions }
 )
@@ -29,17 +31,59 @@ export default class Filter extends React.PureComponent {
 
     this.state = {
       loading: true,
-      data: dataFilter
+      data: dataFilter,
+      dataSource: []
     };
   }
 
   componentDidMount() {
-    this.props.getLanguages();
+    const { state: { params: { title } } } = this.props.navigation;
+
+    switch (title) {
+      case 'Ngôn ngữ':
+        this.props.getLanguages();
+        break;
+      case 'Quốc gia':
+        this.props.getCountries();
+        break;
+      case 'Khu vực':
+        this.props.getRegions();
+        break;
+      default:
+        break;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
+    const { navigation: { state: { params: { title } } } } = nextProps;
+    let dataTemp = [];
+
+    switch (title) {
+      case 'Ngôn ngữ':
+        {
+          const { languages: { data } } = nextProps;
+          dataTemp = data;
+        }
+        break;
+      case 'Quốc gia':
+        {
+          const { countries: { data } } = nextProps;
+          dataTemp = data;
+        }
+        break;
+      case 'Khu vực':
+        {
+          const { regions: { data } } = nextProps;
+          dataTemp = data;
+        }
+        break;
+      default:
+        break;
+    }
+
     this.setState({
-      loading: false
+      loading: false,
+      dataSource: dataTemp
     });
   }
 
@@ -95,10 +139,10 @@ export default class Filter extends React.PureComponent {
   )
 
   render() {
-    const { navigation, languages: { data } } = this.props;
-    const { loading } = this.state;
+    const { navigation } = this.props;
+    const { loading, dataSource } = this.state;
     const { state: { params: { title } } } = navigation;
-    const content = loading ? <ActivityIndicator color={platform.containerBg} /> : this.renderFlatlist(data);
+    const content = loading ? <ActivityIndicator color={platform.containerBg} /> : this.renderFlatlist(dataSource);
 
     return (
       <SafeArea>

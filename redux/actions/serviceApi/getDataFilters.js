@@ -16,3 +16,36 @@ export const getLanguages = () => {
     dispatch(action({ request }));
   };
 };
+
+export const getCountries = () => {
+  const action = createAction('GET_COUNTRIES');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'GET',
+      url: '/countries/me'
+    };
+
+    dispatch(action({ request }));
+  };
+};
+
+export const getRegions = () => {
+  const action = createAction('GET_REGIONS');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'GET',
+      url: '/regions/me'
+    };
+
+    dispatch(action({ request }));
+  };
+};
+
