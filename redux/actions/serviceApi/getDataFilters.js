@@ -49,3 +49,19 @@ export const getRegions = () => {
   };
 };
 
+export const getSources = () => {
+  const action = createAction('GET_SOURCES');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'GET',
+      url: '/sources'
+    };
+
+    dispatch(action({ request }));
+  };
+};
+

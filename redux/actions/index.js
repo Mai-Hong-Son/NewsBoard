@@ -1,5 +1,5 @@
 import { login } from './auth';
-import { getLanguages, getCountries, getRegions } from './serviceApi/getDataFilters';
+import { getLanguages, getCountries, getRegions, getSources } from './serviceApi/getDataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
 import { timkiemthuoc } from './serviceApi/timkiemthuoc';
 import { getPostDetail } from './serviceApi/getPostDetail';
@@ -15,6 +15,7 @@ export {
   getLanguages,
   getCountries,
   getRegions,
+  getSources,
   truyxuathoadon,
   timkiemthuoc,
   getPostDetail,

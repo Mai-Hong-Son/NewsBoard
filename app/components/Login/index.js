@@ -39,6 +39,8 @@ export default class Login extends React.Component {
       localhost: 'http://35.231.242.252:8080',
       loading: false
     };
+
+    this.flag = false;
   }
 
   componentDidMount() {
@@ -54,7 +56,7 @@ export default class Login extends React.Component {
 
     if (data.token) {
       this.props.navigation.navigate('DrawerApp');
-    } else {
+    } else if (this.flag) {
       Alert.alert(
         'Cảnh báo',
         'Đăng nhập không thành công!',
@@ -75,6 +77,7 @@ export default class Login extends React.Component {
     this.setState({
       loading: true
     });
+    this.flag = true;
 
     this.props.login({ username, password });
   }
@@ -158,7 +161,8 @@ const styles = StyleSheet.create({
     height: Scale.getSize(100)
   },
   wrapTextInput: {
-    padding: Scale.getSize(10),
+    paddingHorizontal: Scale.getSize(10),
+    paddingVertical: platform.platform === 'ios' ? Scale.getSize(10) : 0,
     width: platform.deviceWidth - 50,
     borderColor: platform.containerBg,
     borderWidth: 2,

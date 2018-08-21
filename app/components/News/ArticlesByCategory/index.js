@@ -10,12 +10,12 @@ import { connect } from 'react-redux';
 // import Icon from 'react-native-vector-icons/Ionicons';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
-import Header from '../Reusables/Header';
-import ArticleLarge from '../News/ArticleView/ArticleLarge';
-import ArticleSmall from '../News/ArticleView/ArticleSmall';
-import platform from '../../theme/platform';
-import * as commonActions from '../../../redux/actions';
-import Scale from '../../theme/scale';
+import Header from '../../Reusables/Header';
+import ArticleLarge from '../../News/ArticleView/ArticleLarge';
+import ArticleSmall from '../../News/ArticleView/ArticleSmall';
+import platform from '../../../theme/platform';
+import * as commonActions from '../../../../redux/actions';
+import Scale from '../../../theme/scale';
 
 @connect(
   state => ({
@@ -23,16 +23,14 @@ import Scale from '../../theme/scale';
   }),
   { ...commonActions }
 )
-export default class Save extends React.Component {
+export default class ArticlesByCategory extends React.Component {
   state = {
     changeView: false,
     isLoading: true
   }
 
   componentDidMount() {
-    this.props.navigation.addListener('willFocus', () => {
-      this.props.getMyArticles();
-    });
+    this.props.getMyArticles();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,6 +71,7 @@ export default class Save extends React.Component {
 
   render() {
     const { navigation, myArticles: { data: { results } } } = this.props;
+    const { state: { params: { category } } } = navigation;
     const { isLoading } = this.state;
     const content = isLoading ? <ActivityIndicator /> : (<FlatList
       data={results}
@@ -89,7 +88,7 @@ export default class Save extends React.Component {
     return (
       <View style={styles.container}>
         <Header
-          title={'Lưu trữ'}
+          title={category.name}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
           navigation={navigation}
           onPress={this.onPress}

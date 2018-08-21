@@ -11,13 +11,13 @@
 #import <React/RCTRootView.h>
 #import "SplashScreen.h"
 #import <React/RCTLinkingManager.h>
-#import <Firebase.h>
+//#import <Firebase.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [FIRApp configure];
+//  [FIRApp configure];
   
   NSURL *jsCodeLocation;
 

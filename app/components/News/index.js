@@ -188,6 +188,26 @@ export default class News extends React.Component {
           }
         });
         break;
+      case SOURCE_FILTER:
+        this.props.navigation.navigate('Filter', {
+          title,
+          dataFilter: this.state.source,
+          onSubmit: (source) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              region,
+              domain,
+              category,
+              country,
+              lang,
+              search,
+              time
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+          }
+        });
+        break;
 
       default:
         break;
@@ -291,13 +311,13 @@ export default class News extends React.Component {
 
   renderArticleGroup = ({ item }) => {
     const { posts: { hits: { hits } }, key } = item;
-    const { categories: { data } } = this.props;
-    const categoryName = data.find(it => it._id === key);
+    const { categories: { data }, navigation: { navigate } } = this.props;
+    const category = data.find(it => it._id === key);
 
     return (
       <View style={styles.wrapArticle}>
         <View style={styles.wrapChildArtical}>
-          <Text style={styles.txtCategoryStyle}>{categoryName.name}</Text>
+          <Text style={styles.txtCategoryStyle}>{category.name}</Text>
           <FlatList
             data={hits}
             renderItem={this.renderArticleItem}
@@ -306,6 +326,9 @@ export default class News extends React.Component {
             key={(this.state.changeView ? 'h' : 'v')}
             keyExtractor={(it) => it._id.toString()}
           />
+          <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { category })}>
+            <Text style={styles.txtSeeMoreStyle}>{'Xem thêm...'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -416,6 +439,13 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(10),
     fontWeight: '800',
     color: 'rgb(82,82,82)'
+  },
+  txtSeeMoreStyle: {
+    paddingLeft: Scale.getSize(10),
+    fontSize: Scale.getSize(14),
+    paddingVertical: Scale.getSize(10),
+    fontWeight: '800',
+    color: platform.primaryBlue
   },
   wrapEmptyArticles: {
     flex: 1,

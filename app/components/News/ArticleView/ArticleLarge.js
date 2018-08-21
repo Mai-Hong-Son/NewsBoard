@@ -8,13 +8,14 @@ import imageUrl from '../../../assets/images';
 
 const IMAGE_SIZE = (platform.deviceWidth - Scale.getSize(70)) / 2;
 
-export default class ArticleLarge extends React.PureComponent {
-  prevTime = time => {
-    if (time.asSeconds() <= 60) return `${Math.ceil(time.asSeconds())} giây trước`;
-    if (time.asMinutes() <= 60) return `${Math.ceil(time.asMinutes())} phút trước`;
+const prevTime = time => {
+  if (time.asSeconds() <= 60) return `${Math.ceil(time.asSeconds())} giây trước`;
+  if (time.asMinutes() <= 60) return `${Math.ceil(time.asMinutes())} phút trước`;
 
-    return `${Math.ceil(time.asHours())} giờ trước`;
-  }
+  return `${Math.ceil(time.asHours())} giờ trước`;
+};
+
+export default class ArticleLarge extends React.PureComponent {
   render() {
     const { source: { image, title, domain, collected_time } } = this.props;
     const timeFomat = moment.duration(moment().diff(moment(collected_time)));
@@ -23,7 +24,7 @@ export default class ArticleLarge extends React.PureComponent {
     if (timeFomat.asHours() > 24) {
       date = moment(collected_time).format('DD/MM/YYYY');
     } else {
-      date = this.prevTime(timeFomat);
+      date = prevTime(timeFomat);
     }
 
     return (

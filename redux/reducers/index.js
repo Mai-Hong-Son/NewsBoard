@@ -1,5 +1,5 @@
 import { tokenAccess } from './auth';
-import { languages, regions, countries } from './serviceApi/dataFilters';
+import { languages, regions, countries, sources } from './serviceApi/dataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
 import { ketquatimkiem } from './serviceApi/timkiemthuoc';
 import { postDetail } from './serviceApi/postDetail';
@@ -21,6 +21,7 @@ export {
   languages,
   regions,
   countries,
+  sources,
   truyxuathoadon,
   ketquatimkiem,
   postDetail,

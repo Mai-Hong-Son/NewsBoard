@@ -20,7 +20,8 @@ import platform from '../../../theme/platform';
   state => ({
     languages: state.languages,
     regions: state.regions,
-    countries: state.countries
+    countries: state.countries,
+    sources: state.sources
   }),
   { ...commonActions }
 )
@@ -49,6 +50,9 @@ export default class Filter extends React.PureComponent {
       case 'Khu vực':
         this.props.getRegions();
         break;
+      case 'Loại nguồn':
+        this.props.getSources();
+        break;
       default:
         break;
     }
@@ -74,6 +78,12 @@ export default class Filter extends React.PureComponent {
       case 'Khu vực':
         {
           const { regions: { data } } = nextProps;
+          dataTemp = data;
+        }
+        break;
+      case 'Loại nguồn':
+        {
+          const { sources: { data } } = nextProps;
           dataTemp = data;
         }
         break;
@@ -142,7 +152,12 @@ export default class Filter extends React.PureComponent {
     const { navigation } = this.props;
     const { loading, dataSource } = this.state;
     const { state: { params: { title } } } = navigation;
-    const content = loading ? <ActivityIndicator color={platform.containerBg} /> : this.renderFlatlist(dataSource);
+    const content = loading ? (
+      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+        <ActivityIndicator color={platform.containerBg} />
+      </View>
+    ) :
+      this.renderFlatlist(dataSource);
 
     return (
       <SafeArea>
@@ -172,11 +187,10 @@ export default class Filter extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#33ccff',
-    justifyContent: 'flex-end'
+    backgroundColor: '#33ccff'
   },
   wrapTitle: {
-    paddingVertical: Scale.getSize(20),
+    paddingTop: Scale.getSize(20),
     paddingHorizontal: Scale.getSize(15)
   },
   txtTitle: {
@@ -200,16 +214,13 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   containerFooter: {
-    backgroundColor: '#33ccff',
     paddingHorizontal: Scale.getSize(15),
     paddingBottom: Scale.getSize(25),
-    paddingTop: Scale.getSize(10),
-    width: '100%',
-    position: 'absolute'
+    paddingTop: Scale.getSize(10)
   },
   buttonOk: {
     backgroundColor: platform.checkboxBgColor,
-    paddingVertical: Scale.getSize(25),
+    paddingVertical: Scale.getSize(15),
     borderRadius: Scale.getSize(50),
     alignItems: 'center'
   },

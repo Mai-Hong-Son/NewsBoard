@@ -29,3 +29,13 @@ export const regions = (state = { data: [], error: false }, action) => {
   }
   return state;
 };
+
+export const sources = (state = { data: [], error: false }, action) => {
+  if (_.endsWith(action.type, ':ERROR') && _.startsWith(action.type, 'GET_SOURCES')) {
+    return { ...state, error: true, isLoading: false };
+  }
+  if (_.endsWith(action.type, ':SUCCESS') && _.startsWith(action.type, 'GET_SOURCES')) {
+    return { ...state, data: action.payload.data, error: false };
+  }
+  return state;
+};
