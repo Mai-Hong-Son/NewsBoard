@@ -13,7 +13,7 @@ import {
   countries,
   sources,
   truyxuathoadon,
-  ketquatimkiem,
+  articlesSource,
   postDetail,
   categories,
   ketquatruyxuathandung,
@@ -26,7 +26,7 @@ import {
 const config = {
   key: 'root',
   storage,
-  blacklist: ['mainRouter', 'navReducer', 'articles']
+  blacklist: ['mainRouter', 'navReducer', 'articles', 'articlesSource']
 };
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -41,7 +41,7 @@ export default function buildStore() {
     countries,
     sources,
     truyxuathoadon,
-    ketquatimkiem,
+    articlesSource,
     postDetail,
     categories,
     ketquatruyxuathandung,

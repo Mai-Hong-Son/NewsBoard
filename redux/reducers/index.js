@@ -1,7 +1,7 @@
 import { tokenAccess } from './auth';
 import { languages, regions, countries, sources } from './serviceApi/dataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
-import { ketquatimkiem } from './serviceApi/timkiemthuoc';
+import { articlesSource } from './serviceApi/articlesSource';
 import { postDetail } from './serviceApi/postDetail';
 import { categories } from './serviceApi/categories';
 import { ketquatruyxuathandung } from './serviceApi/ketquatruyxuathandung';
@@ -23,7 +23,7 @@ export {
   countries,
   sources,
   truyxuathoadon,
-  ketquatimkiem,
+  articlesSource,
   postDetail,
   categories,
   ketquatruyxuathandung,

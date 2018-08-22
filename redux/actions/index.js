@@ -1,7 +1,7 @@
 import { login } from './auth';
 import { getLanguages, getCountries, getRegions, getSources } from './serviceApi/getDataFilters';
 import { truyxuathoadon } from './serviceApi/truyxuathoadon';
-import { timkiemthuoc } from './serviceApi/timkiemthuoc';
+import { getArticlesSource } from './serviceApi/getArticlesSource';
 import { getPostDetail } from './serviceApi/getPostDetail';
 import { getCategories } from './serviceApi/getCategories';
 import { truyxuathandung } from './serviceApi/truyxuathandung';
@@ -17,7 +17,7 @@ export {
   getRegions,
   getSources,
   truyxuathoadon,
-  timkiemthuoc,
+  getArticlesSource,
   getPostDetail,
   getCategories,
   truyxuathandung,

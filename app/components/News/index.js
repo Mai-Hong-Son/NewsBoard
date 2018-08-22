@@ -326,7 +326,7 @@ export default class News extends React.Component {
             key={(this.state.changeView ? 'h' : 'v')}
             keyExtractor={(it) => it._id.toString()}
           />
-          <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { category })}>
+          <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { categoryFilter: { _id: category._id, name: category.name } })}>
             <Text style={styles.txtSeeMoreStyle}>{'Xem thêm...'}</Text>
           </TouchableOpacity>
         </View>

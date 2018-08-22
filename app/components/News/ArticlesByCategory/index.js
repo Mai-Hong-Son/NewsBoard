@@ -19,7 +19,7 @@ import Scale from '../../../theme/scale';
 
 @connect(
   state => ({
-    myArticles: state.myArticles
+    articlesSource: state.articlesSource
   }),
   { ...commonActions }
 )
@@ -30,14 +30,28 @@ export default class ArticlesByCategory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getMyArticles();
+    const { state: { params: { categoryFilter } } } = this.props.navigation;
+
+    this.props.getArticlesSource({
+      source: [],
+      domain: [],
+      category: [categoryFilter],
+      country: [],
+      region: [],
+      lang: [],
+      search: '',
+      from: '',
+      to: '',
+      page_number: 1,
+      time: ''
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { myArticles: { data: dataAticles } } = nextProps;
+    const { articlesSource: { data } } = nextProps;
     const { isLoading } = this.state;
 
-    if (dataAticles.results && isLoading) {
+    if (data.length !== 0 && isLoading) {
       this.setState({
         isLoading: false
       });
@@ -51,11 +65,24 @@ export default class ArticlesByCategory extends React.Component {
   }
 
   onRefresh = () => {
+    const { state: { params: { categoryFilter } } } = this.props.navigation;
     this.setState({
       isLoading: true
     });
 
-    this.props.getMyArticles();
+    this.props.getArticlesSource({
+      source: [],
+      domain: [],
+      category: [categoryFilter],
+      country: [],
+      region: [],
+      lang: [],
+      search: '',
+      from: '',
+      to: '',
+      page_number: 1,
+      time: ''
+    });
   }
 
   renderArticleItem = ({ item }) => {
@@ -70,11 +97,11 @@ export default class ArticlesByCategory extends React.Component {
   }
 
   render() {
-    const { navigation, myArticles: { data: { results } } } = this.props;
-    const { state: { params: { category } } } = navigation;
+    const { navigation, articlesSource: { data } } = this.props;
+    const { state: { params: { categoryFilter } } } = navigation;
     const { isLoading } = this.state;
     const content = isLoading ? <ActivityIndicator /> : (<FlatList
-      data={results}
+      data={data}
       renderItem={this.renderArticleItem}
       refreshing={isLoading}
       onRefresh={this.onRefresh}
@@ -82,13 +109,14 @@ export default class ArticlesByCategory extends React.Component {
       extraData={this.state.changeView}
       numColumns={this.state.changeView ? 1 : 2}
       key={(this.state.changeView ? 'h' : 'v')}
-      keyExtractor={(it) => it.id.toString()}
+      keyExtractor={(it, index) => index}
     />);
 
     return (
       <View style={styles.container}>
         <Header
-          title={category.name}
+          type='stack'
+          title={categoryFilter.name}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
           navigation={navigation}
           onPress={this.onPress}
