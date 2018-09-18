@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
 import SafeArea from '../../../theme/SafeArea';
+import FullGradient from '../../Reusables/FullGradient';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
@@ -161,11 +162,11 @@ export default class Filter extends React.PureComponent {
 
     return (
       <SafeArea>
-        <View style={styles.headerContainer}>
+        <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
           </TouchableOpacity>
-        </View>
+        </FullGradient>
         <View style={styles.container}>
           <View style={styles.wrapTitle}>
             <Text style={styles.txtTitle}>{title}</Text>
@@ -173,9 +174,9 @@ export default class Filter extends React.PureComponent {
           {content}
           <View style={styles.containerFooter}>
             <TouchableOpacity onPress={this.onSubmit}>
-              <View style={styles.buttonOk}>
+              <FullGradient containerStyle={styles.buttonOk}>
                 <Text style={styles.txtOK}>{'Xác nhận'}</Text>
-              </View>
+              </FullGradient>
             </TouchableOpacity>
           </View>
         </View>
@@ -187,7 +188,7 @@ export default class Filter extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#33ccff'
+    backgroundColor: '#fff'
   },
   wrapTitle: {
     paddingTop: Scale.getSize(20),
@@ -195,21 +196,18 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     fontSize: Scale.getSize(20),
-    fontWeight: '800',
-    color: platform.containerBg
+    fontWeight: '800'
   },
   headerContainer: {
     height: Scale.getSize(80),
     width: platform.deviceWidth,
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15),
-    backgroundColor: '#33ccff',
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#fff'
   },
   txtCheckbox: {
-    color: platform.checkboxLeftColor,
     fontSize: Scale.getSize(18),
     fontWeight: '700'
   },
@@ -219,7 +217,7 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(10)
   },
   buttonOk: {
-    backgroundColor: platform.checkboxBgColor,
+    // backgroundColor: platform.checkboxBgColor,
     paddingVertical: Scale.getSize(15),
     borderRadius: Scale.getSize(50),
     alignItems: 'center'

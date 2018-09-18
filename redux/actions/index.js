@@ -1,6 +1,6 @@
-import { login } from './auth';
+import { login, getUserInfo } from './auth';
 import { getLanguages, getCountries, getRegions, getSources } from './serviceApi/getDataFilters';
-import { truyxuathoadon } from './serviceApi/truyxuathoadon';
+import { getSummaries } from './serviceApi/getSummaries';
 import { getArticlesSource } from './serviceApi/getArticlesSource';
 import { getPostDetail } from './serviceApi/getPostDetail';
 import { getCategories } from './serviceApi/getCategories';
@@ -12,11 +12,12 @@ import { navigateMainTab } from './navigations';
 
 export {
   login,
+  getUserInfo,
   getLanguages,
   getCountries,
   getRegions,
   getSources,
-  truyxuathoadon,
+  getSummaries,
   getArticlesSource,
   getPostDetail,
   getCategories,

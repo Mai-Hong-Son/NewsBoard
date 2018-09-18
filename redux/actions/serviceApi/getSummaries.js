@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from '../../utils';
 
-export const truyxuathoadon = receiptId => {
-  const action = createAction('GET_TRUY_XUAT_HOA_DON');
+export const getSummaries = (page, pageSize) => {
+  const action = createAction('GET_SUMMARIES');
 
   return (dispatch, getState) => {
     const state = getState();
@@ -10,7 +10,9 @@ export const truyxuathoadon = receiptId => {
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: `/cong_tra_cuu_thuoc/truy_xuat_hoa_don/${receiptId}`
+      pageNumber: page,
+      pageSize,
+      url: `/summaries/${pageSize}/${page}`
     };
 
     dispatch(action({ request }));

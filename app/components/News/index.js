@@ -59,7 +59,7 @@ export default class News extends React.Component {
     time: ''
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     BackHandler.addEventListener('backPress', () => {
       const { navigation: { dispatch }, mainRouter } = this.props;
 
@@ -68,7 +68,7 @@ export default class News extends React.Component {
       return true;
     });
 
-    this.props.getArticles({
+    await this.props.getArticles({
       source: [],
       domain: [],
       category: [],
@@ -82,7 +82,7 @@ export default class News extends React.Component {
       time: ''
     });
 
-    this.props.getCategories();
+    await this.props.getCategories();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -365,6 +365,7 @@ export default class News extends React.Component {
           title={'Tin tức'}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
           navigation={navigation}
+          hasSearch
           onPress={this.onPress}
         />
         <View style={styles.contentStyle}>

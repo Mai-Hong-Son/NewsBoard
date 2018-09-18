@@ -7,5 +7,7 @@ export default {
     require('./menuicon/save-icon.png')
   ],
   logoApp: require('./NewsboardLogo.jpg'),
-  emptyImage: 'http://www.elanclearwater.com/wp-content/uploads/2016/04/placeholder.png'
+  emptyImage: 'http://www.elanclearwater.com/wp-content/uploads/2016/04/placeholder.png',
+  summaryImage: require('./news.jpg'),
+  userImage: require('./userImage.png')
 };

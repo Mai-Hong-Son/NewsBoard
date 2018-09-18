@@ -14,7 +14,7 @@ export const getArticlesSource = ({
   page_number,
   time
 }) => {
-  const action = createAction('GET_SOURCES');
+  const action = createAction('GET_SOURCES_ARTICLES');
 
   return (dispatch, getState) => {
     const state = getState();

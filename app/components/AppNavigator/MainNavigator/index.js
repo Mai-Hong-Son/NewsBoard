@@ -18,6 +18,7 @@ import Newspaper from '../../Newspaper';
 import NewsDetail from '../../NewsDetail';
 import Filter from '../../News/Filter';
 import ArticlesByCategory from '../../News/ArticlesByCategory';
+import SideMenu from '../../SideMenu';
 
 // theme component
 // import Header from '../../Reusables/Header';
@@ -42,13 +43,13 @@ export const RootTabs = createBottomTabNavigator(
         title: 'Tiêu điểm'
       }
     },
-    Share: {
-      screen: Share
-    },
     Newspaper: {
-      screen: Newspaper,
+      screen: Newspaper
+    },
+    Share: {
+      screen: Share,
       navigationOptions: {
-        title: 'Tin tham khảo'
+        title: 'Chia sẻ'
       }
     },
     Save: {
@@ -115,7 +116,9 @@ export const DrawerApp = createDrawerNavigator(
         drawerLabel: 'Home'
       }
     }
-  },
+  }, {
+    contentComponent: SideMenu
+  }
 );
 
 export const MainStack = createStackNavigator(

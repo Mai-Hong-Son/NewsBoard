@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { buildHeaders } from '../utils';
 
 export const login = account => {
   const action = createAction('LOGIN');
@@ -16,5 +17,20 @@ export const login = account => {
 
     dispatch(action({ request, client: 'default' }));
   };
-}
-  ;
+};
+
+export const getUserInfo = () => {
+  const action = createAction('GET_USER_INFO');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'GET',
+      url: '/user_info'
+    };
+
+    dispatch(action({ request, client: 'default' }));
+  };
+};

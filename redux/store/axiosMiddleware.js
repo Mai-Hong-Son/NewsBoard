@@ -3,7 +3,7 @@ import axiosMiddleware from 'redux-axios-middleware';
 // import _ from 'lodash';
 
 const axiosClient = axios.create({
-  baseURL: 'http://35.231.242.252:8080',
+  baseURL: 'http://35.196.179.240:8080',
   responseType: 'json'
 });
 

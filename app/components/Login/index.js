@@ -36,7 +36,7 @@ export default class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      localhost: 'http://35.231.242.252:8080',
+      localhost: 'http://35.196.179.240:8080',
       loading: false
     };
 
@@ -55,7 +55,7 @@ export default class Login extends React.Component {
     const { tokenAccess: { data } } = nextProps;
 
     if (data.token) {
-      this.props.navigation.navigate('DrawerApp');
+      this.props.navigation.replace('DrawerApp');
     } else if (this.flag) {
       Alert.alert(
         'Cảnh báo',

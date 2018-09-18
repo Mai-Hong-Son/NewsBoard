@@ -26,7 +26,9 @@ import Scale from '../../../theme/scale';
 export default class ArticlesByCategory extends React.Component {
   state = {
     changeView: false,
-    isLoading: true
+    isLoading: true,
+    pageNumer: 1,
+    isLoadmore: false
   }
 
   componentDidMount() {
@@ -49,11 +51,11 @@ export default class ArticlesByCategory extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { articlesSource: { data } } = nextProps;
-    const { isLoading } = this.state;
 
-    if (data.length !== 0 && isLoading) {
+    if (data.length !== 0) {
       this.setState({
-        isLoading: false
+        isLoading: false,
+        isLoadmore: false
       });
     }
   }
@@ -85,6 +87,29 @@ export default class ArticlesByCategory extends React.Component {
     });
   }
 
+  onEndReached = () => {
+    const { state: { params: { categoryFilter } } } = this.props.navigation;
+
+    this.setState({
+      pageNumer: this.state.pageNumer,
+      isLoadmore: true
+    }, () => {
+      this.props.getArticlesSource({
+        source: [],
+        domain: [],
+        category: [categoryFilter],
+        country: [],
+        region: [],
+        lang: [],
+        search: '',
+        from: '',
+        to: '',
+        page_number: this.state.pageNumer,
+        time: ''
+      });
+    });
+  }
+
   renderArticleItem = ({ item }) => {
     const { id } = item;
     const { navigation: { navigate } } = this.props;
@@ -99,12 +124,15 @@ export default class ArticlesByCategory extends React.Component {
   render() {
     const { navigation, articlesSource: { data } } = this.props;
     const { state: { params: { categoryFilter } } } = navigation;
-    const { isLoading } = this.state;
+    const { isLoading, isLoadmore } = this.state;
     const content = isLoading ? <ActivityIndicator /> : (<FlatList
       data={data}
       renderItem={this.renderArticleItem}
       refreshing={isLoading}
       onRefresh={this.onRefresh}
+      onEndReached={this.onEndReached}
+      ListFooterComponent={isLoadmore ? <ActivityIndicator /> : null}
+      onEndReachedThreshold={platform.platform === 'ios' ? 0 : 0.5}
       contentContainerStyle={styles.wrapArticle}
       extraData={this.state.changeView}
       numColumns={this.state.changeView ? 1 : 2}

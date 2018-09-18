@@ -11,3 +11,13 @@ export const tokenAccess = (state = DEFAULT_STATES, action) => {
   }
   return state;
 };
+
+export const userInfo = (state = { data: {}, error: false }, action) => {
+  if (_.endsWith(action.type, ':ERROR') && _.startsWith(action.type, 'GET_USER_INFO')) {
+    return { ...state, error: true };
+  }
+  if (_.endsWith(action.type, ':SUCCESS') && _.startsWith(action.type, 'GET_USER_INFO')) {
+    return { ...state, data: action.payload.data, error: false };
+  }
+  return state;
+};

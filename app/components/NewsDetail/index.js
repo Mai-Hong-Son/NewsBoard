@@ -19,7 +19,8 @@ import { Loading } from '../Reusables/Loading';
 @connect(
   state => ({
     postDetail: state.postDetail,
-    saveArticleStatus: state.saveArticleStatus
+    saveArticleStatus: state.saveArticleStatus,
+    categories: state.categories
   }),
   { ...commonActions }
 )
@@ -80,7 +81,20 @@ export default class NewsDetail extends React.PureComponent {
 
   onSaveAricle = () => {
     const { navigation: { state: { params: { _source, _id } } } } = this.props;
-    const { lang, domain, title, logo, image, url, time, collected_time } = _source;
+    const {
+      body,
+      lang,
+      domain,
+      logo,
+      image,
+      url,
+      time,
+      collected_time,
+      category,
+      country,
+      region,
+      source
+    } = _source;
 
     this.setState({
       isClickSave: true
@@ -90,12 +104,16 @@ export default class NewsDetail extends React.PureComponent {
       id: _id,
       lang,
       domain,
-      title,
       logo,
       image,
       url,
       time,
-      collected_time
+      collected_time,
+      body,
+      category,
+      country,
+      region,
+      source
     });
   }
 
@@ -118,7 +136,8 @@ export default class NewsDetail extends React.PureComponent {
       );
     }
 
-    const { postDetail: { data: { body, domain, title, logo, time, subcontent } }, navigation } = this.props;
+    const { postDetail: { data: { body, domain, title, logo, time, subcontent, category } }, navigation, categories } = this.props;
+    const categoryName = categories.data.find(it => it._id === category);
 
     return (
       <View style={styles.container}>
@@ -136,11 +155,14 @@ export default class NewsDetail extends React.PureComponent {
               <Image style={styles.logoImage} source={{ uri: logo }} />
               <Text style={styles.txtSourceStyle}>{`${domain} - ${time}`}</Text>
             </View>
+            <View style={styles.wrapTag}>
+              <Text style={styles.txtName}>{categoryName.name}</Text>
+            </View>
             <Text style={styles.txtSubContentStyle}>{subcontent}</Text>
             <HTML
               html={body}
               imagesMaxWidth={platform.deviceWidth - 100}
-              baseFontStyle={{ fontSize: Scale.getSize(19) }}
+              baseFontStyle={{ fontSize: Scale.getSize(25) }}
               tagsStyles={{
                 p: {
                   paddingTop: Scale.getSize(10),
@@ -163,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   titleStyle: {
-    fontSize: Scale.getSize(22),
+    fontSize: Scale.getSize(27),
     fontWeight: '700'
   },
   wrapContentStyle: {
@@ -180,12 +202,24 @@ const styles = StyleSheet.create({
     width: Scale.getSize(18)
   },
   txtSourceStyle: {
-    fontSize: Scale.getSize(14),
+    fontSize: Scale.getSize(16),
     color: 'rgb(137,137,137)',
     paddingLeft: Scale.getSize(10)
   },
   txtSubContentStyle: {
-    fontSize: Scale.getSize(19),
+    fontSize: Scale.getSize(25),
     fontWeight: '600'
+  },
+  wrapTag: {
+    padding: Scale.getSize(5),
+    marginVertical: Scale.getSize(5),
+    borderRadius: 5,
+    backgroundColor: '#cc0099',
+    width: 80,
+    alignItems: 'center'
+  },
+  txtName: {
+    color: '#fff',
+    fontWeight: '700'
   }
 });

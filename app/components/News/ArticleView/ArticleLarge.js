@@ -8,31 +8,16 @@ import imageUrl from '../../../assets/images';
 
 const IMAGE_SIZE = (platform.deviceWidth - Scale.getSize(70)) / 2;
 
-const prevTime = time => {
-  if (time.asSeconds() <= 60) return `${Math.ceil(time.asSeconds())} giây trước`;
-  if (time.asMinutes() <= 60) return `${Math.ceil(time.asMinutes())} phút trước`;
-
-  return `${Math.ceil(time.asHours())} giờ trước`;
-};
-
 export default class ArticleLarge extends React.PureComponent {
   render() {
     const { source: { image, title, domain, collected_time } } = this.props;
-    const timeFomat = moment.duration(moment().diff(moment(collected_time)));
-    let date = null;
-
-    if (timeFomat.asHours() > 24) {
-      date = moment(collected_time).format('DD/MM/YYYY');
-    } else {
-      date = prevTime(timeFomat);
-    }
 
     return (
       <View style={styles.container}>
         <View style={styles.wrapImage}>
           {image === undefined ?
             (<View style={styles.imageEmpty}>
-              <Text style={styles.txtEmpty}>{domain.slice(0, 2)}</Text>
+              <Text style={styles.txtEmpty}>{domain.slice(0, 2).toUpperCase()}</Text>
             </View>) :
             (<Image
               style={styles.image}
@@ -41,7 +26,7 @@ export default class ArticleLarge extends React.PureComponent {
         </View>
         <View>
           <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
-          <Text style={styles.txtArticleSrc}>{`${domain} | ${date}`}</Text>
+          <Text style={styles.txtArticleSrc}>{`${domain} | ${moment(collected_time).fromNow()}`}</Text>
         </View>
       </View>
     );
@@ -80,10 +65,11 @@ const styles = StyleSheet.create({
   },
   titleArticle: {
     width: IMAGE_SIZE,
-    paddingVertical: Scale.getSize(8)
+    paddingVertical: Scale.getSize(8),
+    fontSize: Scale.getSize(20)
   },
   txtArticleSrc: {
-    fontSize: Scale.getSize(10),
+    fontSize: Scale.getSize(12),
     color: platform.borderColor,
     width: IMAGE_SIZE
   }
