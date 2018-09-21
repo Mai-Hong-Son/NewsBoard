@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: IMAGE_SIZE,
     paddingVertical: Scale.getSize(8),
-    fontSize: Scale.getSize(20)
+    fontSize: Scale.getSize(25)
   },
   txtArticleSrc: {
-    fontSize: Scale.getSize(12),
+    fontSize: Scale.getSize(14),
     color: platform.borderColor,
     width: IMAGE_SIZE
   }

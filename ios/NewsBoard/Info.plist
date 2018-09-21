@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>NewsBoard muốn truy cập camera của bạn</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMotionUsageDescription</key>
 	<string>My description about why I need this capability</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from '../../utils';
 
-export const truyxuathandung = (id, solo) => {
-  const action = createAction('TRUY_XUAT_HAN_DUNG');
+export const getSummaryDetail = (id) => {
+  const action = createAction('GET_SUMMARY_DETAIL');
 
   return (dispatch, getState) => {
     const state = getState();
@@ -10,7 +10,7 @@ export const truyxuathandung = (id, solo) => {
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: `/cong_tra_cuu_thuoc/truy_xuat_so_lo?id=${id}&solo=${solo}`
+      url: `/summary/${id}`
     };
 
     dispatch(action({ request }));

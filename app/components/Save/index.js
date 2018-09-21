@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     flex: 1,
-    backgroundColor: 'rgb(250,250,250)'
+    backgroundColor: '#fff'
   },
   wrapFilterList: {
     flexDirection: 'row',

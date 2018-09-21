@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
   StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -73,21 +74,24 @@ export default class Newspaper extends React.Component {
   }
 
   renderSummaryItem = ({ item }) => {
-    const { title, updated_time, creator } = item;
+    const { title, updated_time, creator, id } = item;
+    const { navigation: { navigate } } = this.props;
 
     return (
-      <View style={styles.containerItem}>
-        <View style={styles.wrapImage}>
-          <Image
-            style={styles.image}
-            source={images.summaryImage}
-          />
+      <TouchableOpacity onPress={() => navigate('SummaryDetail', { id })}>
+        <View style={styles.containerItem}>
+          <View style={styles.wrapImage}>
+            <Image
+              style={styles.image}
+              source={images.summaryImage}
+            />
+          </View>
+          <View style={styles.wrapTxtBox}>
+            <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
+            <Text style={styles.txtArticleSrc}>{`Được tạo bởi: ${creator} | ${moment(updated_time).fromNow()}`}</Text>
+          </View>
         </View>
-        <View style={styles.wrapTxtBox}>
-          <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
-          <Text style={styles.txtArticleSrc}>{`Được tạo bởi: ${creator} | ${moment(updated_time).fromNow()}`}</Text>
-        </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -146,10 +150,10 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
-    fontSize: Scale.getSize(18)
+    fontSize: Scale.getSize(25)
   },
   txtArticleSrc: {
-    fontSize: Scale.getSize(12),
+    fontSize: Scale.getSize(14),
     color: platform.borderColor,
     width: TXT_BOX_SIZE
   }

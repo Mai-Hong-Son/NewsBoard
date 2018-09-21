@@ -68,7 +68,9 @@ export default class News extends React.Component {
       return true;
     });
 
-    await this.props.getArticles({
+    await this.props.getCategories();
+
+    this.props.getArticles({
       source: [],
       domain: [],
       category: [],
@@ -81,8 +83,6 @@ export default class News extends React.Component {
       page_number: 1,
       time: ''
     });
-
-    await this.props.getCategories();
   }
 
   componentWillReceiveProps(nextProps) {

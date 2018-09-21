@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
-    fontSize: Scale.getSize(18)
+    fontSize: Scale.getSize(25)
   },
   txtArticleSrc: {
-    fontSize: Scale.getSize(12),
+    fontSize: Scale.getSize(14),
     color: platform.borderColor,
     width: TXT_BOX_SIZE
   }

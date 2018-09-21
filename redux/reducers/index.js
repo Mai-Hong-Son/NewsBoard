@@ -4,7 +4,7 @@ import { summaries } from './serviceApi/summaries';
 import { articlesSource } from './serviceApi/articlesSource';
 import { postDetail } from './serviceApi/postDetail';
 import { categories } from './serviceApi/categories';
-import { ketquatruyxuathandung } from './serviceApi/ketquatruyxuathandung';
+import { summaryDetail } from './serviceApi/summaryDetail';
 import { saveArticleStatus } from './serviceApi/saveArticleStatus';
 import { articles } from './serviceApi/articles';
 import { myArticles } from './serviceApi/myArticles';
@@ -27,7 +27,7 @@ export {
   articlesSource,
   postDetail,
   categories,
-  ketquatruyxuathandung,
+  summaryDetail,
   saveArticleStatus,
   articles,
   myArticles,

@@ -19,6 +19,8 @@ import NewsDetail from '../../NewsDetail';
 import Filter from '../../News/Filter';
 import ArticlesByCategory from '../../News/ArticlesByCategory';
 import SideMenu from '../../SideMenu';
+import SummaryDetail from '../../Newspaper/SummaryDetail';
+import SearchArticle from '../../SearchArticle';
 
 // theme component
 // import Header from '../../Reusables/Header';
@@ -99,6 +101,12 @@ export const RootStacks = createStackNavigator(
     },
     ArticlesByCategory: {
       screen: ArticlesByCategory
+    },
+    SummaryDetail: {
+      screen: SummaryDetail
+    },
+    SearchArticle: {
+      screen: SearchArticle
     }
   },
   {
