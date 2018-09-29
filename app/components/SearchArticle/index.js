@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View,
+  // View,
   TextInput,
   TouchableOpacity,
   StyleSheet
@@ -13,6 +13,18 @@ import FullGradient from '../Reusables/FullGradient';
 import Scale from '../../theme/scale';
 
 export default class SearchArticle extends React.PureComponent {
+  state = {
+    data: ''
+  }
+
+  onSubmit = () => {
+    const { navigation: { state: { params: { onSubmit } } } } = this.props;
+    const { data } = this.state;
+
+    onSubmit && onSubmit(data);
+    this.props.navigation.goBack();
+  }
+
   render() {
     const { navigation } = this.props;
 
@@ -25,6 +37,8 @@ export default class SearchArticle extends React.PureComponent {
           <TextInput
             underlineColorAndroid={'transparent'}
             autoFocus
+            onSubmitEditing={this.onSubmit}
+            onChangeText={text => this.setState({ data: text })}
             selectionColor={'#fff'}
             style={styles.textInputStyle}
           />
@@ -40,7 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: platform.containerBg
   },
   headerContainer: {
-    height: Scale.getSize(80),
+    height: platform.platform == 'ios' ? Scale.getSize(80) : Scale.getSize(60),
     width: platform.deviceWidth,
     flexDirection: 'row',
     alignItems: 'flex-end',

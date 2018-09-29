@@ -30,6 +30,7 @@ const LANGUAGE_FILTER = 'Ngôn ngữ';
 const NATION_FILTER = 'Quốc gia';
 const AREA_FILTER = 'Khu vực';
 const SOURCE_FILTER = 'Loại nguồn';
+const SEARCH = 'Tìm kiếm';
 
 @connect(
   state => ({
@@ -208,6 +209,24 @@ export default class News extends React.Component {
           }
         });
         break;
+      case SEARCH:
+        this.props.navigation.navigate('SearchArticle', {
+          onSubmit: (search) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              region,
+              domain,
+              category,
+              country,
+              lang,
+              source,
+              time
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+          }
+        });
+        break;
 
       default:
         break;
@@ -334,29 +353,31 @@ export default class News extends React.Component {
     );
   }
 
-  renderFlatlist = data => {
-    if (data.length === 0) {
-      return (
-        <View style={styles.wrapEmptyArticles}>
-          <Text style={styles.txtEmptyArticle}>{'Không có bài tin nào'}</Text>
-        </View>
-      );
-    }
-    return (<FlatList
+  renderFlatlist = data => (
+    <FlatList
       data={data}
       refreshing={this.state.isLoading}
       onRefresh={this.onRefresh}
       key={(this.state.changeView ? 'h' : 'v')}
+      ListEmptyComponent={
+        (<View style={styles.wrapEmptyArticles}>
+          <Text style={styles.txtEmptyArticle}>{'Không có bài tin nào'}</Text>
+        </View>)
+      }
       renderItem={this.renderArticleGroup}
       keyExtractor={(item) => item.key.toString()}
       extraData={this.state.changeView}
-    />);
-  }
+    />
+  )
 
   render() {
     const { navigation, articles: { data } } = this.props;
     const { isLoading, toggleButtonPicker } = this.state;
-    const content = isLoading ? <ActivityIndicator /> : this.renderFlatlist(data.items);
+    const content = isLoading ? (
+      <View style={{ marginTop: 25 }}>
+        <ActivityIndicator size='large' />
+      </View>
+    ) : this.renderFlatlist(data.items);
 
     return (
       <SafeArea>
@@ -366,6 +387,7 @@ export default class News extends React.Component {
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
           navigation={navigation}
           hasSearch
+          onSearch={() => this.onNavigateFilter(SEARCH)}
           onPress={this.onPress}
         />
         <View style={styles.contentStyle}>

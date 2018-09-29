@@ -9,6 +9,9 @@ import { saveArticle } from './serviceApi/saveArticle';
 import { getArticles } from './serviceApi/getAriticles';
 import { getMyArticles } from './serviceApi/getMyArticles';
 import { navigateMainTab } from './navigations';
+import { getSubjects } from './serviceApi/getSubjects';
+import { getIssues, createIssues, updateIssues } from './serviceApi/getIssues';
+import { getUsers } from './serviceApi/getUsers';
 
 export {
   login,
@@ -25,5 +28,10 @@ export {
   saveArticle,
   getArticles,
   navigateMainTab,
-  getMyArticles
+  getMyArticles,
+  getSubjects,
+  getIssues,
+  getUsers,
+  createIssues,
+  updateIssues
 };

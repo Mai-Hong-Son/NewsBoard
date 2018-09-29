@@ -33,7 +33,10 @@ export default class Header extends React.PureComponent {
           </View>
           <Text style={styles.txtNews}>{title.toUpperCase()}</Text>
           <View style={styles.wrapBoxRight}>
-            <TouchableOpacity style={{ marginRight: 15 }} onPress={() => navigation.navigate('SearchArticle')}>
+            <TouchableOpacity
+              style={{ marginRight: 15 }}
+              onPress={() => { this.props.onSearch(); }}
+            >
               <Icon
                 name={hasSearch ? 'search' : null}
                 color={platform.containerBg}

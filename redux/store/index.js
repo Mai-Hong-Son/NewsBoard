@@ -21,7 +21,12 @@ import {
   saveArticleStatus,
   articles,
   myArticles,
-  statusBack
+  statusBack,
+  subjects,
+  issues,
+  users,
+  createIssue,
+  updateIssue
 } from './../reducers/index';
 
 const config = {
@@ -50,7 +55,12 @@ export default function buildStore() {
     saveArticleStatus,
     articles,
     myArticles,
-    statusBack
+    statusBack,
+    subjects,
+    issues,
+    users,
+    createIssue,
+    updateIssue
   });
 
   const store = createStore(reducers, composeEnhancer(applyMiddleware(reduxThunk, axiosMiddleware, middleware)));

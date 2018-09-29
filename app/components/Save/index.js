@@ -74,7 +74,11 @@ export default class Save extends React.Component {
   render() {
     const { navigation, myArticles: { data: { results } } } = this.props;
     const { isLoading } = this.state;
-    const content = isLoading ? <ActivityIndicator /> : (<FlatList
+    const content = isLoading ? (
+      <View style={{ marginTop: 25 }}>
+        <ActivityIndicator size='large' />
+      </View>
+    ) : (<FlatList
       data={results}
       renderItem={this.renderArticleItem}
       refreshing={isLoading}

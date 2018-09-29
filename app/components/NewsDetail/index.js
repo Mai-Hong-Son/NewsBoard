@@ -5,7 +5,9 @@ import {
   Text,
   Image,
   ScrollView,
-  Alert
+  Alert,
+  TouchableOpacity,
+  Linking
 } from 'react-native';
 import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
@@ -94,6 +96,7 @@ export default class NewsDetail extends React.PureComponent {
       country,
       region,
       source
+      // title
     } = _source;
 
     this.setState({
@@ -103,6 +106,7 @@ export default class NewsDetail extends React.PureComponent {
     this.props.saveArticle({
       id: _id,
       lang,
+      // title,
       domain,
       logo,
       image,
@@ -115,6 +119,10 @@ export default class NewsDetail extends React.PureComponent {
       region,
       source
     });
+  }
+
+  onLinking = (link) => {
+    Linking.openURL(link);
   }
 
   render() {
@@ -136,7 +144,7 @@ export default class NewsDetail extends React.PureComponent {
       );
     }
 
-    const { postDetail: { data: { body, domain, title, logo, time, subcontent, category } }, navigation, categories } = this.props;
+    const { postDetail: { data: { body, domain, title, logo, time, subcontent, category, url } }, navigation, categories } = this.props;
     const categoryName = categories.data.find(it => it._id === category);
 
     return (
@@ -158,6 +166,9 @@ export default class NewsDetail extends React.PureComponent {
             <View style={styles.wrapTag}>
               <Text style={styles.txtName}>{categoryName.name}</Text>
             </View>
+            <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
+              <Text style={{ color: 'blue' }}>{url}</Text>
+            </TouchableOpacity>
             <Text style={styles.txtSubContentStyle}>{subcontent}</Text>
             <HTML
               html={body}

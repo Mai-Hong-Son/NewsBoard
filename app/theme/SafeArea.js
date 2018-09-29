@@ -5,7 +5,7 @@ import platform from './platform';
 const SafeArea = ({ testID = 'safearea', children, style }) => {
   if (!platform.isIphoneX) {
     return (
-      <View testID={testID} style={{ flex: 1 }}>
+      <View testID={testID} style={{ flex: 1, backgroundColor: '#fff' }}>
         {children}
       </View>
     );

@@ -21,6 +21,8 @@ import ArticlesByCategory from '../../News/ArticlesByCategory';
 import SideMenu from '../../SideMenu';
 import SummaryDetail from '../../Newspaper/SummaryDetail';
 import SearchArticle from '../../SearchArticle';
+import ArticleBySubject from '../../ArticleBySubject';
+import IssuesDetail from '../../Focus/IssuesDetail';
 
 // theme component
 // import Header from '../../Reusables/Header';
@@ -107,6 +109,9 @@ export const RootStacks = createStackNavigator(
     },
     SearchArticle: {
       screen: SearchArticle
+    },
+    IssuesDetail: {
+      screen: IssuesDetail
     }
   },
   {
@@ -119,10 +124,10 @@ export const RootStacks = createStackNavigator(
 export const DrawerApp = createDrawerNavigator(
   {
     RootStack: {
-      screen: RootStacks,
-      navigationOptions: {
-        drawerLabel: 'Home'
-      }
+      screen: RootStacks
+    },
+    ArticleBySubject: {
+      screen: ArticleBySubject
     }
   }, {
     contentComponent: SideMenu
