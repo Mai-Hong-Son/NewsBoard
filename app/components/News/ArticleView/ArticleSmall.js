@@ -12,11 +12,16 @@ const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(65) - IMAGE_SIZE;
 export default class ArticleSmall extends React.PureComponent {
   render() {
     const { source: { image, title, domain, collected_time } } = this.props;
+    let isEmptyImage = false;
+
+    if (image === 'file:///static/news.jpg' || image === undefined) {
+      isEmptyImage = true;
+    }
 
     return (
       <View style={styles.container}>
         <View style={styles.wrapImage}>
-          {image === undefined ?
+          {isEmptyImage ?
             (<View style={styles.imageEmpty}>
               <Text style={styles.txtEmpty}>{domain.slice(0, 2).toUpperCase()}</Text>
             </View>) :

@@ -12,6 +12,7 @@ import { navigateMainTab } from './navigations';
 import { getSubjects } from './serviceApi/getSubjects';
 import { getIssues, createIssues, updateIssues } from './serviceApi/getIssues';
 import { getUsers } from './serviceApi/getUsers';
+import { shareArticle, getArticleShareByMe, getArticleShareForMe } from './serviceApi/shareArticle';
 
 export {
   login,
@@ -33,5 +34,8 @@ export {
   getIssues,
   getUsers,
   createIssues,
-  updateIssues
+  updateIssues,
+  shareArticle,
+  getArticleShareByMe,
+  getArticleShareForMe
 };

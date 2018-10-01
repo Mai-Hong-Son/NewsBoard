@@ -16,6 +16,7 @@ import images from '../../assets/images';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
+import SafeArea from '../../theme/SafeArea';
 
 const IMAGE_SIZE_HEIGHT = Scale.getSize(80);
 const IMAGE_SIZE_WIDTH = Scale.getSize(120);
@@ -100,7 +101,7 @@ export default class Newspaper extends React.Component {
     const { loading, data, loadMore } = this.state;
 
     return (
-      <View style={styles.container}>
+      <SafeArea>
         <Header title={'Tin tham khảo'} navigation={navigation} />
         <FlatList
           data={data}
@@ -112,7 +113,7 @@ export default class Newspaper extends React.Component {
           ListFooterComponent={loadMore ? <ActivityIndicator /> : null}
           keyExtractor={(it, index) => index.toString()}
         />
-      </View>
+      </SafeArea>
     );
   }
 }
@@ -150,7 +151,8 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
-    fontSize: Scale.getSize(25)
+    fontSize: Scale.getSize(25),
+    color: '#000'
   },
   txtArticleSrc: {
     fontSize: Scale.getSize(14),

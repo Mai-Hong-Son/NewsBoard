@@ -33,25 +33,26 @@ export default class Focus extends React.Component {
   }
 
   componentDidMount() {
+    this.onRefresh();
     this.props.navigation.addListener('willFocus', () => {
       this.onRefresh();
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { issues: { data, error }, userInfo: { id } } = nextProps;
+    const { issues: { data, error }, userInfo: { data: { id } } } = nextProps;
     const { isTabLeft, isTabRight } = this.state;
 
     if (!error) {
       if (isTabLeft && !isTabRight) {
         this.setState({
-          data: data.filter(item => item.create_by !== id),
+          data: data.filter(item => item.created_by !== id),
           loading: false
         });
       } else if (!isTabLeft && isTabRight) {
         this.setState({
           loading: false,
-          data: data.filter(item => item.create_by === id)
+          data: data.filter(item => item.created_by === id)
         });
       }
     }
@@ -64,22 +65,22 @@ export default class Focus extends React.Component {
   }
 
   onChooseTabLeft = () => {
-    const { userInfo: { id }, issues: { data } } = this.props;
+    const { userInfo: { data: { id } }, issues: { data } } = this.props;
 
     this.setState({
       isTabLeft: true,
       isTabRight: false,
-      data: data.filter(item => item.create_by !== id)
+      data: data.filter(item => item.created_by !== id)
     });
   }
 
   onChooseTabRight = () => {
-    const { userInfo: { id }, issues: { data } } = this.props;
+    const { userInfo: { data: { id } }, issues: { data } } = this.props;
 
     this.setState({
       isTabLeft: false,
       isTabRight: true,
-      data: data.filter(item => item.create_by === id)
+      data: data.filter(item => item.created_by === id)
     });
   }
 
@@ -101,8 +102,8 @@ export default class Focus extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const { title, description, created_time } = item;
-    const { navigation: { navigate } } = this.props;
+    const { title, description, created_time, completed } = item;
+    const { navigation: { navigate }, userInfo: { data } } = this.props;
 
     return (
       <TouchableWithoutFeedback
@@ -112,14 +113,16 @@ export default class Focus extends React.Component {
           type: 'update'
         })}
       >
-        <View style={styles.wrapItem}>
-          <View>
-            <Text style={styles.txtTitle}>{title}</Text>
-            <Text>{description}</Text>
+        <View style={styles.wrapItemView}>
+          <View style={styles.contentRightStyle}>
+            <Text style={styles.txtContentRight}>{data.username.slice(0, 1).toUpperCase()}</Text>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.txtTitle}>{moment(created_time).fromNow()}</Text>
-            <Icon name='ios-arrow-forward' color={'rgb(91,91,91)'} size={Scale.getSize(18)} />
+          <View style={styles.wrapItem}>
+            <View>
+              <Text style={styles.txtTitle}>{title}</Text>
+              <Text style={styles.txtTimeTitle}>{moment(created_time).fromNow()}</Text>
+            </View>
+            {completed ? <Icon name='ios-checkmark-circle' color={'#7CFC00'} size={Scale.getSize(25)} /> : null}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -191,16 +194,26 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(10)
   },
   wrapItem: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomColor: 'rgb(237,237,237)',
     borderBottomWidth: 1,
-    paddingVertical: 5
+    paddingVertical: 5,
+    paddingLeft: 15,
+    paddingTop: 15
   },
   txtTitle: {
     paddingBottom: 4,
     fontSize: Scale.getSize(18),
-    color: '#000'
+    color: '#000',
+    fontWeight: '700'
+  },
+  txtTimeTitle: {
+    color: 'rgb(137,137,137)',
+    fontSize: Scale.getSize(15),
+    paddingBottom: 4
   },
   tabStyle: {
     flex: 1,
@@ -212,5 +225,20 @@ const styles = StyleSheet.create({
     color: platform.containerBg,
     fontSize: Scale.getSize(16),
     fontWeight: '700'
+  },
+  wrapItemView: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  contentRightStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ADFF2F',
+    borderRadius: 25,
+    height: 50,
+    width: 50
+  },
+  txtContentRight: {
+    fontSize: Scale.getSize(25)
   }
 });

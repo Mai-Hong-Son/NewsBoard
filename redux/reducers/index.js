@@ -11,6 +11,7 @@ import { myArticles } from './serviceApi/myArticles';
 import { subjects } from './serviceApi/subjects';
 import { issues, createIssue, updateIssue } from './serviceApi/issues';
 import { users } from './serviceApi/users';
+import { shareArticleStatus, articleShareByMe, articleShareForMe } from './serviceApi/articleShare';
 
 const statusBack = (state = null, action) => {
   if (action.type === 'Navigation/BACK') {
@@ -39,5 +40,8 @@ export {
   issues,
   users,
   createIssue,
-  updateIssue
+  updateIssue,
+  shareArticleStatus,
+  articleShareByMe,
+  articleShareForMe
 };

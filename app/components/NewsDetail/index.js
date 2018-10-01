@@ -22,14 +22,16 @@ import { Loading } from '../Reusables/Loading';
   state => ({
     postDetail: state.postDetail,
     saveArticleStatus: state.saveArticleStatus,
-    categories: state.categories
+    categories: state.categories,
+    shareArticleStatus: state.shareArticleStatus
   }),
   { ...commonActions }
 )
 export default class NewsDetail extends React.PureComponent {
   state = {
     loading: true,
-    isClickSave: false
+    isClickSave: false,
+    onClickShare: false
   }
 
   componentDidMount() {
@@ -40,7 +42,7 @@ export default class NewsDetail extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { postDetail: { data }, saveArticleStatus: { error } } = nextProps;
+    const { postDetail: { data }, saveArticleStatus: { error }, shareArticleStatus: { error: errShare } } = nextProps;
 
     if (data !== {}) {
       this.setState({
@@ -79,6 +81,38 @@ export default class NewsDetail extends React.PureComponent {
         { cancelable: false }
       );
     }
+
+    if (!errShare && this.state.onClickShare) {
+      Alert.alert(
+        'Thông báo',
+        'Bạn đã chia sẻ thành công',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.setState({
+              onClickShare: false
+            })
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+
+    if (errShare && this.state.onClickShare) {
+      Alert.alert(
+        'Thông báo',
+        'Bài này đã được chia sẻ',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.setState({
+              onClickShare: false
+            })
+          }
+        ],
+        { cancelable: false }
+      );
+    }
   }
 
   onSaveAricle = () => {
@@ -95,8 +129,8 @@ export default class NewsDetail extends React.PureComponent {
       category,
       country,
       region,
-      source
-      // title
+      source,
+      title
     } = _source;
 
     this.setState({
@@ -106,7 +140,7 @@ export default class NewsDetail extends React.PureComponent {
     this.props.saveArticle({
       id: _id,
       lang,
-      // title,
+      title: '',
       domain,
       logo,
       image,
@@ -123,6 +157,28 @@ export default class NewsDetail extends React.PureComponent {
 
   onLinking = (link) => {
     Linking.openURL(link);
+  }
+
+  onShare = (priority, shares) => {
+    const { postDetail: { data: { id, collected_time, domain, logo } } } = this.props;
+
+    this.setState({
+      onClickShare: true
+    });
+
+    this.props.shareArticle({
+      id,
+      title: '',
+      domain,
+      logo,
+      collected_time,
+      priority,
+      shares
+    });
+  }
+
+  onTranslate = () => {
+
   }
 
   render() {
@@ -154,21 +210,24 @@ export default class NewsDetail extends React.PureComponent {
           type='stack'
           navigation={navigation}
           iconName='flag'
+          iconMenu
           onPress={this.onSaveAricle}
+          onShare={(priority, shares) => this.onShare(priority, shares)}
+          onTranslate={this.onTranslate}
         />
         <ScrollView>
           <View style={styles.wrapContentStyle}>
             <Text style={styles.titleStyle}>{title}</Text>
             <View style={styles.wrapSourceStyle}>
               <Image style={styles.logoImage} source={{ uri: logo }} />
-              <Text style={styles.txtSourceStyle}>{`${domain} - ${time}`}</Text>
+              <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
+                <Text style={{ color: 'blue', paddingLeft: 10, fontSize: Scale.getSize(16) }}>{domain}</Text>
+              </TouchableOpacity>
             </View>
+            <Text style={styles.txtSourceStyle}>{time}</Text>
             <View style={styles.wrapTag}>
               <Text style={styles.txtName}>{categoryName.name}</Text>
             </View>
-            <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
-              <Text style={{ color: 'blue' }}>{url}</Text>
-            </TouchableOpacity>
             <Text style={styles.txtSubContentStyle}>{subcontent}</Text>
             <HTML
               html={body}
@@ -177,7 +236,8 @@ export default class NewsDetail extends React.PureComponent {
               tagsStyles={{
                 p: {
                   paddingTop: Scale.getSize(10),
-                  paddingBottom: Scale.getSize(10)
+                  paddingBottom: Scale.getSize(10),
+                  color: '#000'
                 },
                 img: { overflow: 'visible' },
                 div: { alignItems: 'center' }
@@ -197,7 +257,8 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontSize: Scale.getSize(27),
-    fontWeight: '700'
+    fontWeight: '700',
+    color: '#000'
   },
   wrapContentStyle: {
     width: platform.deviceWidth,
@@ -206,7 +267,7 @@ const styles = StyleSheet.create({
   },
   wrapSourceStyle: {
     flexDirection: 'row',
-    paddingVertical: Scale.getSize(5)
+    paddingVertical: 5
   },
   logoImage: {
     height: Scale.getSize(18),
@@ -215,11 +276,12 @@ const styles = StyleSheet.create({
   txtSourceStyle: {
     fontSize: Scale.getSize(16),
     color: 'rgb(137,137,137)',
-    paddingLeft: Scale.getSize(10)
+    paddingVertical: 5
   },
   txtSubContentStyle: {
     fontSize: Scale.getSize(25),
-    fontWeight: '600'
+    fontWeight: '600',
+    color: '#000'
   },
   wrapTag: {
     padding: Scale.getSize(5),

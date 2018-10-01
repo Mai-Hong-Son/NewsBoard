@@ -16,6 +16,7 @@ import ArticleSmall from '../News/ArticleView/ArticleSmall';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+import SafeArea from '../../theme/SafeArea';
 
 @connect(
   state => ({
@@ -30,8 +31,9 @@ export default class Save extends React.Component {
   }
 
   componentDidMount() {
+    this.onRefresh();
     this.props.navigation.addListener('willFocus', () => {
-      this.props.getMyArticles();
+      this.onRefresh();
     });
   }
 
@@ -91,7 +93,7 @@ export default class Save extends React.Component {
     />);
 
     return (
-      <View style={styles.container}>
+      <SafeArea>
         <Header
           title={'Lưu trữ'}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
@@ -101,7 +103,7 @@ export default class Save extends React.Component {
         <View style={styles.contentStyle}>
           {content}
         </View>
-      </View>
+      </SafeArea>
     );
   }
 }

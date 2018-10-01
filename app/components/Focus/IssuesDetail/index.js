@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Alert
+  Alert,
+  TextInput,
+  ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Akira } from 'react-native-textinput-effects';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import CheckBox from 'react-native-check-box';
 import moment from 'moment';
@@ -20,8 +21,6 @@ import FullGradient from '../../Reusables/FullGradient';
 import platform from '../../../theme/platform';
 import Scale from '../../../theme/scale';
 import * as commonActions from '../../../../redux/actions';
-
-const BORDER_COLOR = '#a5d1cc';
 
 @connect(
   state => ({
@@ -189,7 +188,7 @@ export default class IssuesDetail extends React.PureComponent {
 
   render() {
     const { navigation, users } = this.props;
-    const { state: { params: { titleHeader } } } = navigation;
+    const { state: { params: { titleHeader, type } } } = navigation;
     const { fromDate, toDate, showModal, peopleAsign, isComplete, title, description } = this.state;
 
     return (
@@ -206,61 +205,69 @@ export default class IssuesDetail extends React.PureComponent {
           </View>
         </FullGradient>
 
-        <View style={styles.wrapForm}>
-          <Akira
-            label={'Tiêu đề'}
-            onChangeText={(text) => this.setState({ title: text })}
-            value={title}
-            borderColor={BORDER_COLOR}
-            labelStyle={styles.txtLabel}
-          />
+        <ScrollView contentContainerStyle={styles.wrapForm}>
+          <View style={styles.wrapTextinput}>
+            <Text style={styles.txtTitleTextInput}>{'Tiêu đề:'}</Text>
+            <TextInput
+              onChangeText={(text) => this.setState({ title: text })}
+              value={title}
+              style={styles.textInputStyle}
+              multiline
+            />
+          </View>
           <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleDate}>{'Ngày bắt đầu: '}</Text>
+            <Text style={styles.txtTitleTextInput}>{'Ngày bắt đầu: '}</Text>
+            <View style={styles.boxTxtDate}>
+              <Text style={styles.txtTitleDate}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
+            </View>
             <TouchableOpacity onPress={this.showStartDateTimePicker}>
-              <View style={styles.boxTxtDate}>
-                <Text style={styles.txtTitleDate}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
-              </View>
+              <Icon name='calendar' size={18} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
           <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleDate}>{'Ngày kết thúc: '}</Text>
-            <TouchableOpacity onPress={this.showEndDateTimePicker}>
-              <View style={styles.boxTxtDate}>
-                <Text style={styles.txtTitleDate}>{moment(toDate).format('DD/MM/YYYY')}</Text>
-              </View>
+            <Text style={styles.txtTitleTextInput}>{'Ngày kết thúc: '}</Text>
+            <View style={styles.boxTxtDate}>
+              <Text style={styles.txtTitleDate}>{moment(toDate).format('DD/MM/YYYY')}</Text>
+            </View>
+            <TouchableOpacity onPress={this.showStartDateTimePicker}>
+              <Icon name='calendar' size={18} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
-          <View style={[styles.wrapDate, { paddingBottom: Scale.getSize(15) }]}>
-            <Text style={styles.txtTitleDate}>{'Giao cho: '}</Text>
-            {peopleAsign.map(item =>
-              (<View key={item.id} style={[styles.boxTxtDate, { marginRight: 5 }]}>
-                <Text style={styles.txtTitleDate}>{
-                  users.data.length !== 0 ? users.data.filter(it => it.id === item)[0].username : ''
-                }</Text>
-              </View>)
-            )}
+          <View style={styles.wrapDate}>
+            <Text style={styles.txtTitleTextInput}>{'Giao cho: '}</Text>
+            <View style={styles.boxTxtDate}>
+              {peopleAsign.map(item =>
+                (
+                  <Text key={item.id} style={styles.txtTitleDate}>{
+                    users.data.length !== 0 ? users.data.filter(it => it.id === item)[0].username : ''
+                  }</Text>
+                )
+              )}
+            </View>
             <TouchableOpacity onPress={this.showModalAsign}>
-              <Icon name='edit' size={30} color={BORDER_COLOR} />
+              <Icon name='edit' size={30} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
-          <Akira
-            label={'Mô tả chi tiết'}
-            onChangeText={(text) => this.setState({ description: text })}
-            value={description}
-            borderColor={BORDER_COLOR}
-            labelStyle={styles.txtLabel}
-          />
-          <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleDate}>{'Hoàn thành: '}</Text>
+          <View style={styles.wrapTextinput}>
+            <Text style={styles.txtTitleTextInput}>{'Mô tả:'}</Text>
+            <TextInput
+              onChangeText={(text) => this.setState({ description: text })}
+              value={description}
+              style={styles.textInputStyle}
+              multiline
+            />
+          </View>
+          {type === 'create' ? null : (<View style={styles.wrapDate}>
+            <Text style={styles.txtTitleTextInput}>{'Hoàn thành: '}</Text>
             <CheckBox
               style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
               onClick={() => this.setState({ isComplete: !isComplete })}
-              checkBoxColor={BORDER_COLOR}
+              checkBoxColor={platform.primaryBlue}
               rightTextStyle={styles.txtCheckbox}
               isChecked={isComplete}
             />
-          </View>
-        </View>
+          </View>)}
+        </ScrollView>
         <DateTimePicker
           titleIOS={'Chọn thời gian bắt đầu'}
           confirmTextIOS={'Xác nhận'}
@@ -319,13 +326,14 @@ const styles = StyleSheet.create({
   },
   wrapDate: {
     flexDirection: 'row',
-    paddingTop: Scale.getSize(15),
-    alignItems: 'center'
-  },
-  boxTxtDate: {
-    borderColor: BORDER_COLOR,
+    justifyContent: 'space-between',
+    paddingVertical: Scale.getSize(10),
+    alignItems: 'center',
+    borderColor: 'rgb(240,240,240)',
     borderWidth: 1,
-    padding: Scale.getSize(6)
+    borderRadius: 4,
+    marginVertical: Scale.getSize(10),
+    paddingHorizontal: Scale.getSize(10)
   },
   txtTitleDate: {
     fontSize: Scale.getSize(18)
@@ -338,6 +346,24 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: Scale.getSize(18),
     fontWeight: '100'
+  },
+  wrapTextinput: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingVertical: Scale.getSize(10),
+    paddingHorizontal: Scale.getSize(10),
+    borderColor: 'rgb(240,240,240)'
+  },
+  txtTitleTextInput: {
+    color: 'rgb(137,137,137)',
+    fontSize: Scale.getSize(18),
+    paddingRight: 15
+  },
+  textInputStyle: {
+    fontSize: Scale.getSize(18),
+    color: '#000',
+    width: platform.deviceWidth - Scale.getSize(160)
   }
 });
 

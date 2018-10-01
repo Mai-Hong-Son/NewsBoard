@@ -29,6 +29,7 @@ export default class SideMenu extends React.PureComponent {
 
   componentDidMount() {
     this.props.getSubjects();
+    this.props.getUsers();
   }
 
   componentWillReceiveProps(nextProps) {

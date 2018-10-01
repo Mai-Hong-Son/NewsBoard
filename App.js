@@ -7,6 +7,7 @@
 import React from 'react';
 // import SplashScreen from 'react-native-splash-screen';
 import { Provider } from 'react-redux';
+import { MenuProvider } from 'react-native-popup-menu';
 import { AppWithNavigationState } from './app/components/AppNavigator/withConnect';
 import buildStore from './redux/store';
 
@@ -20,7 +21,9 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <AppWithNavigationState />
+        <MenuProvider>
+          <AppWithNavigationState />
+        </MenuProvider>
       </Provider>
     );
   }
