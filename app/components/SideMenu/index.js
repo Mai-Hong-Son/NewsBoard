@@ -5,10 +5,12 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+// import { NavigationActions } from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import FullGradient from '../Reusables/FullGradient';
 import PersonalInfo from './PersonalInfo';
@@ -17,14 +19,16 @@ import Scale from '../../theme/scale';
 
 @connect(
   state => ({
-    subjects: state.subjects
+    subjects: state.subjects,
+    tokenAccess: state.tokenAccess
   }),
   { ...commonActions }
 )
 export default class SideMenu extends React.PureComponent {
   state = {
     loading: true,
-    subjectsData: []
+    subjectsData: [],
+    isClickLogout: false
   };
 
   componentDidMount() {
@@ -33,7 +37,7 @@ export default class SideMenu extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { subjects: { error, data } } = nextProps;
+    const { subjects: { error, data }, tokenAccess: { error: errLogout } } = nextProps;
 
     if (!error) {
       this.setState({
@@ -41,12 +45,35 @@ export default class SideMenu extends React.PureComponent {
         loading: false
       });
     }
+
+    if (!errLogout && this.state.isClickLogout) {
+      this.setState({
+        isClickLogout: false
+      }, () => this.props.navigation.navigate('Login'));
+    }
   }
 
   onRefresh = () => {
     this.setState({
       loading: true
     }, () => this.props.getSubjects());
+  }
+
+  onLogout = () => {
+    Alert.alert(
+      'Thông báo',
+      'Bạn muốn đăng xuất ứng dụng?',
+      [
+        { text: 'Hủy', onPress: () => null },
+        {
+          text: 'Đồng ý',
+          onPress: () => this.setState({
+            isClickLogout: true
+          }, () => this.props.logout())
+        }
+      ],
+      { cancelable: false }
+    );
   }
 
   // navigateToScreen = (route, queryObject) => () => {
@@ -115,7 +142,19 @@ export default class SideMenu extends React.PureComponent {
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
-      </FullGradient>
+        <View style={styles.footerStyle}>
+          <View style={styles.contentFooter}>
+            <Icon name='ios-cog' size={Scale.getSize(35)} color={'#fff'} />
+            <Text style={styles.txtFooterStyle}>{'Cài đặt'}</Text>
+          </View>
+          <TouchableOpacity onPress={this.onLogout}>
+            <View style={styles.contentFooter}>
+              <Icon name='ios-log-out' size={Scale.getSize(35)} color={'#fff'} />
+              <Text style={styles.txtFooterStyle}>{'Đăng xuất'}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </FullGradient >
     );
   }
 }
@@ -149,6 +188,21 @@ const styles = StyleSheet.create({
     fontSize: Scale.getSize(16),
     fontWeight: '700',
     color: '#fff'
+  },
+  footerStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Scale.getSize(15),
+    paddingVertical: Scale.getSize(25)
+  },
+  contentFooter: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  txtFooterStyle: {
+    fontSize: Scale.getSize(15),
+    color: '#fff',
+    paddingLeft: Scale.getSize(10)
   }
 });
 

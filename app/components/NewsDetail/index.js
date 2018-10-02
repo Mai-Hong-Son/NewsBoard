@@ -7,7 +7,8 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
-  Linking
+  Linking,
+  Clipboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
@@ -181,6 +182,10 @@ export default class NewsDetail extends React.PureComponent {
 
   }
 
+  writeToClipboard = async (text) => {
+    await Clipboard.setString(text);
+  };
+
   render() {
     const { loading } = this.state;
 
@@ -214,6 +219,7 @@ export default class NewsDetail extends React.PureComponent {
           onPress={this.onSaveAricle}
           onShare={(priority, shares) => this.onShare(priority, shares)}
           onTranslate={this.onTranslate}
+          onCopy={() => this.writeToClipboard(url)}
         />
         <ScrollView>
           <View style={styles.wrapContentStyle}>

@@ -1,4 +1,4 @@
-import { login, getUserInfo } from './auth';
+import { login, getUserInfo, logout } from './auth';
 import { getLanguages, getCountries, getRegions, getSources } from './serviceApi/getDataFilters';
 import { getSummaries } from './serviceApi/getSummaries';
 import { getArticlesSource } from './serviceApi/getArticlesSource';
@@ -37,5 +37,6 @@ export {
   updateIssues,
   shareArticle,
   getArticleShareByMe,
-  getArticleShareForMe
+  getArticleShareForMe,
+  logout
 };

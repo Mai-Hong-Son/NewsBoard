@@ -9,6 +9,13 @@ export const tokenAccess = (state = DEFAULT_STATES, action) => {
   if (_.endsWith(action.type, ':SUCCESS') && _.startsWith(action.type, 'LOGIN')) {
     return { ...state, data: action.payload.data, error: false };
   }
+
+  if (_.endsWith(action.type, ':ERROR') && _.startsWith(action.type, 'LOGOUT')) {
+    return { ...state, error: true };
+  }
+  if (_.endsWith(action.type, ':SUCCESS') && _.startsWith(action.type, 'LOGOUT')) {
+    return { ...state, data: {}, error: false };
+  }
   return state;
 };
 

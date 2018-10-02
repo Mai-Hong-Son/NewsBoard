@@ -23,6 +23,7 @@ import SummaryDetail from '../../Newspaper/SummaryDetail';
 import SearchArticle from '../../SearchArticle';
 import ArticleBySubject from '../../ArticleBySubject';
 import IssuesDetail from '../../Focus/IssuesDetail';
+import Setting from '../../Setting';
 
 // theme component
 // import Header from '../../Reusables/Header';
@@ -128,6 +129,9 @@ export const DrawerApp = createDrawerNavigator(
     },
     ArticleBySubject: {
       screen: ArticleBySubject
+    },
+    Setting: {
+      screen: Setting
     }
   }, {
     contentComponent: SideMenu

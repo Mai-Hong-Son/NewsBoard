@@ -148,7 +148,7 @@ export default class Header extends React.PureComponent {
                   <MenuOption onSelect={this.onShowModalPriority}>
                     <Text style={styles.txtOptionMenu}>{'Chia sẻ'}</Text>
                   </MenuOption>
-                  <MenuOption onSelect={() => null}>
+                  <MenuOption onSelect={() => this.props.onCopy()}>
                     <Text style={styles.txtOptionMenu}>{'Sao chép liên kết'}</Text>
                   </MenuOption>
                   <MenuOption onSelect={() => this.props.onTranslate()}>

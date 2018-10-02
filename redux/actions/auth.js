@@ -19,6 +19,19 @@ export const login = account => {
   };
 };
 
+export const logout = () => {
+  const actionSuccess = createAction('LOGOUT:SUCCESS');
+  const actionError = createAction('LOGOUT:ERROR');
+
+  return dispatch => {
+    try {
+      dispatch(actionSuccess());
+    } catch (err) {
+      dispatch(actionError());
+    }
+  };
+};
+
 export const getUserInfo = () => {
   const action = createAction('GET_USER_INFO');
 
