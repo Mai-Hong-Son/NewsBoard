@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
-    fontSize: Scale.getSize(25),
+    fontSize: Scale.getSize(20),
     color: '#000'
   },
   txtArticleSrc: {

@@ -143,10 +143,12 @@ export default class SideMenu extends React.PureComponent {
           keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.footerStyle}>
-          <View style={styles.contentFooter}>
-            <Icon name='ios-cog' size={Scale.getSize(35)} color={'#fff'} />
-            <Text style={styles.txtFooterStyle}>{'Cài đặt'}</Text>
-          </View>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Setting')}>
+            <View style={styles.contentFooter}>
+              <Icon name='ios-cog' size={Scale.getSize(35)} color={'#fff'} />
+              <Text style={styles.txtFooterStyle}>{'Cài đặt'}</Text>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={this.onLogout}>
             <View style={styles.contentFooter}>
               <Icon name='ios-log-out' size={Scale.getSize(35)} color={'#fff'} />

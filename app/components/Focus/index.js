@@ -161,17 +161,15 @@ export default class Focus extends React.Component {
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
-        <View style={styles.boxFlatlist}>
-          <FlatList
-            data={data}
-            contentContainerStyle={styles.wrapContentFlatlist}
-            keyExtractor={(it, index) => index.toString()}
-            renderItem={this.renderItem}
-            refreshing={loading}
-            onRefresh={this.onRefresh}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          data={data}
+          contentContainerStyle={styles.wrapContentFlatlist}
+          keyExtractor={(it, index) => index.toString()}
+          renderItem={this.renderItem}
+          refreshing={loading}
+          onRefresh={this.onRefresh}
+          showsVerticalScrollIndicator={false}
+        />
       </SafeArea>
     );
   }
@@ -187,19 +185,17 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: platform.primaryBlue
   },
-  boxFlatlist: {
-    paddingHorizontal: Scale.getSize(15)
-  },
   wrapContentFlatlist: {
-    paddingTop: Scale.getSize(10)
+    paddingTop: Scale.getSize(10),
+    paddingHorizontal: Scale.getSize(15)
   },
   wrapItem: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomColor: 'rgb(237,237,237)',
-    borderBottomWidth: 1,
+    // borderBottomColor: 'rgb(237,237,237)',
+    // borderBottomWidth: 1,
     paddingVertical: 5,
     paddingLeft: 15,
     paddingTop: 15
@@ -228,7 +224,15 @@ const styles = StyleSheet.create({
   },
   wrapItemView: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: Scale.getSize(10),
+    backgroundColor: '#fff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: '#777',
+    shadowOpacity: 0.3,
+    shadowRadius: Scale.getSize(3),
+    elevation: Scale.getSize(1),
+    paddingHorizontal: Scale.getSize(10)
   },
   contentRightStyle: {
     justifyContent: 'center',

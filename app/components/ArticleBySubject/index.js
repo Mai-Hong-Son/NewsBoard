@@ -4,7 +4,7 @@ import {
   StyleSheet,
   StatusBar,
   BackHandler,
-  ScrollView,
+  // ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
@@ -21,6 +21,7 @@ import ArticleSmall from '../News/ArticleView/ArticleSmall';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+import { Loading } from '../Reusables/Loading';
 
 @connect(
   state => ({
@@ -127,7 +128,7 @@ export default class ArticleBySubject extends React.Component {
   render() {
     const { navigation, articles: { data } } = this.props;
     const { isLoading } = this.state;
-    const content = isLoading ? <ActivityIndicator /> : this.renderFlatlist(data.items);
+    const content = isLoading ? <Loading /> : this.renderFlatlist(data.items);
 
     return (
       <SafeArea>

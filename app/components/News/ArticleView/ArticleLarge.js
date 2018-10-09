@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   titleArticle: {
     width: IMAGE_SIZE,
     paddingVertical: Scale.getSize(8),
-    fontSize: Scale.getSize(25),
+    fontSize: Scale.getSize(20),
     color: '#000'
   },
   txtArticleSrc: {

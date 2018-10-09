@@ -14,6 +14,7 @@ import platform from '../../../theme/platform';
 import SafeArea from '../../../theme/SafeArea';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
+import { Loading } from '../../Reusables/Loading';
 
 @connect(
   state => ({
@@ -47,7 +48,7 @@ export default class SummaryDetail extends React.PureComponent {
   render() {
     const { navigation } = this.props;
     const { loading, summaryDetail } = this.state;
-    let content = <ActivityIndicator />;
+    let content = <Loading />;
 
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;

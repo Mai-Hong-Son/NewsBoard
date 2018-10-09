@@ -29,11 +29,13 @@ const styles = StyleSheet.create({
   },
   buttonFilter: {
     paddingHorizontal: Scale.getSize(15),
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
+    // backgroundColor: 'red'
   },
   txtButtonFilter: {
     paddingRight: Scale.getSize(7),
-    fontSize: Scale.getSize(14),
-    paddingTop: Scale.getSize(24) - Scale.getSize(21)
+    fontSize: Scale.getSize(14)
+    // paddingTop: Scale.getSize(24) - Scale.getSize(21)
   }
 });

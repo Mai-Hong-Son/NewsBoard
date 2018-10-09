@@ -17,6 +17,25 @@ import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
 
+const sourceTypeData = [
+  {
+    _id: 'facebook',
+    name: 'Facebook'
+  },
+  {
+    _id: 'google',
+    name: 'Google'
+  },
+  {
+    _id: 'youtube',
+    name: 'Youtube'
+  },
+  {
+    _id: 'website',
+    name: 'Website'
+  }
+];
+
 @connect(
   state => ({
     languages: state.languages,
@@ -53,6 +72,12 @@ export default class Filter extends React.PureComponent {
         break;
       case 'Loại nguồn':
         this.props.getSources();
+        break;
+      case 'Nguồn tin':
+        this.setState({
+          loading: false,
+          dataSource: sourceTypeData
+        });
         break;
       default:
         break;
@@ -155,7 +180,7 @@ export default class Filter extends React.PureComponent {
     const { state: { params: { title } } } = navigation;
     const content = loading ? (
       <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-        <ActivityIndicator color={platform.containerBg} />
+        <ActivityIndicator color={platform.primaryBlue} size='large' />
       </View>
     ) :
       this.renderFlatlist(dataSource);

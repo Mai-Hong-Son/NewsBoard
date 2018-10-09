@@ -31,6 +31,7 @@ const NATION_FILTER = 'Quốc gia';
 const AREA_FILTER = 'Khu vực';
 const SOURCE_FILTER = 'Loại nguồn';
 const SEARCH = 'Tìm kiếm';
+const SOURCE_TYPE_FILTER = 'Nguồn tin';
 
 @connect(
   state => ({
@@ -57,7 +58,8 @@ export default class News extends React.Component {
     region: [],
     lang: [],
     search: '',
-    time: ''
+    time: '',
+    sourcetype: []
   }
 
   async componentDidMount() {
@@ -82,7 +84,8 @@ export default class News extends React.Component {
       from: '',
       to: '',
       page_number: 1,
-      time: ''
+      time: '',
+      sourcetype: []
     });
   }
 
@@ -123,7 +126,8 @@ export default class News extends React.Component {
       from: '',
       to: '',
       page_number: 1,
-      time: ''
+      time: '',
+      sourcetype: []
     });
   }
 
@@ -143,9 +147,10 @@ export default class News extends React.Component {
               country,
               region,
               search,
-              time
+              time,
+              sourcetype
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
           }
         });
         break;
@@ -163,9 +168,10 @@ export default class News extends React.Component {
               lang,
               region,
               search,
-              time
+              time,
+              sourcetype
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
           }
         });
         break;
@@ -183,9 +189,10 @@ export default class News extends React.Component {
               country,
               lang,
               search,
-              time
+              time,
+              sourcetype
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
           }
         });
         break;
@@ -203,9 +210,10 @@ export default class News extends React.Component {
               country,
               lang,
               search,
-              time
+              time,
+              sourcetype
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
           }
         });
         break;
@@ -221,9 +229,31 @@ export default class News extends React.Component {
               country,
               lang,
               source,
+              time,
+              sourcetype
+            } = this.state;
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
+          }
+        });
+        break;
+      case SOURCE_TYPE_FILTER:
+        this.props.navigation.navigate('Filter', {
+          title,
+          dataFilter: this.state.sourcetype,
+          onSubmit: (sourcetype) => {
+            const {
+              fromDate: from,
+              toDate: to,
+              region,
+              search,
+              domain,
+              category,
+              country,
+              lang,
+              source,
               time
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
           }
         });
         break;
@@ -233,7 +263,7 @@ export default class News extends React.Component {
     }
   }
 
-  getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time) => {
+  getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time, sourcetype) => {
     this.setState({
       isLoading: true,
       fromDate: from,
@@ -245,7 +275,8 @@ export default class News extends React.Component {
       region,
       lang,
       search,
-      time
+      time,
+      sourcetype
     }, () => {
       const {
         fromDate,
@@ -257,7 +288,8 @@ export default class News extends React.Component {
         region: regionArticles,
         lang: langArticles,
         search: searchArticles,
-        time: timeArticles
+        time: timeArticles,
+        sourcetype
       } = this.state;
 
       this.props.getArticles({
@@ -271,7 +303,8 @@ export default class News extends React.Component {
         from: fromDate,
         to: toDate,
         page_number: 1,
-        time: timeArticles
+        time: timeArticles,
+        sourcetype
       });
     });
   }
@@ -308,10 +341,11 @@ export default class News extends React.Component {
         region,
         lang,
         search,
-        time
+        time,
+        sourcetype
       } = this.state;
 
-      this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, fromDate, toDate, time);
+      this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, fromDate, toDate, time, sourcetype);
     });
 
     this.hideEndDateTimePicker();
@@ -405,6 +439,7 @@ export default class News extends React.Component {
               <ButtonFilter title={NATION_FILTER} onPress={() => this.onNavigateFilter(NATION_FILTER)} />
               <ButtonFilter title={AREA_FILTER} onPress={() => this.onNavigateFilter(AREA_FILTER)} />
               <ButtonFilter title={SOURCE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_FILTER)} />
+              <ButtonFilter title={SOURCE_TYPE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_TYPE_FILTER)} />
             </ScrollView>
           </View>
           {content}

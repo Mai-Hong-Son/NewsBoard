@@ -12,7 +12,8 @@ export const getArticles = ({
   from,
   to,
   page_number,
-  time
+  time,
+  sourcetype
 }) => {
   const action = createAction('GET_ARTICLES');
 
@@ -31,7 +32,8 @@ export const getArticles = ({
         from,
         to,
         page_number,
-        time
+        time,
+        sourcetype
       },
       method: 'POST',
       headers: buildHeaders(state),

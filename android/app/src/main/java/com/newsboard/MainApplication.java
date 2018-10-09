@@ -15,6 +15,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 // import com.airbnb.android.react.maps.MapsPackage;
 // import org.reactnative.camera.RNCameraPackage;
 // import com.RNFetchBlob.RNFetchBlobPackage;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(new MainReactPackage(),
           // new RNFirebasePackage(),
           // new RNFirebaseCrashlyticsPackage(),
+          new RNI18nPackage(),
           new VectorIconsPackage(), new LinearGradientPackage()
       // new MapsPackage(),
       // new RNCameraPackage(),

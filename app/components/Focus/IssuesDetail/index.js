@@ -229,7 +229,7 @@ export default class IssuesDetail extends React.PureComponent {
             <View style={styles.boxTxtDate}>
               <Text style={styles.txtTitleDate}>{moment(toDate).format('DD/MM/YYYY')}</Text>
             </View>
-            <TouchableOpacity onPress={this.showStartDateTimePicker}>
+            <TouchableOpacity onPress={this.showEndDateTimePicker}>
               <Icon name='calendar' size={18} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>

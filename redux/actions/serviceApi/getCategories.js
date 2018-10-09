@@ -4,7 +4,7 @@ import { buildHeaders } from '../../utils';
 export const getCategories = () => {
   const action = createAction('GET_CATEGORIES');
 
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const state = getState();
 
     const request = {
@@ -13,6 +13,6 @@ export const getCategories = () => {
       url: '/categories/me'
     };
 
-    dispatch(action({ request }));
+    await dispatch(action({ request }));
   };
 };
