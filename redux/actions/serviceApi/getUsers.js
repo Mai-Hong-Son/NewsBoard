@@ -10,7 +10,7 @@ export const getUsers = () => {
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v3/users?v=1'
+      url: '/v3/users'
     };
 
     dispatch(action({ request }));

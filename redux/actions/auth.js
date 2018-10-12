@@ -1,6 +1,19 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from '../utils';
 
+// export const saveLocalhost = (localhost) => {
+//   const actionSuccess = createAction('SAVE_LOCALHOST:SUCCESS');
+//   const actionError = createAction('SAVE_LOCALHOST:ERROR');
+
+//   return async dispatch => {
+//     try {
+//       await dispatch(actionSuccess({ payload: localhost }));
+//     } catch (err) {
+//       dispatch(actionError());
+//     }
+//   };
+// };
+
 export const login = account => {
   const action = createAction('LOGIN');
 

@@ -164,7 +164,7 @@ export default class Focus extends React.Component {
         <FlatList
           data={data}
           contentContainerStyle={styles.wrapContentFlatlist}
-          keyExtractor={(it, index) => index.toString()}
+          keyExtractor={(it, index) => it.id.toString()}
           renderItem={this.renderItem}
           refreshing={loading}
           onRefresh={this.onRefresh}

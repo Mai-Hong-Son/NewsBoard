@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import moment from 'moment';
+// import moment from 'moment';
 
 import Header from '../Reusables/Header';
 import SafeArea from '../../theme/SafeArea';
@@ -32,7 +32,7 @@ export default class Share extends React.Component {
     isTabRight: false,
     data: [],
     loading: true,
-    changeView: false
+    changeView: true
   }
 
   componentDidMount() {
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   //   backgroundColor: '#fff'
   // },
   contentContainerStyle: {
-    width: platform.deviceWidth,
+    width: '100%',
     height: 40,
     backgroundColor: platform.primaryBlue
   },

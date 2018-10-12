@@ -26,7 +26,7 @@ import SafeArea from '../../theme/SafeArea';
 )
 export default class Save extends React.Component {
   state = {
-    changeView: false,
+    changeView: true,
     isLoading: true
   }
 
@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    alignItems: 'center'
   },
   wrapFilterList: {
     flexDirection: 'row',

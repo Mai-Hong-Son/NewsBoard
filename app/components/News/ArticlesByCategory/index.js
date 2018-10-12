@@ -25,7 +25,7 @@ import Scale from '../../../theme/scale';
 )
 export default class ArticlesByCategory extends React.Component {
   state = {
-    changeView: false,
+    changeView: true,
     isLoading: true,
     pageNumer: 1,
     isLoadmore: false

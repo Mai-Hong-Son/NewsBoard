@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
@@ -18,6 +19,7 @@ import FullGradient from '../Reusables/FullGradient';
 import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
 import imageurls from '../../assets/images';
+import { _retrieveData } from '../../../redux/store/axiosMiddleware';
 
 @connect(
   state => ({
@@ -72,14 +74,28 @@ export default class Login extends React.Component {
     });
   }
 
-  onLogin = () => {
+  onLogin = async () => {
     const { username, password } = this.state;
+
+    await this._storeData();
+    await _retrieveData();
+
     this.setState({
       loading: true
     });
     this.flag = true;
 
     this.props.login({ username, password });
+  }
+
+  _storeData = async () => {
+    const { localhost } = this.state;
+
+    try {
+      await AsyncStorage.setItem('localhost', localhost);
+    } catch (error) {
+      // Error saving data
+    }
   }
 
   render() {

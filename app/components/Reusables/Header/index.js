@@ -201,7 +201,7 @@ export default class Header extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
-    width: platform.deviceWidth,
+    width: '100%',
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15)
   },

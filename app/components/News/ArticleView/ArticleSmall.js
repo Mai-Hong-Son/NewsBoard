@@ -42,8 +42,7 @@ export default class ArticleSmall extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     padding: Scale.getSize(10),
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: 'row'
   },
   wrapImage: {
     backgroundColor: '#fff',
@@ -72,13 +71,15 @@ const styles = StyleSheet.create({
     fontWeight: '800'
   },
   wrapTxtBox: {
-    width: TXT_BOX_SIZE
+    width: TXT_BOX_SIZE,
+    paddingLeft: 15
   },
   titleArticle: {
     width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
     fontSize: Scale.getSize(20),
-    color: '#000'
+    color: '#000',
+    paddingRight: 15
   },
   txtArticleSrc: {
     fontSize: Scale.getSize(14),

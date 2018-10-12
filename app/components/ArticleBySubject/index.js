@@ -33,7 +33,7 @@ import { Loading } from '../Reusables/Loading';
 )
 export default class ArticleBySubject extends React.Component {
   state = {
-    changeView: false,
+    changeView: true,
     isLoading: true
   }
 

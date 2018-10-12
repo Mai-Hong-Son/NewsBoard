@@ -118,7 +118,7 @@ export default class SideMenu extends React.PureComponent {
         <TouchableOpacity onPress={() => navigation.navigate('ArticleBySubject', { search_query })}>
           <View style={styles.wrapItemSubject}>
             <Image
-              style={{ height: 50, width: 50, borderRadius: 25 }}
+              style={{ height: Scale.getSize(40), width: Scale.getSize(40), borderRadius: Scale.getSize(20) }}
               source={{ uri: avatar }}
             />
             <Text style={styles.txtSubjectName}>{name}</Text>
@@ -164,7 +164,8 @@ export default class SideMenu extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
+    paddingTop: 20,
+    paddingHorizontal: Scale.getSize(5)
   },
   wrapItemSubject: {
     paddingVertical: Scale.getSize(5),
@@ -173,7 +174,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: Scale.getSize(30)
   },
   txtSubjectName: {
     fontSize: Scale.getSize(18),

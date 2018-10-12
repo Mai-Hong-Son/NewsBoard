@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     height: Scale.getSize(80),
-    width: platform.deviceWidth,
+    width: '100%',
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15),
     paddingHorizontal: 10,

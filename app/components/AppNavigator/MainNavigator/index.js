@@ -33,6 +33,7 @@ import ImageUrls from '../../../assets/images';
 
 import { MyTabBar } from './myTabBar';
 import Scale from '../../../theme/scale';
+import platform from '../../../theme/platform';
 
 export const RootTabs = createBottomTabNavigator(
   {
@@ -134,7 +135,8 @@ export const DrawerApp = createDrawerNavigator(
       screen: Setting
     }
   }, {
-    contentComponent: SideMenu
+    contentComponent: SideMenu,
+    drawerWidth: platform.deviceWidth - 100
   }
 );
 

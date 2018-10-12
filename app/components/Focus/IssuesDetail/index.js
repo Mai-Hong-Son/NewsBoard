@@ -304,7 +304,7 @@ export default class IssuesDetail extends React.PureComponent {
 const styles = StyleSheet.create({
   headerContainer: {
     height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
-    width: platform.deviceWidth,
+    width: '100%',
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15)
   },

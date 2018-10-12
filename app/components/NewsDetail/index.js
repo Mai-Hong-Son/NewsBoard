@@ -255,27 +255,28 @@ export default class NewsDetail extends React.PureComponent {
                         }} />)}
                     >
                         <View style={styles.wrapContentStyle}>
+                            <View style={styles.wrapTag}>
+                                <Text style={styles.txtName}>{categoryName.name}</Text>
+                            </View>
                             <Text style={styles.titleStyle}>{title}</Text>
                             <View style={styles.wrapSourceStyle}>
                                 <Image style={styles.logoImage} source={{ uri: logo }} />
                                 <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
-                                    <Text style={{ color: 'blue', paddingLeft: 10, fontSize: Scale.getSize(16) }}>{domain}</Text>
+                                    <Text style={[styles.txtSourceStyle, { paddingLeft: 10 }]}>{domain}</Text>
                                 </TouchableOpacity>
-                            </View>
-                            <Text style={styles.txtSourceStyle}>{time}</Text>
-                            <View style={styles.wrapTag}>
-                                <Text style={styles.txtName}>{categoryName.name}</Text>
+                                <Text style={styles.txtSourceStyle}>{` - ${time}`}</Text>
                             </View>
                             <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '')}</Text>
                             <HTML
                                 html={body}
                                 imagesMaxWidth={platform.deviceWidth - 100}
-                                baseFontStyle={{ fontSize: Scale.getSize(25) }}
+                                baseFontStyle={{ fontSize: Scale.getSize(24) }}
                                 tagsStyles={{
                                     p: {
                                         paddingTop: Scale.getSize(10),
                                         paddingBottom: Scale.getSize(10),
-                                        color: '#000'
+                                        color: '#000',
+                                        textAlign: 'justify'
                                     },
                                     img: { overflow: 'visible' },
                                     div: { alignItems: 'center' }
@@ -284,7 +285,7 @@ export default class NewsDetail extends React.PureComponent {
                         </View>
                     </ParallaxScrollView>
                 </View>
-            </View>
+            </View >
         );
     }
 }
@@ -295,18 +296,19 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     titleStyle: {
-        fontSize: Scale.getSize(27),
+        fontSize: Scale.getSize(26),
         fontWeight: '700',
         color: '#000'
     },
     wrapContentStyle: {
-        width: platform.deviceWidth,
+        width: '100%',
         paddingHorizontal: Scale.getSize(15),
         paddingTop: Scale.getSize(15)
     },
     wrapSourceStyle: {
         flexDirection: 'row',
-        paddingVertical: 5
+        paddingVertical: 5,
+        alignItems: 'center'
     },
     logoImage: {
         height: Scale.getSize(18),
@@ -318,9 +320,10 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     txtSubContentStyle: {
-        fontSize: Scale.getSize(25),
+        fontSize: Scale.getSize(24),
         fontWeight: '600',
-        color: '#000'
+        color: '#000',
+        textAlign: 'justify'
     },
     wrapTag: {
         padding: Scale.getSize(5),

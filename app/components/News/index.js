@@ -43,7 +43,7 @@ const SOURCE_TYPE_FILTER = 'Nguồn tin';
 )
 export default class News extends React.Component {
   state = {
-    changeView: false,
+    changeView: true,
     isLoading: true,
     startDateTimePickerVisible: false,
     endDateTimePickerVisible: false,
@@ -73,20 +73,49 @@ export default class News extends React.Component {
 
     await this.props.getCategories();
 
+    const {
+      fromDate,
+      toDate,
+      source: sourceArticles,
+      domain: domainArticles,
+      category: categoryArticles,
+      country: countryArticles,
+      region: regionArticles,
+      lang: langArticles,
+      search: searchArticles,
+      time: timeArticles,
+      sourcetype
+    } = this.state;
+
     this.props.getArticles({
-      source: [],
-      domain: [],
-      category: [],
-      country: [],
-      region: [],
-      lang: [],
-      search: '',
-      from: '',
-      to: '',
+      source: sourceArticles,
+      domain: domainArticles,
+      category: categoryArticles,
+      country: countryArticles,
+      region: regionArticles,
+      lang: langArticles,
+      search: searchArticles,
+      from: fromDate,
+      to: toDate,
       page_number: 1,
-      time: '',
-      sourcetype: []
+      time: timeArticles,
+      sourcetype
     });
+
+    this.interval = setInterval(() => this.props.getArticles({
+      source: sourceArticles,
+      domain: domainArticles,
+      category: categoryArticles,
+      country: countryArticles,
+      region: regionArticles,
+      lang: langArticles,
+      search: searchArticles,
+      from: fromDate,
+      to: toDate,
+      page_number: 1,
+      time: timeArticles,
+      sourcetype
+    }), 20000);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,6 +131,7 @@ export default class News extends React.Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
+    clearInterval(this.interval);
   }
 
   onPress = () => {
@@ -112,10 +142,19 @@ export default class News extends React.Component {
 
   onRefresh = () => {
     this.setState({
-      isLoading: true
-    });
-
-    this.props.getArticles({
+      isLoading: true,
+      fromDate: '',
+      toDate: '',
+      source: [],
+      domain: [],
+      category: [],
+      country: [],
+      region: [],
+      lang: [],
+      search: '',
+      time: '',
+      sourcetype: []
+    }, () => this.props.getArticles({
       source: [],
       domain: [],
       category: [],
@@ -128,7 +167,7 @@ export default class News extends React.Component {
       page_number: 1,
       time: '',
       sourcetype: []
-    });
+    }));
   }
 
   onNavigateFilter = (title) => {
@@ -468,7 +507,8 @@ export default class News extends React.Component {
 const styles = StyleSheet.create({
   contentStyle: {
     flex: 1,
-    backgroundColor: 'rgb(250,250,250)'
+    backgroundColor: 'rgb(250,250,250)',
+    alignItems: 'center'
   },
   wrapFilterList: {
     flexDirection: 'row',

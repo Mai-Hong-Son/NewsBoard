@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     backgroundColor: platform.containerBg
   },
   headerContainer: {
-    height: platform.platform == 'ios' ? Scale.getSize(80) : Scale.getSize(60),
-    width: platform.deviceWidth,
+    height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingBottom: Scale.getSize(15),
