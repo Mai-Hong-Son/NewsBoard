@@ -49,7 +49,7 @@ export const getRegions = () => {
   };
 };
 
-export const getSources = () => {
+export const getSources = (filterData) => {
   const action = createAction('GET_SOURCES');
 
   return (dispatch, getState) => {
@@ -57,8 +57,9 @@ export const getSources = () => {
 
     const request = {
       headers: buildHeaders(state),
-      method: 'GET',
-      url: '/sources'
+      data: filterData,
+      method: 'POST',
+      url: '/v2/sources'
     };
 
     dispatch(action({ request }));

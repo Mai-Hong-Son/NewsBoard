@@ -6,8 +6,8 @@ import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
 import imageUrl from '../../../assets/images';
 
-const IMAGE_SIZE = Scale.getSize(80);
-const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(65) - IMAGE_SIZE;
+const IMAGE_SIZE = Scale.getSize(70);
+// const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(65) - IMAGE_SIZE;
 
 export default class ArticleSmall extends React.PureComponent {
   render() {
@@ -42,7 +42,8 @@ export default class ArticleSmall extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     padding: Scale.getSize(10),
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: '100%'
   },
   wrapImage: {
     backgroundColor: '#fff',
@@ -71,11 +72,11 @@ const styles = StyleSheet.create({
     fontWeight: '800'
   },
   wrapTxtBox: {
-    width: TXT_BOX_SIZE,
+    width: '80%',
     paddingLeft: 15
   },
   titleArticle: {
-    width: TXT_BOX_SIZE,
+    // width: '100%',
     paddingBottom: Scale.getSize(8),
     fontSize: Scale.getSize(20),
     color: '#000',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   },
   txtArticleSrc: {
     fontSize: Scale.getSize(14),
-    color: platform.borderColor,
-    width: TXT_BOX_SIZE
+    color: platform.borderColor
+    // width: TXT_BOX_SIZE
   }
 });

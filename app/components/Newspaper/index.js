@@ -18,9 +18,9 @@ import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
 import SafeArea from '../../theme/SafeArea';
 
-const IMAGE_SIZE_HEIGHT = Scale.getSize(80);
-const IMAGE_SIZE_WIDTH = Scale.getSize(120);
-const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(45) - IMAGE_SIZE_WIDTH;
+const IMAGE_SIZE_HEIGHT = Scale.getSize(70);
+const IMAGE_SIZE_WIDTH = Scale.getSize(110);
+// const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(45) - IMAGE_SIZE_WIDTH;
 
 @connect(
   state => ({
@@ -106,6 +106,7 @@ export default class Newspaper extends React.Component {
         <FlatList
           data={data}
           renderItem={this.renderSummaryItem}
+          contentContainerStyle={{ paddingVertical: 15 }}
           refreshing={loading}
           onRefresh={this.onRefresh}
           onEndReachedThreshold={platform.platform === 'ios' ? 0 : 0.5}
@@ -123,9 +124,11 @@ const styles = StyleSheet.create({
     flex: 1
   },
   containerItem: {
-    padding: Scale.getSize(10),
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    width: '100%',
+    paddingBottom: 15,
+    paddingHorizontal: 15
+    // justifyContent: 'space-between'
   },
   wrapImage: {
     backgroundColor: '#fff',
@@ -146,17 +149,18 @@ const styles = StyleSheet.create({
     fontWeight: '800'
   },
   wrapTxtBox: {
-    width: TXT_BOX_SIZE
+    width: '70%',
+    paddingLeft: 15
   },
   titleArticle: {
-    width: TXT_BOX_SIZE,
+    // width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
     fontSize: Scale.getSize(20),
     color: '#000'
   },
   txtArticleSrc: {
     fontSize: Scale.getSize(14),
-    color: platform.borderColor,
-    width: TXT_BOX_SIZE
+    color: platform.borderColor
+    // width: TXT_BOX_SIZE
   }
 });

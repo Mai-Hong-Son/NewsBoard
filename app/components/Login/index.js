@@ -13,13 +13,14 @@ import {
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import * as commonActions from '../../../redux/actions';
 import FullGradient from '../Reusables/FullGradient';
 import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
 import imageurls from '../../assets/images';
-import { _retrieveData } from '../../../redux/store/axiosMiddleware';
+import { axiosClient } from '../../../redux/store/axiosMiddleware';
 
 @connect(
   state => ({
@@ -27,7 +28,7 @@ import { _retrieveData } from '../../../redux/store/axiosMiddleware';
   }),
   { ...commonActions }
 )
-export default class Login extends React.Component {
+export default class Login extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -45,19 +46,24 @@ export default class Login extends React.Component {
     this.flag = false;
   }
 
-  componentDidMount() {
-    const { tokenAccess: { data }, navigation } = this.props;
+  // componentDidMount() {
+  //   const { tokenAccess: { data }, navigation } = this.props;
+  //   console.warn(this.props);
 
-    if (data.token) {
-      navigation.replace('DrawerApp');
-    }
-  }
+  //   if (data.token) {
+  //     navigation.replace('DrawerApp');
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
     const { tokenAccess: { data } } = nextProps;
 
     if (data.token) {
-      this.props.navigation.replace('DrawerApp');
+      if (this.flag) {
+        this.props.navigation.replace('DrawerApp');
+      } else {
+        this._retrieveData();
+      }
     } else if (this.flag) {
       Alert.alert(
         'Cảnh báo',
@@ -78,12 +84,12 @@ export default class Login extends React.Component {
     const { username, password } = this.state;
 
     await this._storeData();
-    await _retrieveData();
 
     this.setState({
       loading: true
     });
     this.flag = true;
+    await this._retrieveData();
 
     this.props.login({ username, password });
   }
@@ -97,6 +103,25 @@ export default class Login extends React.Component {
       // Error saving data
     }
   }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('localhost');
+      if (value !== null) {
+        // We have data!!
+        if (_.endsWith(value, ':8080')) {
+          axiosClient.defaults.baseURL = value;
+          if (!this.flag) {
+            this.props.navigation.replace('DrawerApp');
+          }
+        } else {
+          axiosClient.defaults.baseURL = '';
+        }
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
   render() {
     const { username, password, loading, localhost } = this.state;

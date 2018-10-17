@@ -5,7 +5,7 @@ import { getArticlesSource } from './serviceApi/getArticlesSource';
 import { getPostDetail } from './serviceApi/getPostDetail';
 import { getCategories } from './serviceApi/getCategories';
 import { getSummaryDetail } from './serviceApi/getSummaryDetail';
-import { saveArticle } from './serviceApi/saveArticle';
+import { saveArticle, deleteArticleSave } from './serviceApi/saveArticle';
 import { getArticles } from './serviceApi/getAriticles';
 import { getMyArticles } from './serviceApi/getMyArticles';
 import { navigateMainTab } from './navigations';
@@ -38,5 +38,6 @@ export {
   shareArticle,
   getArticleShareByMe,
   getArticleShareForMe,
-  logout
+  logout,
+  deleteArticleSave
 };

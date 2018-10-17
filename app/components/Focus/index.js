@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   //   backgroundColor: '#fff'
   // },
   contentContainerStyle: {
-    width: platform.deviceWidth,
+    width: '100%',
     height: 40,
     backgroundColor: platform.primaryBlue
   },

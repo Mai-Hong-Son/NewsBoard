@@ -27,6 +27,7 @@ export default class SearchArticle extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
+    const { navigation: { state: { params: { textSearch } } } } = this.props;
 
     return (
       <SafeArea>
@@ -41,6 +42,7 @@ export default class SearchArticle extends React.PureComponent {
             onChangeText={text => this.setState({ data: text })}
             selectionColor={'#fff'}
             style={styles.textInputStyle}
+            value={textSearch}
           />
         </FullGradient>
       </SafeArea>

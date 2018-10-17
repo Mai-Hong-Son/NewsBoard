@@ -82,7 +82,7 @@ export const RootTabs = createBottomTabNavigator(
           iconName = ImageUrls.menubars[4];
         }
 
-        return <Image source={iconName} style={{ width: Scale.getSize(27), height: Scale.getSize(27), tintColor }} />;
+        return <Image source={iconName} style={{ width: 27, height: 27, tintColor }} />;
       }
     }),
     tabBarComponent: MyTabBar,
@@ -114,6 +114,9 @@ export const RootStacks = createStackNavigator(
     },
     IssuesDetail: {
       screen: IssuesDetail
+    },
+    ArticleBySubject: {
+      screen: ArticleBySubject
     }
   },
   {
@@ -127,9 +130,6 @@ export const DrawerApp = createDrawerNavigator(
   {
     RootStack: {
       screen: RootStacks
-    },
-    ArticleBySubject: {
-      screen: ArticleBySubject
     },
     Setting: {
       screen: Setting

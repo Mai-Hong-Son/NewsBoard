@@ -92,7 +92,7 @@ export default class Header extends React.PureComponent {
   }
 
   render() {
-    const { navigation, title, iconName, type, hasSearch, iconMenu, users } = this.props;
+    const { navigation, title, iconName, type, hasSearch, iconMenu, users, colorSave } = this.props;
     const { showModal } = this.state;
     const iconLeft = type !== 'stack' ? 'align-justify' : 'angle-left';
     const sizeBtnLeft = type !== 'stack' ? Scale.getSize(25) : Scale.getSize(40);
@@ -129,7 +129,7 @@ export default class Header extends React.PureComponent {
             <TouchableOpacity onPress={() => this.props.onPress()}>
               <Icon
                 name={iconName}
-                color={platform.containerBg}
+                color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
                 size={Scale.getSize(25)}
               />
             </TouchableOpacity>

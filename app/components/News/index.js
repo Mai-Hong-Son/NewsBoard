@@ -29,9 +29,9 @@ import Scale from '../../theme/scale';
 const LANGUAGE_FILTER = 'Ngôn ngữ';
 const NATION_FILTER = 'Quốc gia';
 const AREA_FILTER = 'Khu vực';
-const SOURCE_FILTER = 'Loại nguồn';
+const SOURCE_FILTER = 'Nguồn';
 const SEARCH = 'Tìm kiếm';
-const SOURCE_TYPE_FILTER = 'Nguồn tin';
+const SOURCE_TYPE_FILTER = 'Loại nguồn';
 
 @connect(
   state => ({
@@ -239,6 +239,12 @@ export default class News extends React.Component {
         this.props.navigation.navigate('Filter', {
           title,
           dataFilter: this.state.source,
+          dataAccess: {
+            category: this.state.category.map(element => element._id),
+            lang: this.state.lang.map(element => element._id),
+            region: this.state.region.map(element => element._id),
+            country: this.state.country.map(element => element._id)
+          },
           onSubmit: (source) => {
             const {
               fromDate: from,
@@ -258,6 +264,7 @@ export default class News extends React.Component {
         break;
       case SEARCH:
         this.props.navigation.navigate('SearchArticle', {
+          textSearch: this.state.search,
           onSubmit: (search) => {
             const {
               fromDate: from,
@@ -303,6 +310,8 @@ export default class News extends React.Component {
   }
 
   getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time, sourcetype) => {
+    clearInterval(this.interval);
+
     this.setState({
       isLoading: true,
       fromDate: from,
@@ -395,7 +404,7 @@ export default class News extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _source, _id })}>
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id })}>
         {this.state.changeView ? <ArticleSmall source={_source} /> : <ArticleLarge source={_source} />}
       </TouchableOpacity>
     );
@@ -430,6 +439,7 @@ export default class News extends React.Component {
     <FlatList
       data={data}
       refreshing={this.state.isLoading}
+      // contentContainerStyle={{ padding: 15 }}
       onRefresh={this.onRefresh}
       key={(this.state.changeView ? 'h' : 'v')}
       ListEmptyComponent={
@@ -507,8 +517,7 @@ export default class News extends React.Component {
 const styles = StyleSheet.create({
   contentStyle: {
     flex: 1,
-    backgroundColor: 'rgb(250,250,250)',
-    alignItems: 'center'
+    backgroundColor: 'rgb(250,250,250)'
   },
   wrapFilterList: {
     flexDirection: 'row',
@@ -529,7 +538,7 @@ const styles = StyleSheet.create({
     elevation: Scale.getSize(1)
   },
   wrapArticle: {
-    padding: Scale.getSize(15)
+    padding: 15
   },
   txtCategoryStyle: {
     paddingLeft: Scale.getSize(10),

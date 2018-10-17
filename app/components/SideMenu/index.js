@@ -16,6 +16,34 @@ import FullGradient from '../Reusables/FullGradient';
 import PersonalInfo from './PersonalInfo';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+import platform from '../../theme/platform';
+
+const topicData = [
+  {
+    id: '1',
+    name: 'NÓNG'
+  },
+  {
+    id: '2',
+    name: 'SỰ KIỆN'
+  },
+  {
+    id: '3',
+    name: 'LÃNH ĐẠO'
+  },
+  {
+    id: '4',
+    name: 'ĐỐI TƯỢNG'
+  },
+  {
+    id: '5',
+    name: 'TỔ CHỨC'
+  },
+  {
+    id: '6',
+    name: 'CÁ NHÂN'
+  }
+];
 
 @connect(
   state => ({
@@ -84,62 +112,58 @@ export default class SideMenu extends React.PureComponent {
   // }
 
   renderItem = ({ item }) => {
-    const { name, matched_count, avatar, type, search_query } = item;
+    const { name, matched_count, avatar, search_query } = item;
     const { navigation } = this.props;
-    let typeSubject = '';
 
-    switch (type) {
-      case '1':
-        typeSubject = 'NÓNG';
-        break;
-      case '2':
-        typeSubject = 'SỰ KIỆN';
-        break;
-      case '3':
-        typeSubject = 'LÃNH ĐẠO';
-        break;
-      case '4':
-        typeSubject = 'ĐỐI TƯỢNG';
-        break;
-      case '5':
-        typeSubject = 'TỔ CHỨC';
-        break;
-      case '6':
-        typeSubject = 'CÁ NHÂN';
-        break;
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('ArticleBySubject', { search_query })}>
+        <View style={styles.wrapItemSubject}>
+          {avatar === '' ?
+            (<View style={styles.imageEmpty}>
+              <Text style={styles.txtEmpty}>{name.slice(0, 1).toUpperCase()}</Text>
+            </View>)
+            : <Image
+              style={{ height: Scale.getSize(40), width: Scale.getSize(40), borderRadius: Scale.getSize(20) }}
+              source={{ uri: avatar }}
+            />}
+          <Text style={styles.txtSubjectName}>{name}</Text>
+          <Text style={styles.txtSubjectNotif}>{matched_count}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
-      default:
-        break;
-    }
+  renderGroupItem = ({ item }) => {
+    const { subjectsData } = this.state;
 
     return (
       <View>
-        <Text style={styles.txtTypeSubject}>{typeSubject}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('ArticleBySubject', { search_query })}>
-          <View style={styles.wrapItemSubject}>
-            <Image
-              style={{ height: Scale.getSize(40), width: Scale.getSize(40), borderRadius: Scale.getSize(20) }}
-              source={{ uri: avatar }}
-            />
-            <Text style={styles.txtSubjectName}>{name}</Text>
-            <Text style={styles.txtSubjectNotif}>{matched_count}</Text>
-          </View>
-        </TouchableOpacity>
+        {
+          subjectsData.filter(it => it.type === item.id).length === 0 ? null :
+            <Text style={styles.txtTypeSubject}>{item.name}</Text>
+        }
+        <FlatList
+          data={subjectsData.filter(it => it.type === item.id)}
+          renderItem={this.renderItem}
+          extraData={subjectsData}
+          keyExtractor={(it, index) => index.toString()}
+        />
       </View>
     );
   }
 
   render() {
-    const { loading, subjectsData } = this.state;
+    const { loading } = this.state;
 
     return (
       <FullGradient containerStyle={styles.container}>
         <PersonalInfo />
         <FlatList
-          data={subjectsData}
+          data={topicData}
           refreshing={loading}
           onRefresh={this.onRefresh}
-          renderItem={this.renderItem}
+          renderItem={this.renderGroupItem}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.footerStyle}>
@@ -207,6 +231,19 @@ const styles = StyleSheet.create({
     fontSize: Scale.getSize(15),
     color: '#fff',
     paddingLeft: Scale.getSize(10)
+  },
+  imageEmpty: {
+    height: Scale.getSize(40),
+    width: Scale.getSize(40),
+    borderRadius: Scale.getSize(20),
+    backgroundColor: platform.primaryBlue,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  txtEmpty: {
+    fontSize: Scale.getSize(15),
+    color: '#fff',
+    fontWeight: '800'
   }
 });
 

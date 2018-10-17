@@ -29,7 +29,8 @@ import {
   updateIssue,
   shareArticleStatus,
   articleShareByMe,
-  articleShareForMe
+  articleShareForMe,
+  deleteArticleStatus
 } from './../reducers/index';
 
 const config = {
@@ -66,7 +67,8 @@ export default function buildStore() {
     updateIssue,
     shareArticleStatus,
     articleShareByMe,
-    articleShareForMe
+    articleShareForMe,
+    deleteArticleStatus
   });
 
   const store = createStore(reducers, composeEnhancer(applyMiddleware(reduxThunk, axiosMiddleware, middleware)));

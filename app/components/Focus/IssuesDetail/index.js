@@ -239,7 +239,8 @@ export default class IssuesDetail extends React.PureComponent {
               {peopleAsign.map(item =>
                 (
                   <Text key={item.id} style={styles.txtTitleDate}>{
-                    users.data.length !== 0 ? users.data.filter(it => it.id === item)[0].username : ''
+                    users.data.length !== 0 && users.data.filter(it => it.id === item)[0] ?
+                      users.data.filter(it => it.id === item)[0].username : ''
                   }</Text>
                 )
               )}

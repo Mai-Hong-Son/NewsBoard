@@ -24,7 +24,9 @@ import { Loading } from '../Reusables/Loading';
         postDetail: state.postDetail,
         saveArticleStatus: state.saveArticleStatus,
         categories: state.categories,
-        shareArticleStatus: state.shareArticleStatus
+        shareArticleStatus: state.shareArticleStatus,
+        myArticles: state.myArticles,
+        deleteArticleStatus: state.deleteArticleStatus
     }),
     { ...commonActions }
 )
@@ -34,32 +36,58 @@ export default class NewsDetail extends React.PureComponent {
         isClickSave: false,
         onClickShare: false,
         isTranslate: false,
-        subContent: ''
+        subContent: '',
+        colorSave: false
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { navigation: { state: { params: { _id } } } } = this.props;
 
+        await this.props.getMyArticles();
         this.props.getPostDetail(_id);
-        this.props.getMyArticles();
     }
 
     componentWillReceiveProps(nextProps) {
-        const { postDetail: { data }, saveArticleStatus: { error }, shareArticleStatus: { error: errShare } } = nextProps;
+        const {
+            postDetail: { data },
+            myArticles: { data: myArticlesData },
+            saveArticleStatus: { error },
+            shareArticleStatus: { error: errShare },
+            deleteArticleStatus: { error: errDelete }
+        } = nextProps;
 
-        if (data !== {}) {
-            const { subcontent } = data;
+        if (data !== {} && myArticlesData !== {}) {
+            const { subcontent, id } = data;
+            const { results } = myArticlesData;
 
             this.setState({
                 loading: false,
-                subContent: subcontent
+                subContent: subcontent,
+                colorSave: results.some(it => it.id === id)
             });
         }
 
-        if (!error && this.state.isClickSave) {
+        if (!error && this.state.isClickSave && !this.state.colorSave) {
             Alert.alert(
                 'Thông báo',
                 'Bạn đã lưu thành công',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => this.setState({
+                            isClickSave: false,
+                            colorSave: true
+                        })
+                    }
+                ],
+                { cancelable: false }
+            );
+        }
+
+        if (error && this.state.isClickSave && !this.state.colorSave) {
+            Alert.alert(
+                'Thông báo',
+                'Bài này đã được lưu',
                 [
                     {
                         text: 'OK',
@@ -72,16 +100,19 @@ export default class NewsDetail extends React.PureComponent {
             );
         }
 
-        if (error && this.state.isClickSave) {
+        if (!errDelete && this.state.isClickSave && this.state.colorSave) {
             Alert.alert(
                 'Thông báo',
-                'Bài này đã được lưu',
+                'Xóa bài lưu thành công',
                 [
                     {
                         text: 'OK',
-                        onPress: () => this.setState({
-                            isClickSave: false
-                        })
+                        onPress: () => {
+                            this.setState({
+                                isClickSave: false,
+                                colorSave: false
+                            });
+                        }
                     }
                 ],
                 { cancelable: false }
@@ -122,7 +153,7 @@ export default class NewsDetail extends React.PureComponent {
     }
 
     onSaveAricle = () => {
-        const { navigation: { state: { params: { _source, _id } } } } = this.props;
+        const { navigation: { state: { params: { _id, unique_id } } }, postDetail: { data } } = this.props;
         const {
             body,
             lang,
@@ -137,28 +168,33 @@ export default class NewsDetail extends React.PureComponent {
             region,
             source,
             title
-        } = _source;
+        } = data;
+        const { colorSave } = this.state;
 
         this.setState({
             isClickSave: true
         });
 
-        this.props.saveArticle({
-            id: _id,
-            lang,
-            title: '',
-            domain,
-            logo,
-            image,
-            url,
-            time,
-            collected_time,
-            body,
-            category,
-            country,
-            region,
-            source
-        });
+        if (!colorSave) {
+            this.props.saveArticle({
+                id: _id,
+                lang,
+                title: '',
+                domain,
+                logo,
+                image,
+                url,
+                time,
+                collected_time,
+                body,
+                category,
+                country,
+                region,
+                source
+            });
+        } else {
+            this.props.deleteArticleSave(unique_id);
+        }
     }
 
     onLinking = (link) => {
@@ -184,25 +220,25 @@ export default class NewsDetail extends React.PureComponent {
     }
 
     // onTranslate = (text) => {
-    //     const textChanged = text.replace(/<(?:.|\n)*?>/gm, '');
+    //  const textChanged = text.replace(/<(?:.|\n)*?>/gm, '');
 
-    //     this.setState({
-    //         isTranslate: true
-    //     }, () => {
-    //         fetch(`https://api.mymemory.translated.net/get?q=${textChanged}&langpair=vi|en`)
-    //             .then((response) => response.json())
-    //             .then((responseJson) => {
-    //                 const { responseData: { translatedText } } = responseJson;
+    //  this.setState({
+    //    isTranslate: true
+    //  }, () => {
+    //    fetch(`https://api.mymemory.translated.net/get?q=${textChanged}&langpair=vi|en`)
+    //     .then((response) => response.json())
+    //     .then((responseJson) => {
+    //      const { responseData: { translatedText } } = responseJson;
 
-    //                 this.setState({
-    //                     subContent: textChanged === '' ? '' : translatedText,
-    //                     isTranslate: false
-    //                 });
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //             });
+    //      this.setState({
+    //        subContent: textChanged === '' ? '' : translatedText,
+    //        isTranslate: false
+    //      });
+    //     })
+    //     .catch((error) => {
+    //      console.error(error);
     //     });
+    //  });
     // }
 
     writeToClipboard = async (text) => {
@@ -210,7 +246,7 @@ export default class NewsDetail extends React.PureComponent {
     };
 
     render() {
-        const { loading, subContent } = this.state;
+        const { loading, subContent, colorSave } = this.state;
 
         if (loading) {
             return (
@@ -228,7 +264,11 @@ export default class NewsDetail extends React.PureComponent {
             );
         }
 
-        const { postDetail: { data: { body, domain, title, logo, time, category, url, image } }, navigation, categories } = this.props;
+        const {
+            postDetail: { data: { body, domain, title, logo, time, category, url, image, id } },
+            navigation,
+            categories
+        } = this.props;
         const categoryName = categories.data.find(it => it._id === category);
 
         return (
@@ -238,6 +278,7 @@ export default class NewsDetail extends React.PureComponent {
                     type='stack'
                     navigation={navigation}
                     iconName='flag'
+                    colorSave={colorSave}
                     iconMenu
                     onPress={this.onSaveAricle}
                     onShare={(priority, shares) => this.onShare(priority, shares)}
@@ -258,17 +299,17 @@ export default class NewsDetail extends React.PureComponent {
                             <View style={styles.wrapTag}>
                                 <Text style={styles.txtName}>{categoryName.name}</Text>
                             </View>
-                            <Text style={styles.titleStyle}>{title}</Text>
+                            <Text style={styles.titleStyle}>{title.trim()}</Text>
                             <View style={styles.wrapSourceStyle}>
                                 <Image style={styles.logoImage} source={{ uri: logo }} />
                                 <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
-                                    <Text style={[styles.txtSourceStyle, { paddingLeft: 10 }]}>{domain}</Text>
+                                    <Text style={[styles.txtSourceStyle, { paddingLeft: 10 }]}>{domain.trim()}</Text>
                                 </TouchableOpacity>
-                                <Text style={styles.txtSourceStyle}>{` - ${time}`}</Text>
+                                <Text numberOfLines={2} style={styles.txtSourceStyle}>{` - ${time.trim().replace('|', '')}`}</Text>
                             </View>
-                            <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '')}</Text>
+                            <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
                             <HTML
-                                html={body}
+                                html={body.replace('block', '').replace('inline-block', '').replace('inline-', '')}
                                 imagesMaxWidth={platform.deviceWidth - 100}
                                 baseFontStyle={{ fontSize: Scale.getSize(24) }}
                                 tagsStyles={{
@@ -303,7 +344,8 @@ const styles = StyleSheet.create({
     wrapContentStyle: {
         width: '100%',
         paddingHorizontal: Scale.getSize(15),
-        paddingTop: Scale.getSize(15)
+        paddingTop: Scale.getSize(15),
+        paddingBottom: 100
     },
     wrapSourceStyle: {
         flexDirection: 'row',
@@ -330,7 +372,7 @@ const styles = StyleSheet.create({
         marginVertical: Scale.getSize(5),
         borderRadius: 5,
         backgroundColor: '#cc0099',
-        width: 80,
+        width: 100,
         alignItems: 'center'
     },
     txtName: {

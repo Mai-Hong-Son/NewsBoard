@@ -63,11 +63,11 @@ export default class Save extends React.Component {
   }
 
   renderArticleItem = ({ item }) => {
-    const { id } = item;
+    const { id, unique_id } = item;
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id })}>
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id, unique_id })}>
         {this.state.changeView ? <ArticleSmall source={item} /> : <ArticleLarge source={item} />}
       </TouchableOpacity>
     );
@@ -114,8 +114,7 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center'
+    backgroundColor: '#fff'
   },
   wrapFilterList: {
     flexDirection: 'row',

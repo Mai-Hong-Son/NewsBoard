@@ -17,3 +17,19 @@ export const saveArticle = article => {
     dispatch(action({ request }));
   };
 };
+
+export const deleteArticleSave = id => {
+  const action = createAction('DELETE_ARTICLE_SAVE');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'DELETE',
+      url: `/v4/cart/${id}`
+    };
+
+    dispatch(action({ request }));
+  };
+};

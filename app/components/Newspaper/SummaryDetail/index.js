@@ -52,31 +52,36 @@ export default class SummaryDetail extends React.PureComponent {
 
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;
+      console.warn(description);
       content = (
         <ScrollView>
           <View style={styles.wrapContentStyle}>
+            <View style={styles.wrapTag}>
+              <Text style={styles.txtName}>{creator}</Text>
+            </View>
             <Text style={styles.titleStyle}>{title}</Text>
             <View style={styles.wrapSourceStyle}>
               <Text style={styles.txtSourceStyle}>{updated_time}</Text>
             </View>
-            <View style={styles.wrapTag}>
-              <Text style={styles.txtName}>{creator}</Text>
-            </View>
             <HTML
-              html={description}
+              html={description.trim()}
               imagesMaxWidth={platform.deviceWidth - 100}
-              baseFontStyle={{ fontSize: Scale.getSize(25) }}
-              ignoredStyles={['font-family', 'letter-spacing']}
+              baseFontStyle={{ fontSize: Scale.getSize(24) }}
+              ignoredStyles={['font-family', 'letter-spacing', 'Times New Roman', 'serif', 'normal']}
               tagsStyles={{
                 p: {
                   paddingTop: Scale.getSize(10),
                   paddingBottom: Scale.getSize(10)
                 },
                 h1: {
-                  fontSize: Scale.getSize(25),
+                  fontSize: Scale.getSize(24),
                   paddingTop: Scale.getSize(10),
                   paddingBottom: 0
                 },
+                // span: {
+                //   fontSize: Scale.getSize(24),
+                //   paddingBottom: 0
+                // },
                 img: { overflow: 'visible' },
                 div: { alignItems: 'center' }
               }}

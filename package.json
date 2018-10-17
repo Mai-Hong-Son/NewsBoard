@@ -21,6 +21,7 @@
     "react-native-linear-gradient": "^2.4.0",
     "react-native-modal": "^6.5.0",
     "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-onesignal": "^3.2.7",
     "react-native-parallax-scroll-view": "^0.21.3",
     "react-native-permissions": "^1.1.1",
     "react-native-popup-menu": "^0.14.0",

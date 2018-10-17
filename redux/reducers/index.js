@@ -5,7 +5,7 @@ import { articlesSource } from './serviceApi/articlesSource';
 import { postDetail } from './serviceApi/postDetail';
 import { categories } from './serviceApi/categories';
 import { summaryDetail } from './serviceApi/summaryDetail';
-import { saveArticleStatus } from './serviceApi/saveArticleStatus';
+import { saveArticleStatus, deleteArticleStatus } from './serviceApi/saveArticleStatus';
 import { articles } from './serviceApi/articles';
 import { myArticles } from './serviceApi/myArticles';
 import { subjects } from './serviceApi/subjects';
@@ -43,5 +43,6 @@ export {
   updateIssue,
   shareArticleStatus,
   articleShareByMe,
-  articleShareForMe
+  articleShareForMe,
+  deleteArticleStatus
 };

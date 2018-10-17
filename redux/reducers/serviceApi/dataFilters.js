@@ -35,7 +35,7 @@ export const sources = (state = { data: [], error: false }, action) => {
     return { ...state, error: true, isLoading: false };
   }
   if (_.endsWith(action.type, ':SUCCESS') && _.startsWith(action.type, 'GET_SOURCES')) {
-    return { ...state, data: action.payload.data, error: false };
+    return { ...state, data: action.payload.data.items, error: false };
   }
   return state;
 };

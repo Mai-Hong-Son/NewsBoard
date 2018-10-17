@@ -14,7 +14,7 @@ import buildStore from './redux/store';
 const { store } = buildStore();
 
 export default class App extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     // SplashScreen.hide();
   }
 

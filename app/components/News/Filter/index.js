@@ -58,7 +58,7 @@ export default class Filter extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { state: { params: { title } } } = this.props.navigation;
+    const { state: { params: { title, dataAccess } } } = this.props.navigation;
 
     switch (title) {
       case 'Ngôn ngữ':
@@ -70,10 +70,10 @@ export default class Filter extends React.PureComponent {
       case 'Khu vực':
         this.props.getRegions();
         break;
-      case 'Loại nguồn':
-        this.props.getSources();
+      case 'Nguồn':
+        this.props.getSources(dataAccess);
         break;
-      case 'Nguồn tin':
+      case 'Loại nguồn':
         this.setState({
           loading: false,
           dataSource: sourceTypeData
@@ -107,7 +107,7 @@ export default class Filter extends React.PureComponent {
           dataTemp = data;
         }
         break;
-      case 'Loại nguồn':
+      case 'Nguồn':
         {
           const { sources: { data } } = nextProps;
           dataTemp = data;
