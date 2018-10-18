@@ -52,7 +52,7 @@ export default class SummaryDetail extends React.PureComponent {
 
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;
-      console.warn(description);
+      // console.warn(description);
       content = (
         <ScrollView>
           <View style={styles.wrapContentStyle}>
@@ -78,10 +78,10 @@ export default class SummaryDetail extends React.PureComponent {
                   paddingTop: Scale.getSize(10),
                   paddingBottom: 0
                 },
-                // span: {
-                //   fontSize: Scale.getSize(24),
-                //   paddingBottom: 0
-                // },
+                span: {
+                  fontSize: Scale.getSize(24),
+                  paddingBottom: 0
+                },
                 img: { overflow: 'visible' },
                 div: { alignItems: 'center' }
               }}

@@ -32,7 +32,7 @@ import Setting from '../../Setting';
 import ImageUrls from '../../../assets/images';
 
 import { MyTabBar } from './myTabBar';
-import Scale from '../../../theme/scale';
+// import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
 
 export const RootTabs = createBottomTabNavigator(
@@ -117,6 +117,9 @@ export const RootStacks = createStackNavigator(
     },
     ArticleBySubject: {
       screen: ArticleBySubject
+    },
+    Setting: {
+      screen: Setting
     }
   },
   {
@@ -130,9 +133,6 @@ export const DrawerApp = createDrawerNavigator(
   {
     RootStack: {
       screen: RootStacks
-    },
-    Setting: {
-      screen: Setting
     }
   }, {
     contentComponent: SideMenu,

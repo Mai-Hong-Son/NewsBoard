@@ -23,6 +23,8 @@ target 'NewsBoard' do
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
   pod 'RNI18n', :path => '../node_modules/react-native-i18n'
 #  pod 'Firebase/Core'
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
 end
 post_install do |installer|
     installer.pods_project.targets.each do |target|

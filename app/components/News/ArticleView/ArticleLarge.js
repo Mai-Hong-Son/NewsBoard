@@ -31,7 +31,7 @@ export default class ArticleLarge extends React.PureComponent {
         </View>
         <View>
           <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
-          <Text style={styles.txtArticleSrc}>{`${domain} | ${moment(collected_time).fromNow()}`}</Text>
+          {/* <Text style={styles.txtArticleSrc}>{`${domain} | ${moment(collected_time).fromNow()}`}</Text> */}
         </View>
       </View>
     );

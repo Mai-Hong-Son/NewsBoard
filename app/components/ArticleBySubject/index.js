@@ -77,7 +77,7 @@ export default class ArticleBySubject extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _source, _id })}>
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id })}>
         {this.state.changeView ? <ArticleSmall source={_source} /> : <ArticleLarge source={_source} />}
       </TouchableOpacity>
     );

@@ -33,6 +33,7 @@ export default class Save extends React.Component {
   componentDidMount() {
     this.onRefresh();
     this.props.navigation.addListener('willFocus', () => {
+      console.warn('test');
       this.onRefresh();
     });
   }

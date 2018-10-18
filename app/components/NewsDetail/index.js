@@ -84,22 +84,6 @@ export default class NewsDetail extends React.PureComponent {
             );
         }
 
-        if (error && this.state.isClickSave && !this.state.colorSave) {
-            Alert.alert(
-                'Thông báo',
-                'Bài này đã được lưu',
-                [
-                    {
-                        text: 'OK',
-                        onPress: () => this.setState({
-                            isClickSave: false
-                        })
-                    }
-                ],
-                { cancelable: false }
-            );
-        }
-
         if (!errDelete && this.state.isClickSave && this.state.colorSave) {
             Alert.alert(
                 'Thông báo',
@@ -271,6 +255,10 @@ export default class NewsDetail extends React.PureComponent {
         } = this.props;
         const categoryName = categories.data.find(it => it._id === category);
 
+        const typeBody = domain === 'www.youtube.com' ?
+            `<iframe src="${body}" frameborder="0" allowfullscreen></iframe>` :
+            body;
+
         return (
             <View style={styles.container}>
                 <Header
@@ -309,7 +297,7 @@ export default class NewsDetail extends React.PureComponent {
                             </View>
                             <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
                             <HTML
-                                html={body.replace('block', '').replace('inline-block', '').replace('inline-', '')}
+                                html={typeBody.replace('block', '').replace('inline-block', '').replace('inline-', '')}
                                 imagesMaxWidth={platform.deviceWidth - 100}
                                 baseFontStyle={{ fontSize: Scale.getSize(24) }}
                                 tagsStyles={{
@@ -320,7 +308,8 @@ export default class NewsDetail extends React.PureComponent {
                                         textAlign: 'justify'
                                     },
                                     img: { overflow: 'visible' },
-                                    div: { alignItems: 'center' }
+                                    div: { alignItems: 'center' },
+                                    iframe: { width: '100%' }
                                 }}
                             />
                         </View>
