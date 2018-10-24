@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  // View,
+  View,
   TextInput,
   TouchableOpacity,
   StyleSheet
@@ -13,8 +13,14 @@ import FullGradient from '../Reusables/FullGradient';
 import Scale from '../../theme/scale';
 
 export default class SearchArticle extends React.PureComponent {
-  state = {
-    data: ''
+  constructor(props) {
+    super(props);
+
+    const { navigation: { state: { params: { textSearch } } } } = this.props;
+
+    this.state = {
+      data: textSearch
+    };
   }
 
   onSubmit = () => {
@@ -27,23 +33,24 @@ export default class SearchArticle extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { navigation: { state: { params: { textSearch } } } } = this.props;
 
     return (
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={{ height: '100%', justifyContent: 'center' }} onPress={() => navigation.goBack()}>
             <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
           </TouchableOpacity>
-          <TextInput
-            underlineColorAndroid={'transparent'}
-            autoFocus
-            onSubmitEditing={this.onSubmit}
-            onChangeText={text => this.setState({ data: text })}
-            selectionColor={'#fff'}
-            style={styles.textInputStyle}
-            value={textSearch}
-          />
+          <View style={{ justifyContent: 'flex-end' }}>
+            <TextInput
+              underlineColorAndroid={'transparent'}
+              autoFocus
+              onSubmitEditing={this.onSubmit}
+              onChangeText={text => this.setState({ data: text })}
+              selectionColor={'#fff'}
+              style={styles.textInputStyle}
+              value={this.state.data}
+            />
+          </View>
         </FullGradient>
       </SafeArea>
     );
@@ -60,16 +67,15 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    paddingBottom: Scale.getSize(15),
+    // paddingBottom: Scale.getSize(15),
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#fff'
   },
   textInputStyle: {
-    height: Scale.getSize(35),
     flex: 1,
     paddingLeft: 15,
-    fontSize: Scale.getSize(25),
+    fontSize: Scale.getSize(20),
     color: '#fff'
   }
 });

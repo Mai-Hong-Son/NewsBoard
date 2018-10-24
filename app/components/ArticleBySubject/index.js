@@ -25,8 +25,7 @@ import { Loading } from '../Reusables/Loading';
 
 @connect(
   state => ({
-    articles: state.articles,
-    categories: state.categories,
+    articlesSource: state.articlesSource,
     mainRouter: state.mainRouter
   }),
   { ...commonActions }
@@ -34,27 +33,25 @@ import { Loading } from '../Reusables/Loading';
 export default class ArticleBySubject extends React.Component {
   state = {
     changeView: true,
-    isLoading: true
+    isLoading: true,
+    pageNumer: 1,
+    isLoadmore: false
   }
 
   componentDidMount() {
     const { navigation: { state: { params: { search_query } } } } = this.props;
-    this.props.getArticles(search_query);
+    this.props.getArticlesSource(search_query);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { articles: { data: dataAticles }, categories: { data: dataCategories } } = nextProps;
-    const { isLoading } = this.state;
+    const { articlesSource: { data } } = nextProps;
 
-    if (dataAticles.items && isLoading && dataCategories.length !== 0) {
+    if (data.length !== 0) {
       this.setState({
-        isLoading: false
+        isLoading: false,
+        isLoadmore: false
       });
     }
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('backPress');
   }
 
   onPress = () => {
@@ -69,73 +66,77 @@ export default class ArticleBySubject extends React.Component {
       isLoading: true
     });
 
-    this.props.getArticles(search_query);
+    this.props.getArticlesSource(search_query);
+  }
+
+  onEndReached = () => {
+    const { state: { params: { search_query } } } = this.props.navigation;
+    const {
+      domain,
+      category,
+      country,
+      region,
+      lang,
+      search,
+      from,
+      to,
+      time,
+      source } = search_query;
+
+    this.setState({
+      pageNumer: this.state.pageNumer + 1,
+      isLoadmore: true
+    }, () => {
+      this.props.getArticlesSource({
+        category,
+        country,
+        domain,
+        from,
+        lang,
+        page_number: this.state.pageNumer,
+        region,
+        search,
+        source,
+        time,
+        to
+      });
+    });
   }
 
   renderArticleItem = ({ item }) => {
-    const { _source, _id } = item;
+    const { id } = item;
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id })}>
-        {this.state.changeView ? <ArticleSmall source={_source} /> : <ArticleLarge source={_source} />}
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id })}>
+        {this.state.changeView ? <ArticleSmall source={item} /> : <ArticleLarge source={item} />}
       </TouchableOpacity>
     );
   }
 
-  renderArticleGroup = ({ item }) => {
-    const { posts: { hits: { hits } }, key } = item;
-    const { categories: { data } } = this.props;
-    const category = data.find(it => it._id === key);
-
-    return (
-      <View style={styles.wrapArticle}>
-        <View style={styles.wrapChildArtical}>
-          <Text style={styles.txtCategoryStyle}>{category.name}</Text>
-          <FlatList
-            data={hits}
-            renderItem={this.renderArticleItem}
-            extraData={this.state.changeView}
-            numColumns={this.state.changeView ? 1 : 2}
-            key={(this.state.changeView ? 'h' : 'v')}
-            keyExtractor={(it) => it._id.toString()}
-          />
-          {/* <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { categoryFilter: { _id: category._id, name: category.name } })}>
-            <Text style={styles.txtSeeMoreStyle}>{'Xem thêm...'}</Text>
-          </TouchableOpacity> */}
-        </View>
-      </View>
-    );
-  }
-
-  renderFlatlist = data => (
-    <FlatList
-      data={data}
-      refreshing={this.state.isLoading}
-      onRefresh={this.onRefresh}
-      key={(this.state.changeView ? 'h' : 'v')}
-      ListEmptyComponent={
-        (<View style={styles.wrapEmptyArticles}>
-          <Text style={styles.txtEmptyArticle}>{'Không có bài tin nào'}</Text>
-        </View>)
-      }
-      renderItem={this.renderArticleGroup}
-      keyExtractor={(item) => item.key.toString()}
-      extraData={this.state.changeView}
-    />
-  )
-
   render() {
-    const { navigation, articles: { data } } = this.props;
-    const { isLoading } = this.state;
-    const content = isLoading ? <Loading /> : this.renderFlatlist(data.items);
+    const { navigation, articlesSource: { data }, navigation: { state: { params: { name } } } } = this.props;
+    const { isLoading, isLoadmore } = this.state;
+    const content = isLoading ? <Loading /> : (<FlatList
+      data={data}
+      renderItem={this.renderArticleItem}
+      refreshing={isLoading}
+      onRefresh={this.onRefresh}
+      onEndReached={this.onEndReached}
+      ListFooterComponent={isLoadmore ? <ActivityIndicator /> : null}
+      onEndReachedThreshold={platform.platform === 'ios' ? 0 : 0.5}
+      contentContainerStyle={styles.wrapArticle}
+      extraData={this.state.changeView}
+      numColumns={this.state.changeView ? 1 : 2}
+      key={(this.state.changeView ? 'h' : 'v')}
+      keyExtractor={(it, index) => index.toString()}
+    />);
 
     return (
-      <SafeArea>
-        <StatusBar barStyle="light-content" />
+      <View style={styles.container}>
         <Header
-          title={''}
-          type={'stack'}
+          type='stack'
+          title={name}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
           navigation={navigation}
           onPress={this.onPress}
@@ -143,12 +144,15 @@ export default class ArticleBySubject extends React.Component {
         <View style={styles.contentStyle}>
           {content}
         </View>
-      </SafeArea>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   contentStyle: {
     flex: 1,
     backgroundColor: 'rgb(250,250,250)'
@@ -180,21 +184,5 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(10),
     fontWeight: '800',
     color: 'rgb(82,82,82)'
-  },
-  txtSeeMoreStyle: {
-    paddingLeft: Scale.getSize(10),
-    fontSize: Scale.getSize(14),
-    paddingVertical: Scale.getSize(10),
-    fontWeight: '800',
-    color: platform.primaryBlue
-  },
-  wrapEmptyArticles: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  txtEmptyArticle: {
-    fontSize: Scale.getSize(18),
-    fontWeight: '700'
   }
 });

@@ -6,9 +6,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
+import Modal from 'react-native-modal';
 // import moment from 'moment';
 
 import Header from '../Reusables/Header';
@@ -22,7 +24,9 @@ import ArticleSmall from '../News/ArticleView/ArticleSmall';
 @connect(
   state => ({
     articleShareForMe: state.articleShareForMe,
-    articleShareByMe: state.articleShareByMe
+    articleShareByMe: state.articleShareByMe,
+    deleteArticleShareByMe: state.deleteArticleShareByMe,
+    deleteArticleShareForMe: state.deleteArticleShareForMe
   }),
   { ...commonActions }
 )
@@ -32,10 +36,14 @@ export default class Share extends React.Component {
     isTabRight: false,
     data: [],
     loading: true,
-    changeView: true
+    changeView: true,
+    onClickDelete: false,
+    showModal: false,
+    uniqueId: null
   }
 
   componentDidMount() {
+    this.onRefresh();
     this.props.navigation.addListener('willFocus', () => {
       this.onRefresh();
     });
@@ -44,9 +52,11 @@ export default class Share extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {
       articleShareForMe: { data: dataArticleShareForMe, error: errArticleShareForMe },
-      articleShareByMe: { data: dataArticleShareByMe, error: errArticleShareByMe }
+      articleShareByMe: { data: dataArticleShareByMe, error: errArticleShareByMe },
+      deleteArticleShareByMe,
+      deleteArticleShareForMe
     } = nextProps;
-    const { isTabLeft, isTabRight } = this.state;
+    const { isTabLeft, isTabRight, onClickDelete } = this.state;
 
     if (!errArticleShareForMe && !errArticleShareByMe) {
       if (isTabLeft && !isTabRight) {
@@ -60,6 +70,24 @@ export default class Share extends React.Component {
           data: dataArticleShareByMe
         });
       }
+    }
+
+    if (onClickDelete &&
+      !deleteArticleShareForMe.error &&
+      !deleteArticleShareByMe.error) {
+      Alert.alert(
+        'Thông báo',
+        'Xóa bài thành công',
+        [
+          {
+            text: 'OK',
+            onPress: () => this.setState({
+              onClickDelete: false
+            }, () => this.onRefresh())
+          }
+        ],
+        { cancelable: false }
+      );
     }
   }
 
@@ -99,12 +127,36 @@ export default class Share extends React.Component {
     }, () => this.props.getArticleShareByMe());
   }
 
+  onDeleteArticle = () => {
+    const { isTabLeft, isTabRight, uniqueId } = this.state;
+
+    this.setState({
+      onClickDelete: true,
+      showModal: !this.state.showModal
+    }, () => {
+      if (isTabLeft && !isTabRight) {
+        this.props.deleteArticleShareForMe(uniqueId);
+      } else if (!isTabLeft && isTabRight) {
+        this.props.deleteArticleShareByMe(uniqueId);
+      }
+    });
+  }
+
+  showModalAsign = () => this.setState({ showModal: !this.state.showModal });
+
   renderArticleItem = ({ item }) => {
-    const { id } = item;
+    const { id, unique_id } = item;
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id })}>
+      <TouchableOpacity
+        onPress={() => navigate('NewsDetail', { _id: id })}
+        onLongPress={() => {
+          this.setState({
+            uniqueId: unique_id
+          }, () => this.showModalAsign());
+        }}
+      >
         {this.state.changeView ? <ArticleSmall source={item} /> : <ArticleLarge source={item} />}
       </TouchableOpacity>
     );
@@ -153,6 +205,16 @@ export default class Share extends React.Component {
           key={(this.state.changeView ? 'h' : 'v')}
           keyExtractor={(it) => it.id.toString()}
         />
+        <Modal
+          isVisible={this.state.showModal}
+          onBackdropPress={this.showModalAsign}
+        >
+          <View style={{ backgroundColor: '#fff' }}>
+            <TouchableOpacity onPress={this.onDeleteArticle}>
+              <Text style={{ fontSize: Scale.getSize(16), color: '#000', padding: Scale.getSize(10) }}>{'Xóa bài chia sẻ'}</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeArea>
     );
   }

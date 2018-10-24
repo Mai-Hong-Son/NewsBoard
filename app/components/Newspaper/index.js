@@ -32,12 +32,12 @@ export default class Newspaper extends React.Component {
   state = {
     loading: true,
     loadMore: false,
-    page: 1,
+    page: 0,
     data: []
   }
 
   componentDidMount() {
-    this.props.getSummaries(1, 10);
+    this.props.getSummaries(0, 10);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,7 +56,7 @@ export default class Newspaper extends React.Component {
     this.setState({
       loading: true
     }, () => {
-      this.props.getSummaries(1, 10);
+      this.props.getSummaries(0, 10);
     });
   }
 
@@ -74,6 +74,10 @@ export default class Newspaper extends React.Component {
     });
   }
 
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   renderSummaryItem = ({ item }) => {
     const { title, updated_time, creator, id } = item;
     const { navigation: { navigate } } = this.props;
@@ -89,7 +93,10 @@ export default class Newspaper extends React.Component {
           </View>
           <View style={styles.wrapTxtBox}>
             <Text numberOfLines={2} style={styles.titleArticle}>{title}</Text>
-            <Text style={styles.txtArticleSrc}>{`Được tạo bởi: ${creator} | ${moment(updated_time).fromNow()}`}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[styles.txtArticleSrc, { color: '#000' }]}>{`${this.capitalizeFirstLetter(creator)} | `}</Text>
+              <Text style={styles.txtArticleSrc}>{moment(updated_time).fromNow()}</Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -106,7 +113,7 @@ export default class Newspaper extends React.Component {
         <FlatList
           data={data}
           renderItem={this.renderSummaryItem}
-          contentContainerStyle={{ paddingVertical: 15 }}
+          contentContainerStyle={{ paddingBottom: 15 }}
           refreshing={loading}
           onRefresh={this.onRefresh}
           onEndReachedThreshold={platform.platform === 'ios' ? 0 : 0.5}
@@ -126,8 +133,10 @@ const styles = StyleSheet.create({
   containerItem: {
     flexDirection: 'row',
     width: '100%',
-    paddingBottom: 15,
-    paddingHorizontal: 15
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderBottomColor: 'rgb(237,237,237)',
+    borderBottomWidth: 1
     // justifyContent: 'space-between'
   },
   wrapImage: {

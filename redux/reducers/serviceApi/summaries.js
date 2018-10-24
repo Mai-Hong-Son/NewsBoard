@@ -13,7 +13,7 @@ export const summaries = (state = DEFAULT_STATES, action) => {
     _.endsWith(action.type, ':SUCCESS') &&
     _.startsWith(action.type, 'GET_SUMMARIES')
   ) {
-    if (action.payload.config.pageNumber === 1) {
+    if (action.payload.config.pageNumber === 0) {
       state.data = [];
     }
 

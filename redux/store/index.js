@@ -21,7 +21,7 @@ import {
   saveArticleStatus,
   articles,
   myArticles,
-  statusBack,
+  statusRerender,
   subjects,
   issues,
   users,
@@ -30,13 +30,49 @@ import {
   shareArticleStatus,
   articleShareByMe,
   articleShareForMe,
-  deleteArticleStatus
+  deleteArticleStatus,
+  deleteArticleShareByMe,
+  deleteArticleShareForMe,
+  settings,
+  languagesSetting,
+  countriesSetting,
+  regionsSetting,
+  categoriesSetting
 } from './../reducers/index';
 
 const config = {
   key: 'root',
   storage,
-  blacklist: ['mainRouter', 'navReducer', 'articles', 'articlesSource']
+  blacklist: [
+    'mainRouter',
+    'navReducer',
+    'articles',
+    'articlesSource',
+    'languages',
+    'regions',
+    'countries',
+    'sources',
+    'summaries',
+    // 'articlesSource',
+    'postDetail',
+    'summaryDetail',
+    'saveArticleStatus',
+    'articles',
+    'myArticles',
+    'subjects',
+    'issues',
+    'users',
+    'createIssue',
+    'updateIssue',
+    'shareArticleStatus',
+    'articleShareByMe',
+    'articleShareForMe',
+    'deleteArticleStatus',
+    'deleteArticleShareByMe',
+    'deleteArticleShareForMe',
+    'settings',
+    'statusRerender'
+  ]
 };
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -59,7 +95,7 @@ export default function buildStore() {
     saveArticleStatus,
     articles,
     myArticles,
-    statusBack,
+    statusRerender,
     subjects,
     issues,
     users,
@@ -68,7 +104,14 @@ export default function buildStore() {
     shareArticleStatus,
     articleShareByMe,
     articleShareForMe,
-    deleteArticleStatus
+    deleteArticleStatus,
+    deleteArticleShareByMe,
+    deleteArticleShareForMe,
+    settings,
+    languagesSetting,
+    countriesSetting,
+    regionsSetting,
+    categoriesSetting
   });
 
   const store = createStore(reducers, composeEnhancer(applyMiddleware(reduxThunk, axiosMiddleware, middleware)));

@@ -16,7 +16,6 @@ import FullGradient from '../../Reusables/FullGradient';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
-import { getItemsByArrayId } from '../../Setting';
 
 const sourceTypeData = [
   {
@@ -43,93 +42,62 @@ const sourceTypeData = [
 
 @connect(
   state => ({
-    languages: state.languages,
-    regions: state.regions,
-    countries: state.countries,
-    sources: state.sources,
-    userInfo: state.userInfo
+    languagesSetting: state.languagesSetting,
+    countriesSetting: state.countriesSetting,
+    regionsSetting: state.regionsSetting,
+    categoriesSetting: state.categoriesSetting
   }),
   { ...commonActions }
 )
-export default class Filter extends React.PureComponent {
+export default class FilterSetting extends React.PureComponent {
   constructor(props) {
     super(props);
     const { navigation: { state: { params: { dataFilter } } } } = this.props;
 
     this.state = {
-      loading: true,
       data: dataFilter,
       dataSource: []
     };
   }
 
   componentDidMount() {
-    const { state: { params: { title, dataAccess } } } = this.props.navigation;
+    const { state: { params: { title } } } = this.props.navigation;
+    const {
+      languagesSetting: { data: dataLang },
+      countriesSetting: { data: dataCountry },
+      regionsSetting: { data: dataRegion },
+      categoriesSetting: { data: dataCategory }
+    } = this.props;
 
     switch (title) {
+      case 'Danh mục':
+        this.setState({
+          dataSource: dataCategory
+        });
+        break;
       case 'Ngôn ngữ':
-        this.props.getLanguages();
+        this.setState({
+          dataSource: dataLang
+        });
         break;
       case 'Quốc gia':
-        this.props.getCountries();
+        this.setState({
+          dataSource: dataCountry
+        });
         break;
       case 'Khu vực':
-        this.props.getRegions();
-        break;
-      case 'Nguồn':
-        this.props.getSources(dataAccess);
+        this.setState({
+          dataSource: dataRegion
+        });
         break;
       case 'Loại nguồn':
-        this.props.getUserInfo();
+        this.setState({
+          dataSource: sourceTypeData
+        });
         break;
       default:
         break;
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { navigation: { state: { params: { title } } } } = nextProps;
-    let dataTemp = [];
-
-    switch (title) {
-      case 'Ngôn ngữ':
-        {
-          const { languages: { data } } = nextProps;
-          dataTemp = data;
-        }
-        break;
-      case 'Quốc gia':
-        {
-          const { countries: { data } } = nextProps;
-          dataTemp = data;
-        }
-        break;
-      case 'Khu vực':
-        {
-          const { regions: { data } } = nextProps;
-          dataTemp = data;
-        }
-        break;
-      case 'Nguồn':
-        {
-          const { sources: { data } } = nextProps;
-          dataTemp = data;
-        }
-        break;
-      case 'Loại nguồn':
-        {
-          const { userInfo: { data: { settings } } } = nextProps;
-          dataTemp = getItemsByArrayId(sourceTypeData, settings.sourcetype);
-        }
-        break;
-      default:
-        break;
-    }
-
-    this.setState({
-      loading: false,
-      dataSource: dataTemp
-    });
   }
 
   onClick = (data, checkExsist) => {

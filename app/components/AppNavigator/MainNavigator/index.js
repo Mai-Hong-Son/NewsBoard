@@ -24,6 +24,7 @@ import SearchArticle from '../../SearchArticle';
 import ArticleBySubject from '../../ArticleBySubject';
 import IssuesDetail from '../../Focus/IssuesDetail';
 import Setting from '../../Setting';
+import FilterSetting from '../../Setting/elements/FilterSetting';
 
 // theme component
 // import Header from '../../Reusables/Header';
@@ -120,6 +121,9 @@ export const RootStacks = createStackNavigator(
     },
     Setting: {
       screen: Setting
+    },
+    FilterSetting: {
+      screen: FilterSetting
     }
   },
   {

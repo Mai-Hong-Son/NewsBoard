@@ -102,7 +102,7 @@ export default class News extends React.Component {
       sourcetype
     });
 
-    this.interval = setInterval(() => this.props.getArticles({
+    this.props.getArticles({
       source: sourceArticles,
       domain: domainArticles,
       category: categoryArticles,
@@ -115,7 +115,22 @@ export default class News extends React.Component {
       page_number: 1,
       time: timeArticles,
       sourcetype
-    }), 20000);
+    });
+
+    // this.interval = setInterval(() => this.props.getArticles({
+    //   source: sourceArticles,
+    //   domain: domainArticles,
+    //   category: categoryArticles,
+    //   country: countryArticles,
+    //   region: regionArticles,
+    //   lang: langArticles,
+    //   search: searchArticles,
+    //   from: fromDate,
+    //   to: toDate,
+    //   page_number: 1,
+    //   time: timeArticles,
+    //   sourcetype
+    // }), 20000);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -131,7 +146,7 @@ export default class News extends React.Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   onPress = () => {
@@ -310,8 +325,7 @@ export default class News extends React.Component {
   }
 
   getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time, sourcetype) => {
-    clearInterval(this.interval);
-
+    // clearInterval(this.interval);
     this.setState({
       isLoading: true,
       fromDate: from,
@@ -557,7 +571,8 @@ const styles = StyleSheet.create({
   wrapEmptyArticles: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 15
   },
   txtEmptyArticle: {
     fontSize: Scale.getSize(18),

@@ -34,6 +34,22 @@ export const getArticleShareByMe = () => {
   };
 };
 
+export const deleteArticleShareByMe = (id) => {
+  const action = createAction('DELETE_ARTICLE_SHARE_BY_ME');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'DELETE',
+      url: `/v4/shared/${id}`
+    };
+
+    dispatch(action({ request }));
+  };
+};
+
 export const getArticleShareForMe = () => {
   const action = createAction('GET_ARTICLE_SHARE_FOR_ME');
 
@@ -44,6 +60,22 @@ export const getArticleShareForMe = () => {
       headers: buildHeaders(state),
       method: 'GET',
       url: '/v4/shares'
+    };
+
+    dispatch(action({ request }));
+  };
+};
+
+export const deleteArticleShareForMe = (id) => {
+  const action = createAction('DELETE_ARTICLE_SHARE_FOR_ME');
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const request = {
+      headers: buildHeaders(state),
+      method: 'DELETE',
+      url: `/v4/shares/${id}`
     };
 
     dispatch(action({ request }));

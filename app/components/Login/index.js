@@ -14,6 +14,7 @@ import {
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import OneSignal from 'react-native-onesignal';
 
 import * as commonActions from '../../../redux/actions';
 import FullGradient from '../Reusables/FullGradient';
@@ -111,6 +112,7 @@ export default class Login extends React.PureComponent {
         // We have data!!
         if (_.endsWith(value, ':8080')) {
           axiosClient.defaults.baseURL = value;
+          OneSignal.sendTag('ip', value.replace('http://', '').replace(':8080', ''));
           if (!this.flag) {
             this.props.navigation.replace('DrawerApp');
           }

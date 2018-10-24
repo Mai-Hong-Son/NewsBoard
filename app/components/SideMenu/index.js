@@ -112,11 +112,11 @@ export default class SideMenu extends React.PureComponent {
   // }
 
   renderItem = ({ item }) => {
-    const { name, matched_count, avatar, search_query } = item;
+    const { name, matched_count, avatar, search_query, notify } = item;
     const { navigation } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('ArticleBySubject', { search_query })}>
+      <TouchableOpacity onPress={() => navigation.navigate('ArticleBySubject', { search_query, name: `${name} (${matched_count})` })}>
         <View style={styles.wrapItemSubject}>
           {avatar === '' ?
             (<View style={styles.imageEmpty}>
@@ -126,7 +126,7 @@ export default class SideMenu extends React.PureComponent {
               style={{ height: Scale.getSize(40), width: Scale.getSize(40), borderRadius: Scale.getSize(20) }}
               source={{ uri: avatar }}
             />}
-          <Text style={styles.txtSubjectName}>{name}</Text>
+          <Text style={[styles.txtSubjectName, { fontWeight: notify === 1 ? '800' : '500' }]}>{name}</Text>
           <Text style={styles.txtSubjectNotif}>{matched_count}</Text>
         </View>
       </TouchableOpacity>
@@ -193,17 +193,19 @@ const styles = StyleSheet.create({
   },
   wrapItemSubject: {
     paddingVertical: Scale.getSize(5),
-    paddingHorizontal: Scale.getSize(15),
+    paddingHorizontal: Scale.getSize(12),
     backgroundColor: '#fff',
-    marginBottom: 10,
+    marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderRadius: Scale.getSize(30)
+    borderRadius: Scale.getSize(8)
   },
   txtSubjectName: {
     fontSize: Scale.getSize(18),
-    fontWeight: '600'
+    // fontWeight: '500',
+    paddingHorizontal: Scale.getSize(20),
+    flex: 1
   },
   txtSubjectNotif: {
     fontSize: Scale.getSize(15),

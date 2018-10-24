@@ -20,32 +20,37 @@ import SafeArea from '../../theme/SafeArea';
 
 @connect(
   state => ({
-    myArticles: state.myArticles
+    myArticles: state.myArticles,
+    statusRerender: state.statusRerender
   }),
   { ...commonActions }
 )
 export default class Save extends React.Component {
   state = {
     changeView: true,
-    isLoading: true
+    isLoading: true,
+    isFistime: false
   }
 
   componentDidMount() {
-    this.onRefresh();
-    this.props.navigation.addListener('willFocus', () => {
-      console.warn('test');
-      this.onRefresh();
-    });
+    this.setState({
+      isFistime: true
+    }, () => this.onRefresh());
   }
 
   componentWillReceiveProps(nextProps) {
-    const { myArticles: { data: dataAticles } } = nextProps;
-    const { isLoading } = this.state;
+    const { myArticles: { data: dataAticles }, statusRerender } = nextProps;
+    const { isLoading, isFistime } = this.state;
 
-    if (dataAticles.results && isLoading) {
+    if (dataAticles.results && isLoading && isFistime) {
       this.setState({
-        isLoading: false
+        isLoading: false,
+        isFistime: false
       });
+    }
+
+    if (statusRerender !== this.props.statusRerender && !isFistime) {
+      this.onRefresh();
     }
   }
 
@@ -57,18 +62,19 @@ export default class Save extends React.Component {
 
   onRefresh = () => {
     this.setState({
-      isLoading: true
+      isLoading: true,
+      isFistime: true
     });
 
     this.props.getMyArticles();
   }
 
   renderArticleItem = ({ item }) => {
-    const { id, unique_id } = item;
+    const { id } = item;
     const { navigation: { navigate } } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id, unique_id })}>
+      <TouchableOpacity onPress={() => navigate('NewsDetail', { _id: id })}>
         {this.state.changeView ? <ArticleSmall source={item} /> : <ArticleLarge source={item} />}
       </TouchableOpacity>
     );

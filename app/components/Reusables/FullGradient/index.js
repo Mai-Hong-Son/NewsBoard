@@ -12,7 +12,7 @@ export default class FullGradient extends React.PureComponent {
 
   static defaultProps = {
     containerStyle: {},
-    backgroundColor: [platform.primaryColor, platform.primaryBlue]
+    backgroundColor: [platform.primaryBlue, platform.primaryBlue]
   };
   render() {
     const { containerStyle, children, backgroundColor } = this.props;

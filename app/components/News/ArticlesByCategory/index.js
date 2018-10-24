@@ -16,6 +16,7 @@ import ArticleSmall from '../../News/ArticleView/ArticleSmall';
 import platform from '../../../theme/platform';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
+import { Loading } from '../../Reusables/Loading';
 
 @connect(
   state => ({
@@ -91,7 +92,7 @@ export default class ArticlesByCategory extends React.Component {
     const { state: { params: { categoryFilter } } } = this.props.navigation;
 
     this.setState({
-      pageNumer: this.state.pageNumer,
+      pageNumer: this.state.pageNumer + 1,
       isLoadmore: true
     }, () => {
       this.props.getArticlesSource({
@@ -125,7 +126,7 @@ export default class ArticlesByCategory extends React.Component {
     const { navigation, articlesSource: { data } } = this.props;
     const { state: { params: { categoryFilter } } } = navigation;
     const { isLoading, isLoadmore } = this.state;
-    const content = isLoading ? <ActivityIndicator /> : (<FlatList
+    const content = isLoading ? <Loading /> : (<FlatList
       data={data}
       renderItem={this.renderArticleItem}
       refreshing={isLoading}
@@ -137,7 +138,7 @@ export default class ArticlesByCategory extends React.Component {
       extraData={this.state.changeView}
       numColumns={this.state.changeView ? 1 : 2}
       key={(this.state.changeView ? 'h' : 'v')}
-      keyExtractor={(it, index) => index}
+      keyExtractor={(it, index) => index.toString()}
     />);
 
     return (

@@ -170,8 +170,8 @@ export default class IssuesDetail extends React.PureComponent {
 
   renderCheckbox = ({ item }) => {
     const { username } = item;
-    const { state: { params: { dataSaved } } } = this.props.navigation;
-    const checkExsist = dataSaved.assignees.some((el) => el === item.id);
+    // const { state: { params: { dataSaved } } } = this.props.navigation;
+    const checkExsist = this.state.peopleAsign.some((el) => el === item.id);
 
     return (
       <CheckBox
@@ -195,7 +195,7 @@ export default class IssuesDetail extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <View style={styles.wrapContentHeader}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={{ paddingRight: 10 }} onPress={() => navigation.goBack()}>
               <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
             </TouchableOpacity>
             <Text style={styles.txtTitleHeader}>{titleHeader}</Text>
@@ -289,12 +289,24 @@ export default class IssuesDetail extends React.PureComponent {
           isVisible={showModal}
           onBackdropPress={this.showModalAsign}
         >
-          <View style={{ backgroundColor: '#fff' }}>
+          <View style={{ backgroundColor: '#fff', height: '40%' }}>
             <FlatList
               data={users.data}
               renderItem={this.renderCheckbox}
               keyExtractor={(item) => item.id.toString()}
             />
+            
+            <View style={{ alignItems: 'flex-end', paddingRight: Scale.getSize(15), paddingVertical: Scale.getSize(15) }}>
+              <TouchableOpacity onPress={this.showModalAsign}>
+                <Text 
+                  style={{
+                    fontSize: Scale.getSize(18),
+                    fontWeight: '700',
+                    color: platform.primaryBlue 
+                  }}
+                >{'XONG'}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </SafeArea>

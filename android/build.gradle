@@ -2,12 +2,12 @@
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         maven {
             url 'https://maven.fabric.io/public'
         }
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
@@ -43,7 +43,6 @@ subprojects {
 allprojects {
     repositories {
         mavenLocal()
-        jcenter()
         flatDir {
             dirs 'libs'
         }
@@ -53,6 +52,7 @@ allprojects {
         }
         google()
         maven { url "https://jitpack.io" }
+        jcenter()
     }
 }
 

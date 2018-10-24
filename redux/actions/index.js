@@ -12,7 +12,20 @@ import { navigateMainTab } from './navigations';
 import { getSubjects } from './serviceApi/getSubjects';
 import { getIssues, createIssues, updateIssues } from './serviceApi/getIssues';
 import { getUsers } from './serviceApi/getUsers';
-import { shareArticle, getArticleShareByMe, getArticleShareForMe } from './serviceApi/shareArticle';
+import {
+  shareArticle,
+  getArticleShareByMe,
+  getArticleShareForMe,
+  deleteArticleShareByMe,
+  deleteArticleShareForMe
+} from './serviceApi/shareArticle';
+import { postSettings, getSettingNotify, postSettingNotify } from './serviceApi/postSettings';
+import {
+  getLanguagesSetting,
+  getCountriesSetting,
+  getRegionsSetting,
+  getCategoriesSetting
+} from './serviceApi/getDataFilterSetting';
 
 export {
   login,
@@ -39,5 +52,14 @@ export {
   getArticleShareByMe,
   getArticleShareForMe,
   logout,
-  deleteArticleSave
+  deleteArticleSave,
+  deleteArticleShareByMe,
+  deleteArticleShareForMe,
+  postSettings,
+  getLanguagesSetting,
+  getCountriesSetting,
+  getRegionsSetting,
+  getCategoriesSetting,
+  getSettingNotify,
+  postSettingNotify
 };

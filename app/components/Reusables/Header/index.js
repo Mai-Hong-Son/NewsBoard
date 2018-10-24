@@ -130,7 +130,7 @@ export default class Header extends React.PureComponent {
               <Icon
                 name={iconName}
                 color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
-                size={Scale.getSize(25)}
+                size={Scale.getSize(30)}
               />
             </TouchableOpacity>
             {iconMenu ? (
@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
   wrapBoxRight: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   txtOptionMenu: {
     fontSize: Scale.getSize(18),
@@ -231,7 +232,8 @@ const styles = StyleSheet.create({
   },
   wrapModalBox: {
     backgroundColor: '#fff',
-    padding: 15
+    padding: 15,
+    height: '70%'
   },
   txtCheckbox: {
     fontSize: Scale.getSize(18),

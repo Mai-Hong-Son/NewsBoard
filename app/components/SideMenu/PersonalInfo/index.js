@@ -3,9 +3,11 @@ import {
   View,
   Text,
   Image,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
 import { connect } from 'react-redux';
+import OneSignal from 'react-native-onesignal';
 
 import * as commonActions from '../../../../redux/actions';
 import images from '../../../assets/images';
@@ -25,18 +27,37 @@ export default class PersonalInfo extends React.PureComponent {
 
   componentDidMount() {
     this.props.getUserInfo();
+    this.props.getCategoriesSetting();
+    this.props.getLanguagesSetting();
+    this.props.getCountriesSetting();
+    this.props.getRegionsSetting();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { userInfo, error } = nextProps;
+    const { userInfo: { error, data } } = nextProps;
 
     if (!error) {
+      const { id } = data;
+
+      this._retrieveData(id);
       this.setState({
-        userData: userInfo.data,
+        userData: data,
         loading: false
-      });
+      }, () => this.props.postSettings(this.state.userData.settings));
     }
   }
+
+  _retrieveData = async (id) => {
+    try {
+      const value = await AsyncStorage.getItem('localhost');
+      if (value !== null) {
+        // We have data!!
+        OneSignal.sendTags({ ip: value.replace('http://', '').replace(':8080', ''), user_id: id });
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
   render() {
     const { loading, userData } = this.state;

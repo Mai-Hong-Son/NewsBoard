@@ -53,34 +53,41 @@ export default class SummaryDetail extends React.PureComponent {
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;
       // console.warn(description);
+
       content = (
         <ScrollView>
           <View style={styles.wrapContentStyle}>
-            <View style={styles.wrapTag}>
-              <Text style={styles.txtName}>{creator}</Text>
-            </View>
             <Text style={styles.titleStyle}>{title}</Text>
             <View style={styles.wrapSourceStyle}>
-              <Text style={styles.txtSourceStyle}>{updated_time}</Text>
+              <View style={styles.wrapTag}>
+                <Text style={styles.txtName}>{creator}</Text>
+              </View>
+              {/* <Text style={styles.txtSourceStyle}>{` - ${updated_time}`}</Text> */}
             </View>
             <HTML
-              html={description.trim()}
+              html={description.replace(/(\r\n|\n|\r)/gm, ' ')}
               imagesMaxWidth={platform.deviceWidth - 100}
               baseFontStyle={{ fontSize: Scale.getSize(24) }}
-              ignoredStyles={['font-family', 'letter-spacing', 'Times New Roman', 'serif', 'normal']}
+              ignoredStyles={['font-family', 'letter-spacing', 'mso-bidi-font-style']}
               tagsStyles={{
                 p: {
-                  paddingTop: Scale.getSize(10),
-                  paddingBottom: Scale.getSize(10)
+                  // fontSize: Scale.getSize(24),
+                  color: '#000',
+                  paddingTop: Scale.getSize(5),
+                  paddingBottom: Scale.getSize(5),
+                  textAlign: 'justify'
                 },
                 h1: {
                   fontSize: Scale.getSize(24),
                   paddingTop: Scale.getSize(10),
-                  paddingBottom: 0
+                  paddingBottom: 0,
+                  color: '#000',
+                  textAlign: 'justify'
                 },
                 span: {
                   fontSize: Scale.getSize(24),
-                  paddingBottom: 0
+                  color: '#000',
+                  textAlign: 'justify'
                 },
                 img: { overflow: 'visible' },
                 div: { alignItems: 'center' }
@@ -92,14 +99,14 @@ export default class SummaryDetail extends React.PureComponent {
     }
 
     return (
-      <SafeArea>
+      <View style={{ flex: 1, paddingBottom: 10, backgroundColor: '#fff' }}>
         <Header
           title={''}
           navigation={navigation}
           type={'stack'}
         />
         {content}
-      </SafeArea>
+      </View>
     );
   }
 }
@@ -111,7 +118,8 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontSize: Scale.getSize(27),
-    fontWeight: '700'
+    fontWeight: '700',
+    color: '#000'
   },
   wrapContentStyle: {
     width: platform.deviceWidth,
@@ -120,7 +128,8 @@ const styles = StyleSheet.create({
   },
   wrapSourceStyle: {
     flexDirection: 'row',
-    paddingVertical: Scale.getSize(5)
+    paddingVertical: Scale.getSize(5),
+    alignItems: 'center'
   },
   logoImage: {
     height: Scale.getSize(18),

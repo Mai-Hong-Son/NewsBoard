@@ -11,10 +11,23 @@ import { myArticles } from './serviceApi/myArticles';
 import { subjects } from './serviceApi/subjects';
 import { issues, createIssue, updateIssue } from './serviceApi/issues';
 import { users } from './serviceApi/users';
-import { shareArticleStatus, articleShareByMe, articleShareForMe } from './serviceApi/articleShare';
+import {
+  shareArticleStatus,
+  articleShareByMe,
+  articleShareForMe,
+  deleteArticleShareByMe,
+  deleteArticleShareForMe
+} from './serviceApi/articleShare';
+import { settings } from './serviceApi/settings';
+import {
+  languagesSetting,
+  countriesSetting,
+  regionsSetting,
+  categoriesSetting
+} from './serviceApi/dataFiltersSetting';
 
-const statusBack = (state = null, action) => {
-  if (action.type === 'Navigation/BACK') {
+const statusRerender = (state = null, action) => {
+  if (action.type === 'Navigation/DRAWER_CLOSED') {
     return Date.now();
   }
   return state;
@@ -35,7 +48,7 @@ export {
   saveArticleStatus,
   articles,
   myArticles,
-  statusBack,
+  statusRerender,
   subjects,
   issues,
   users,
@@ -44,5 +57,12 @@ export {
   shareArticleStatus,
   articleShareByMe,
   articleShareForMe,
-  deleteArticleStatus
+  deleteArticleStatus,
+  deleteArticleShareByMe,
+  deleteArticleShareForMe,
+  settings,
+  languagesSetting,
+  countriesSetting,
+  regionsSetting,
+  categoriesSetting
 };
