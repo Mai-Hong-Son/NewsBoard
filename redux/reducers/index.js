@@ -18,7 +18,6 @@ import {
   deleteArticleShareByMe,
   deleteArticleShareForMe
 } from './serviceApi/articleShare';
-import { settings } from './serviceApi/settings';
 import {
   languagesSetting,
   countriesSetting,
@@ -60,7 +59,6 @@ export {
   deleteArticleStatus,
   deleteArticleShareByMe,
   deleteArticleShareForMe,
-  settings,
   languagesSetting,
   countriesSetting,
   regionsSetting,

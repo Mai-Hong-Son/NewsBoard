@@ -19,7 +19,7 @@ import {
   deleteArticleShareByMe,
   deleteArticleShareForMe
 } from './serviceApi/shareArticle';
-import { postSettings, getSettingNotify, postSettingNotify } from './serviceApi/postSettings';
+import { postSettings, postSettingNotify } from './serviceApi/postSettings';
 import {
   getLanguagesSetting,
   getCountriesSetting,
@@ -60,6 +60,5 @@ export {
   getCountriesSetting,
   getRegionsSetting,
   getCategoriesSetting,
-  getSettingNotify,
   postSettingNotify
 };

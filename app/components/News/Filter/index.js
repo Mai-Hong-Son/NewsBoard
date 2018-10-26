@@ -230,7 +230,8 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     fontSize: Scale.getSize(20),
-    fontWeight: '800'
+    fontWeight: '800',
+    color: '#000'
   },
   headerContainer: {
     height: Scale.getSize(80),
@@ -243,7 +244,8 @@ const styles = StyleSheet.create({
   },
   txtCheckbox: {
     fontSize: Scale.getSize(18),
-    fontWeight: '700'
+    fontWeight: '700',
+    color: '#000'
   },
   containerFooter: {
     paddingHorizontal: Scale.getSize(15),

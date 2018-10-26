@@ -15,7 +15,8 @@ import Scale from '../../../theme/scale';
 
 @connect(
   state => ({
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    mainRouter: state.mainRouter
   }),
   { ...commonActions }
 )
@@ -36,7 +37,7 @@ export default class PersonalInfo extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     const { userInfo: { error, data } } = nextProps;
 
-    if (!error) {
+    if (!error && this.state.loading) {
       const { id } = data;
 
       this._retrieveData(id);
@@ -47,12 +48,34 @@ export default class PersonalInfo extends React.PureComponent {
     }
   }
 
+  onOpened(openResult, props) {
+    const { type, post } = openResult.notification.payload.additionalData;
+
+    switch (type) {
+      case 'news':
+        props.navigation.push('NewsDetail', { _id: post });
+        break;
+      case 'share':
+        props.navigation.push('NewsDetail', { _id: post });
+        break;
+      case 'issue':
+        props.navigateMainTab('Focus');
+        break;
+    
+      default:
+        break;
+    }
+  }
+
   _retrieveData = async (id) => {
     try {
       const value = await AsyncStorage.getItem('localhost');
       if (value !== null) {
         // We have data!!
         OneSignal.sendTags({ ip: value.replace('http://', '').replace(':8080', ''), user_id: id });
+        OneSignal.inFocusDisplaying(2);
+        OneSignal.addEventListener('opened', (openResult) => this.onOpened(openResult, this.props));
+        OneSignal.configure();
       }
     } catch (error) {
       // Error retrieving data

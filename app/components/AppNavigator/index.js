@@ -10,7 +10,6 @@ import { MainStack } from './MainNavigator';
 
 moment.locale('vi');
 OneSignal.init('581b287b-a830-47e9-83c9-8abe9d53f1a1');
-OneSignal.inFocusDisplaying(2);
 OneSignal.configure();
 
 export const middleware = createReactNavigationReduxMiddleware(

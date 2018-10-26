@@ -130,7 +130,7 @@ export default class Header extends React.PureComponent {
               <Icon
                 name={iconName}
                 color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
-                size={Scale.getSize(30)}
+                size={iconName === 'flag' ? Scale.getSize(22) : Scale.getSize(30)}
               />
             </TouchableOpacity>
             {iconMenu ? (
@@ -200,7 +200,7 @@ export default class Header extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
+    height: (platform.platform === 'ios' && !platform.isIphoneX) ? Scale.getSize(80) : Scale.getSize(60),
     width: '100%',
     justifyContent: 'flex-end',
     paddingBottom: Scale.getSize(15)
@@ -228,7 +228,8 @@ const styles = StyleSheet.create({
   },
   txtOptionMenu: {
     fontSize: Scale.getSize(18),
-    paddingVertical: 7
+    paddingVertical: 7,
+    color: '#000'
   },
   wrapModalBox: {
     backgroundColor: '#fff',

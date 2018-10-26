@@ -249,7 +249,7 @@ export default class IssuesDetail extends React.PureComponent {
               <Icon name='edit' size={30} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
-          <View style={styles.wrapTextinput}>
+          <View style={[styles.wrapTextinput, { height: 200 }]}>
             <Text style={styles.txtTitleTextInput}>{'Mô tả:'}</Text>
             <TextInput
               onChangeText={(text) => this.setState({ description: text })}
@@ -362,6 +362,7 @@ const styles = StyleSheet.create({
   },
   wrapTextinput: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
     borderWidth: 1,
     borderRadius: 4,
     paddingVertical: Scale.getSize(10),

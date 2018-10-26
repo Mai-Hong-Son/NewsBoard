@@ -17,6 +17,7 @@ import _ from 'lodash';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+import SafeArea from '../../theme/SafeArea';
 import Header from '../Reusables/Header';
 import { Loading } from '../Reusables/Loading';
 
@@ -88,8 +89,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!errDelete && this.state.isClickSave && this.state.colorSave) {
       Alert.alert(
-        'Thông báo',
-        'Xóa bài lưu thành công',
+        'Thành công',
+        'Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.',
         [
           {
             text: 'OK',
@@ -124,7 +125,7 @@ export default class NewsDetail extends React.PureComponent {
     if (errShare && this.state.onClickShare) {
       Alert.alert(
         'Thông báo',
-        'Bài này đã được chia sẻ',
+        'Không chia sẻ được',
         [
           {
             text: 'OK',
@@ -291,11 +292,15 @@ export default class NewsDetail extends React.PureComponent {
             keyboardShouldPersistTaps="always"
             maskColor="transparent"
             parallaxHeaderHeight={250}
-            renderBackground={() => (<Image source={{
-              uri: image === undefined ? '' : image,
-              height: 250
-            }}
-            />)}
+            renderBackground={() => (
+              <Image 
+                style={{ height: 250, width: '100%' }}
+                resizeMode='cover'
+                source={(image === undefined || image === '') ? require('../../assets/images/3.jpg') : {
+                  uri: image,
+                  height: 250
+                }}
+              />)}
           >
             <View style={styles.wrapContentStyle}>
               <View style={styles.wrapTag}>
@@ -313,7 +318,7 @@ export default class NewsDetail extends React.PureComponent {
               <HTML
                 html={typeBody.replace('block', '').replace('inline-block', '').replace('inline-', '').replace('fixed', 'absolute')}
                 imagesMaxWidth={platform.deviceWidth - 100}
-                baseFontStyle={{ fontSize: Scale.getSize(24) }}
+                baseFontStyle={{ fontSize: Scale.getSize(24), color: '#000' }}
                 ignoredStyles={['display']}
                 tagsStyles={{
                   p: {
@@ -338,7 +343,9 @@ export default class NewsDetail extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: platform.isIphoneX ? 40 : 0,
+    paddingBottom: platform.isIphoneX ? 10 : 0
   },
   titleStyle: {
     fontSize: Scale.getSize(26),
@@ -348,8 +355,8 @@ const styles = StyleSheet.create({
   wrapContentStyle: {
     width: '100%',
     paddingHorizontal: Scale.getSize(15),
-    paddingTop: Scale.getSize(15),
-    paddingBottom: 100
+    paddingTop: Scale.getSize(15)
+    // paddingBottom: 100
   },
   wrapSourceStyle: {
     flexDirection: 'row',

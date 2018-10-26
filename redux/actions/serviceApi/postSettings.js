@@ -18,30 +18,14 @@ export const postSettings = (setting) => {
   };
 };
 
-export const getSettingNotify = () => {
-  const action = createAction('GET_SETTING_NOTIFY');
+export const postSettingNotify = (settingNotify) => {
+  const action = createAction('POST_SETTINGS');
 
   return (dispatch, getState) => {
     const state = getState();
 
     const request = {
-      method: 'GET',
-      headers: buildHeaders(state),
-      url: '/setting_notify'
-    };
-
-    dispatch(action({ request }));
-  };
-};
-
-export const postSettingNotify = (setting_notify) => {
-  const action = createAction('POST_SETTING_NOTIFY');
-
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const request = {
-      data: setting_notify,
+      data: settingNotify,
       method: 'POST',
       headers: buildHeaders(state),
       url: '/setting_notify'
@@ -50,3 +34,4 @@ export const postSettingNotify = (setting_notify) => {
     dispatch(action({ request }));
   };
 };
+

@@ -69,7 +69,7 @@ export default class SideMenu extends React.PureComponent {
 
     if (!error) {
       this.setState({
-        subjectsData: data,
+        subjectsData: data.filter(item => item.hidden === false),
         loading: false
       });
     }
@@ -157,7 +157,7 @@ export default class SideMenu extends React.PureComponent {
 
     return (
       <FullGradient containerStyle={styles.container}>
-        <PersonalInfo />
+        <PersonalInfo navigation={this.props.navigation} />
         <FlatList
           data={topicData}
           refreshing={loading}
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
   txtSubjectName: {
     fontSize: Scale.getSize(18),
     // fontWeight: '500',
+    color: '#000',
     paddingHorizontal: Scale.getSize(20),
     flex: 1
   },

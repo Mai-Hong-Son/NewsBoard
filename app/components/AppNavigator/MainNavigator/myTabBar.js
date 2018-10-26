@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import FullGradient from '../../Reusables/FullGradient';
 import Scale from '../../../theme/scale';
+import platform from '../../../theme/platform';
 
 const TAB_BAR_HEIGHT = Scale.getSize(60);
 const BARCODE_BUTTON_MARGIN = Scale.getSize(10);
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: platform.isIphoneX ? 20 : 0,
     height: TAB_BAR_HEIGHT + BARCODE_BUTTON_MARGIN,
 
     flexDirection: 'row',
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 0
+      height: platform.isIphoneX ? -3 : 0
     },
     shadowOpacity: 0.7,
     elevation: 1

@@ -45,7 +45,8 @@ const sourceTypeData = [
     languagesSetting: state.languagesSetting,
     countriesSetting: state.countriesSetting,
     regionsSetting: state.regionsSetting,
-    categoriesSetting: state.categoriesSetting
+    categoriesSetting: state.categoriesSetting,
+    subjects: state.subjects
   }),
   { ...commonActions }
 )
@@ -66,7 +67,8 @@ export default class FilterSetting extends React.PureComponent {
       languagesSetting: { data: dataLang },
       countriesSetting: { data: dataCountry },
       regionsSetting: { data: dataRegion },
-      categoriesSetting: { data: dataCategory }
+      categoriesSetting: { data: dataCategory },
+      subjects: { data: dataSubjects }
     } = this.props;
 
     switch (title) {
@@ -93,6 +95,11 @@ export default class FilterSetting extends React.PureComponent {
       case 'Loại nguồn':
         this.setState({
           dataSource: sourceTypeData
+        });
+        break;
+      case 'Danh mục nhận thông báo':
+        this.setState({
+          dataSource: dataSubjects
         });
         break;
       default:
@@ -198,7 +205,8 @@ const styles = StyleSheet.create({
   },
   txtTitle: {
     fontSize: Scale.getSize(20),
-    fontWeight: '800'
+    fontWeight: '800',
+    color: '#000'
   },
   headerContainer: {
     height: Scale.getSize(80),
@@ -211,7 +219,8 @@ const styles = StyleSheet.create({
   },
   txtCheckbox: {
     fontSize: Scale.getSize(18),
-    fontWeight: '700'
+    fontWeight: '700',
+    color: '#000'
   },
   containerFooter: {
     paddingHorizontal: Scale.getSize(15),

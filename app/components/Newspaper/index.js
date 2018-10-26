@@ -18,8 +18,8 @@ import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
 import SafeArea from '../../theme/SafeArea';
 
-const IMAGE_SIZE_HEIGHT = Scale.getSize(70);
-const IMAGE_SIZE_WIDTH = Scale.getSize(110);
+const IMAGE_SIZE_HEIGHT = Scale.getSize(50);
+const IMAGE_SIZE_WIDTH = Scale.getSize(90);
 // const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(45) - IMAGE_SIZE_WIDTH;
 
 @connect(
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   titleArticle: {
     // width: TXT_BOX_SIZE,
     paddingBottom: Scale.getSize(8),
-    fontSize: Scale.getSize(20),
+    fontSize: Scale.getSize(18),
     color: '#000'
   },
   txtArticleSrc: {

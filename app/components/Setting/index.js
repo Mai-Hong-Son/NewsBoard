@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import * as commonActions from '../../../redux/actions';
 import Header from '../Reusables/Header';
-// import SafeArea from '../../theme/SafeArea';
+import SafeArea from '../../theme/SafeArea';
 import ItemView from './elements/ItemView';
 import Scale from '../../theme/scale';
 // import { Loading } from '../../components/Reusables/Loading';
@@ -57,6 +57,26 @@ export function getItemsByArrayId(arr1, arr2) {
   return arr3;
 }
 
+const eNotInArray = (array, e) => {
+  for (let i = 0; i < array.length; ++i) {
+    if (e === array[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const filter = (sourceArray, keyArray) => {
+  const result = [];
+  for (let i = 0; i < sourceArray.length; ++i) {
+    const element = sourceArray[i]._id;
+    if (eNotInArray(keyArray, element)) {
+      result.push(sourceArray[i]);
+    }
+  }
+  return result;
+};
+
 @connect(
   state => ({
     userInfo: state.userInfo,
@@ -78,18 +98,37 @@ export default class Setting extends React.PureComponent {
       languages: [],
       regions: [],
       sourcetype: [],
-      subjects: props.subjects.data
+      subjects: [],
+      loading: true
     };
   }
 
   componentDidMount() {
     this.props.getUserInfo();
+
+    fetch('http://35.196.179.240:8080/setting_notify', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1NjI3NTQxMTR9.Jk1kVQVREPUzUg3NpWzp8j5_0ovskS_04hqhCuA23Rc',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          subjects: filter(this.props.subjects.data, responseJson)
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   componentWillReceiveProps(nextProps) {
     const { userInfo: { error, data } } = nextProps;
 
-    if (!error) {
+    if (!error && this.state.loading) {
       const {
         languagesSetting,
         countriesSetting,
@@ -99,6 +138,7 @@ export default class Setting extends React.PureComponent {
       const { settings } = data;
 
       this.setState({
+        loading: false,
         categories: getItemsByArrayId(categoriesSetting.data, settings.category),
         countries: getItemsByArrayId(countriesSetting.data, settings.country),
         languages: getItemsByArrayId(languagesSetting.data, settings.lang),
@@ -260,6 +300,18 @@ export default class Setting extends React.PureComponent {
           }
         });
         break;
+      case 'Danh mục nhận thông báo':
+        this.props.navigation.navigate('FilterSetting', {
+          title,
+          dataFilter: this.state.subjects,
+          onSubmit: (subjects) => {
+            const data = filter(this.props.subjects.data, subjects.map(item => item._id)).map(item => item._id);
+            this.setState({
+              subjects
+            }, () => this.props.postSettingNotify(data));
+          }
+        });
+        break;
 
       default:
         break;
@@ -271,7 +323,7 @@ export default class Setting extends React.PureComponent {
     const { countries, languages, regions, sourcetype, categories, subjects } = this.state;
 
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeArea style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
           title={'Cài đặt'}
           type='stack'
@@ -291,10 +343,10 @@ export default class Setting extends React.PureComponent {
           </View>
           <Text style={[styles.txtContentTitle, { paddingTop: Scale.getSize(15) }]}>{'Thông báo'}</Text>
           <View>
-            <ItemView title={'Danh mục nhận thông báo'} data={subjects} onPress={() => null} />
+            <ItemView title={'Danh mục nhận thông báo'} data={subjects} onPress={() => this.onNavigateFilter('Danh mục nhận thông báo')} />
           </View>
         </ScrollView>
-      </View>
+      </SafeArea>
     );
   }
 }

@@ -33,7 +33,6 @@ import {
   deleteArticleStatus,
   deleteArticleShareByMe,
   deleteArticleShareForMe,
-  settings,
   languagesSetting,
   countriesSetting,
   regionsSetting,
@@ -70,7 +69,6 @@ const config = {
     'deleteArticleStatus',
     'deleteArticleShareByMe',
     'deleteArticleShareForMe',
-    'settings',
     'statusRerender'
   ]
 };
@@ -107,7 +105,6 @@ export default function buildStore() {
     deleteArticleStatus,
     deleteArticleShareByMe,
     deleteArticleShareForMe,
-    settings,
     languagesSetting,
     countriesSetting,
     regionsSetting,

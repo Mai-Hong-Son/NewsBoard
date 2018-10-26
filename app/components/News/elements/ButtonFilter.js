@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   },
   txtButtonFilter: {
     paddingRight: Scale.getSize(7),
-    fontSize: Scale.getSize(14)
+    fontSize: Scale.getSize(14),
+    color: '#000'
     // paddingTop: Scale.getSize(24) - Scale.getSize(21)
   }
 });

@@ -19,3 +19,4 @@ export const settings = (state = DEFAULT_STATES, action) => {
 
   return state;
 };
+

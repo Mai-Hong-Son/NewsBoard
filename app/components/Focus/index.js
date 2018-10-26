@@ -122,7 +122,7 @@ export default class Focus extends React.Component {
               <Text style={styles.txtTitle}>{title}</Text>
               <Text style={styles.txtTimeTitle}>{moment(created_time).fromNow()}</Text>
             </View>
-            {completed ? <Icon name='ios-checkmark-circle' color={'#7CFC00'} size={Scale.getSize(25)} /> : null}
+            {completed ? <Icon name='ios-checkmark-circle' color={'#00cc66'} size={Scale.getSize(25)} /> : null}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -237,12 +237,13 @@ const styles = StyleSheet.create({
   contentRightStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ADFF2F',
+    backgroundColor: '#00cc66',
     borderRadius: 25,
     height: 50,
     width: 50
   },
   txtContentRight: {
-    fontSize: Scale.getSize(25)
+    fontSize: Scale.getSize(25),
+    color: '#fff'
   }
 });

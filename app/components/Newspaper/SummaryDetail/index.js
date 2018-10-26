@@ -62,12 +62,12 @@ export default class SummaryDetail extends React.PureComponent {
               <View style={styles.wrapTag}>
                 <Text style={styles.txtName}>{creator}</Text>
               </View>
-              {/* <Text style={styles.txtSourceStyle}>{` - ${updated_time}`}</Text> */}
+              <Text style={styles.txtSourceStyle}>{` - ${updated_time}`}</Text>
             </View>
             <HTML
               html={description.replace(/(\r\n|\n|\r)/gm, ' ')}
               imagesMaxWidth={platform.deviceWidth - 100}
-              baseFontStyle={{ fontSize: Scale.getSize(24) }}
+              baseFontStyle={{ fontSize: Scale.getSize(26) }}
               ignoredStyles={['font-family', 'letter-spacing', 'mso-bidi-font-style']}
               tagsStyles={{
                 p: {
@@ -78,14 +78,14 @@ export default class SummaryDetail extends React.PureComponent {
                   textAlign: 'justify'
                 },
                 h1: {
-                  fontSize: Scale.getSize(24),
+                  fontSize: Scale.getSize(26),
                   paddingTop: Scale.getSize(10),
                   paddingBottom: 0,
                   color: '#000',
                   textAlign: 'justify'
                 },
                 span: {
-                  fontSize: Scale.getSize(24),
+                  fontSize: Scale.getSize(26),
                   color: '#000',
                   textAlign: 'justify'
                 },
@@ -99,14 +99,14 @@ export default class SummaryDetail extends React.PureComponent {
     }
 
     return (
-      <View style={{ flex: 1, paddingBottom: 10, backgroundColor: '#fff' }}>
+      <SafeArea>
         <Header
           title={''}
           navigation={navigation}
           type={'stack'}
         />
         {content}
-      </View>
+      </SafeArea>
     );
   }
 }
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   wrapContentStyle: {
-    width: platform.deviceWidth,
+    width: '100%',
     paddingHorizontal: Scale.getSize(15),
     paddingTop: Scale.getSize(15)
   },

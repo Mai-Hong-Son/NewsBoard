@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Text
+  Text,
+  Image
 } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -86,21 +87,6 @@ export default class News extends React.Component {
       time: timeArticles,
       sourcetype
     } = this.state;
-
-    this.props.getArticles({
-      source: sourceArticles,
-      domain: domainArticles,
-      category: categoryArticles,
-      country: countryArticles,
-      region: regionArticles,
-      lang: langArticles,
-      search: searchArticles,
-      from: fromDate,
-      to: toDate,
-      page_number: 1,
-      time: timeArticles,
-      sourcetype
-    });
 
     this.props.getArticles({
       source: sourceArticles,
@@ -458,7 +444,11 @@ export default class News extends React.Component {
       key={(this.state.changeView ? 'h' : 'v')}
       ListEmptyComponent={
         (<View style={styles.wrapEmptyArticles}>
-          <Text style={styles.txtEmptyArticle}>{'Không có bài tin nào'}</Text>
+          <Text style={styles.txtEmptyArticle}>{'Không có bài viết nào phù hợp.'}</Text>
+          <Image
+            style={{ height: 100, width: 100 }}
+            source={require('../../assets/images/image.png')}
+          />
         </View>)
       }
       renderItem={this.renderArticleGroup}
@@ -478,7 +468,7 @@ export default class News extends React.Component {
 
     return (
       <SafeArea>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle={platform.isIphoneX ? 'dark-content' : 'light-content'} />
         <Header
           title={'Tin tức'}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
@@ -576,6 +566,8 @@ const styles = StyleSheet.create({
   },
   txtEmptyArticle: {
     fontSize: Scale.getSize(18),
-    fontWeight: '700'
+    fontWeight: '700',
+    color: '#000',
+    paddingVertical: Scale.getSize(20)
   }
 });

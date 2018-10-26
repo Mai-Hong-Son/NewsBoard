@@ -15,13 +15,13 @@ import { connect } from 'react-redux';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import Header from '../Reusables/Header';
-import SafeArea from '../../theme/SafeArea';
 import ArticleLarge from '../News/ArticleView/ArticleLarge';
 import ArticleSmall from '../News/ArticleView/ArticleSmall';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import { Loading } from '../Reusables/Loading';
+import SafeArea from '../../theme/SafeArea';
 
 @connect(
   state => ({
@@ -133,7 +133,7 @@ export default class ArticleBySubject extends React.Component {
     />);
 
     return (
-      <View style={styles.container}>
+      <SafeArea style={styles.container}>
         <Header
           type='stack'
           title={name}
@@ -144,7 +144,7 @@ export default class ArticleBySubject extends React.Component {
         <View style={styles.contentStyle}>
           {content}
         </View>
-      </View>
+      </SafeArea>
     );
   }
 }

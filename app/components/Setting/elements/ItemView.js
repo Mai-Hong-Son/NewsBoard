@@ -10,12 +10,13 @@ import Scale from '../../../theme/scale';
 export default class ItemView extends React.PureComponent {
   render() {
     const { title, data } = this.props;
+    const text = `${data.map(item => (`${item.name}`))}`;
 
     return (
       <TouchableOpacity onPress={() => this.props.onPress()}>
         <View style={styles.wrapItem}>
           <Text style={styles.txtTitle}>{title}</Text>
-          <Text style={styles.txtContent}>{data.map(item => (`${item.name}, `))}</Text>
+          <Text style={styles.txtContent}>{text.replace(/.$ /, '')}</Text>
         </View>
       </TouchableOpacity>
     );
