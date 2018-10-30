@@ -18,6 +18,7 @@ export const getArticlesSource = ({
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       data: {
@@ -36,7 +37,7 @@ export const getArticlesSource = ({
       pageNumber: page_number,
       method: 'POST',
       headers: buildHeaders(state),
-      url: '/search'
+      url: `${payload}/search`
     };
 
     dispatch(action({ request }));

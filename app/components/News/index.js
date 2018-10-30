@@ -26,6 +26,7 @@ import ArticleSmall from './ArticleView/ArticleSmall';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
+import { buildHeaders } from '../../../redux/utils';
 
 const LANGUAGE_FILTER = 'Ngôn ngữ';
 const NATION_FILTER = 'Quốc gia';
@@ -36,9 +37,10 @@ const SOURCE_TYPE_FILTER = 'Loại nguồn';
 
 @connect(
   state => ({
-    articles: state.articles,
     categories: state.categories,
-    mainRouter: state.mainRouter
+    mainRouter: state.mainRouter,
+    localhost: state.localhost,
+    tokenAccess: state.tokenAccess
   }),
   { ...commonActions }
 )
@@ -49,6 +51,7 @@ export default class News extends React.Component {
     startDateTimePickerVisible: false,
     endDateTimePickerVisible: false,
     toggleButtonPicker: true,
+    dataArticles: null,
 
     fromDate: '',
     toDate: '',
@@ -72,8 +75,6 @@ export default class News extends React.Component {
       return true;
     });
 
-    await this.props.getCategories();
-
     const {
       fromDate,
       toDate,
@@ -88,7 +89,9 @@ export default class News extends React.Component {
       sourcetype
     } = this.state;
 
-    this.props.getArticles({
+    await this.props.getCategories();
+
+    this.getArticles({
       source: sourceArticles,
       domain: domainArticles,
       category: categoryArticles,
@@ -102,33 +105,18 @@ export default class News extends React.Component {
       time: timeArticles,
       sourcetype
     });
-
-    // this.interval = setInterval(() => this.props.getArticles({
-    //   source: sourceArticles,
-    //   domain: domainArticles,
-    //   category: categoryArticles,
-    //   country: countryArticles,
-    //   region: regionArticles,
-    //   lang: langArticles,
-    //   search: searchArticles,
-    //   from: fromDate,
-    //   to: toDate,
-    //   page_number: 1,
-    //   time: timeArticles,
-    //   sourcetype
-    // }), 20000);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { articles: { data: dataAticles }, categories: { data: dataCategories } } = nextProps;
-    const { isLoading } = this.state;
+  // componentWillReceiveProps(nextProps) {
+  //   const { categories: { data: dataCategories } } = nextProps;
+  //   const { isLoading, dataArticles } = this.state;
 
-    if (dataAticles.items && isLoading && dataCategories.length !== 0) {
-      this.setState({
-        isLoading: false
-      });
-    }
-  }
+  //   if (dataArticles && isLoading && dataCategories.length !== 0) {
+  //     this.setState({
+  //       isLoading: false
+  //     });
+  //   }
+  // }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
@@ -142,32 +130,33 @@ export default class News extends React.Component {
   }
 
   onRefresh = () => {
+    const {
+      source: sourceArticles,
+      domain: domainArticles,
+      category: categoryArticles,
+      country: countryArticles,
+      region: regionArticles,
+      lang: langArticles,
+      search: searchArticles,
+      time: timeArticles,
+      sourcetype
+    } = this.state;
+  
     this.setState({
-      isLoading: true,
-      fromDate: '',
-      toDate: '',
-      source: [],
-      domain: [],
-      category: [],
-      country: [],
-      region: [],
-      lang: [],
-      search: '',
-      time: '',
-      sourcetype: []
-    }, () => this.props.getArticles({
-      source: [],
-      domain: [],
-      category: [],
-      country: [],
-      region: [],
-      lang: [],
-      search: '',
+      isLoading: true
+    }, () => this.getArticles({
+      source: sourceArticles,
+      domain: domainArticles,
+      category: categoryArticles,
+      country: countryArticles,
+      region: regionArticles,
+      lang: langArticles,
+      search: searchArticles,
       from: '',
       to: '',
       page_number: 1,
-      time: '',
-      sourcetype: []
+      time: timeArticles,
+      sourcetype
     }));
   }
 
@@ -310,6 +299,53 @@ export default class News extends React.Component {
     }
   }
 
+  getArticles = async ({
+    source,
+    domain,
+    category,
+    country,
+    region,
+    lang,
+    search,
+    from,
+    to,
+    page_number,
+    time,
+    sourcetype
+  }) => {
+    const { payload } = this.props.localhost.data;
+    const { categories: { data: dataCategories } } = this.props;
+
+    await fetch(`${payload}/search/aggs`, {
+      body: JSON.stringify({
+        source,
+        domain,
+        category,
+        country,
+        region,
+        lang,
+        search,
+        from,
+        to,
+        page_number,
+        time,
+        sourcetype
+      }),
+      method: 'POST',
+      headers: buildHeaders(this.props)
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          dataArticles: responseJson,
+          isLoading: dataCategories.length === 0
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   getAticlesAfterFilter = (source, domain, category, country, region, lang, search, from, to, time, sourcetype) => {
     // clearInterval(this.interval);
     this.setState({
@@ -340,7 +376,7 @@ export default class News extends React.Component {
         sourcetype
       } = this.state;
 
-      this.props.getArticles({
+      this.getArticles({
         source: sourceArticles,
         domain: domainArticles,
         category: categoryArticles,
@@ -458,13 +494,13 @@ export default class News extends React.Component {
   )
 
   render() {
-    const { navigation, articles: { data } } = this.props;
-    const { isLoading, toggleButtonPicker } = this.state;
+    const { navigation } = this.props;
+    const { isLoading, toggleButtonPicker, dataArticles } = this.state;
     const content = isLoading ? (
       <View style={{ marginTop: 25 }}>
         <ActivityIndicator size='large' />
       </View>
-    ) : this.renderFlatlist(data.items);
+    ) : this.renderFlatlist(dataArticles.items);
 
     return (
       <SafeArea>
@@ -521,7 +557,8 @@ export default class News extends React.Component {
 const styles = StyleSheet.create({
   contentStyle: {
     flex: 1,
-    backgroundColor: 'rgb(250,250,250)'
+    backgroundColor: 'rgb(250,250,250)',
+    paddingBottom: 60
   },
   wrapFilterList: {
     flexDirection: 'row',

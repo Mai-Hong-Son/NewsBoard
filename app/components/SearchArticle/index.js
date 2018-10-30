@@ -40,7 +40,7 @@ export default class SearchArticle extends React.PureComponent {
           <TouchableOpacity style={{ height: '100%', justifyContent: 'center' }} onPress={() => navigation.goBack()}>
             <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
           </TouchableOpacity>
-          <View style={{ justifyContent: 'flex-end' }}>
+          <View style={{ height: '100%', justifyContent: 'center' }}>
             <TextInput
               underlineColorAndroid={'transparent'}
               autoFocus
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff'
   },
   textInputStyle: {
-    flex: 1,
+    // flex: 1,
     paddingLeft: 15,
     fontSize: Scale.getSize(20),
     color: '#fff'

@@ -12,6 +12,7 @@ import Header from '../Reusables/Header';
 import SafeArea from '../../theme/SafeArea';
 import ItemView from './elements/ItemView';
 import Scale from '../../theme/scale';
+import { buildHeaders } from '../../../redux/utils';
 // import { Loading } from '../../components/Reusables/Loading';
 
 const sourceTypeData = [
@@ -54,7 +55,7 @@ export function getItemsByArrayId(arr1, arr2) {
     }
   }
 
-  return arr3;
+  return arr3.length === 0 ? arr1 : arr3;
 }
 
 const eNotInArray = (array, e) => {
@@ -84,7 +85,9 @@ const filter = (sourceArray, keyArray) => {
     countriesSetting: state.countriesSetting,
     regionsSetting: state.regionsSetting,
     categoriesSetting: state.categoriesSetting,
-    subjects: state.subjects
+    subjects: state.subjects,
+    localhost: state.localhost,
+    tokenAccess: state.tokenAccess
   }),
   { ...commonActions }
 )
@@ -105,14 +108,11 @@ export default class Setting extends React.PureComponent {
 
   componentDidMount() {
     this.props.getUserInfo();
+    const { payload } = this.props.localhost.data;
 
-    fetch('http://35.196.179.240:8080/setting_notify', {
+    fetch(`${payload}/setting_notify`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE1NjI3NTQxMTR9.Jk1kVQVREPUzUg3NpWzp8j5_0ovskS_04hqhCuA23Rc',
-        'Content-Type': 'application/json'
-      }
+      headers: buildHeaders(this.props)
     })
       .then((response) => response.json())
       .then((responseJson) => {

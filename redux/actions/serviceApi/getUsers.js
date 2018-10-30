@@ -6,11 +6,12 @@ export const getUsers = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v3/users'
+      url: `${payload}/v3/users`
     };
 
     dispatch(action({ request }));

@@ -6,12 +6,13 @@ export const shareArticle = article => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       data: article,
       headers: buildHeaders(state),
       method: 'POST',
-      url: '/v4/shares'
+      url: `${payload}/v4/shares`
     };
 
     dispatch(action({ request }));
@@ -23,11 +24,12 @@ export const getArticleShareByMe = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v4/shared'
+      url: `${payload}/v4/shared`
     };
 
     dispatch(action({ request }));
@@ -39,11 +41,12 @@ export const deleteArticleShareByMe = (id) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'DELETE',
-      url: `/v4/shared/${id}`
+      url: `${payload}/v4/shared/${id}`
     };
 
     dispatch(action({ request }));
@@ -55,11 +58,12 @@ export const getArticleShareForMe = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v4/shares'
+      url: `${payload}/v4/shares`
     };
 
     dispatch(action({ request }));
@@ -71,11 +75,12 @@ export const deleteArticleShareForMe = (id) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'DELETE',
-      url: `/v4/shares/${id}`
+      url: `${payload}/v4/shares/${id}`
     };
 
     dispatch(action({ request }));

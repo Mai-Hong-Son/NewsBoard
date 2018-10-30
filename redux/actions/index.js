@@ -1,4 +1,4 @@
-import { login, getUserInfo, logout } from './auth';
+import { login, getUserInfo, logout, saveLocalhost } from './auth';
 import { getLanguages, getCountries, getRegions, getSources } from './serviceApi/getDataFilters';
 import { getSummaries } from './serviceApi/getSummaries';
 import { getArticlesSource } from './serviceApi/getArticlesSource';
@@ -60,5 +60,6 @@ export {
   getCountriesSetting,
   getRegionsSetting,
   getCategoriesSetting,
-  postSettingNotify
+  postSettingNotify,
+  saveLocalhost
 };

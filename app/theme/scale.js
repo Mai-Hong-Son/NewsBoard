@@ -7,7 +7,13 @@ export default class Scale {
     if (typeof size !== 'number') {
       throw new Error("Error: Scale.getSize can't parse a non number value");
     }
+    
+    let fontSize = Dimensions.get('window').width;
 
-    return (size * Dimensions.get('window').width) / IPHONE_8_DEVICE_WIDTH;
+    if (Dimensions.get('window').width > Dimensions.get('window').height) {
+      fontSize = Dimensions.get('window').height;
+    }
+
+    return (size * fontSize) / IPHONE_8_DEVICE_WIDTH;
   }
 }

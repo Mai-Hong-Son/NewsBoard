@@ -6,11 +6,12 @@ export const getCategories = () => {
 
   return async (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/categories/me'
+      url: `${payload}/categories/me`
     };
 
     await dispatch(action({ request }));

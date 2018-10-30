@@ -6,12 +6,13 @@ export const postSettings = (setting) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       data: setting,
       method: 'POST',
       headers: buildHeaders(state),
-      url: '/setting'
+      url: `${payload}/setting`
     };
 
     dispatch(action({ request }));
@@ -23,12 +24,13 @@ export const postSettingNotify = (settingNotify) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       data: settingNotify,
       method: 'POST',
       headers: buildHeaders(state),
-      url: '/setting_notify'
+      url: `${payload}/setting_notify`
     };
 
     dispatch(action({ request }));

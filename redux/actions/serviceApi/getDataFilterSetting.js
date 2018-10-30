@@ -6,11 +6,12 @@ export const getLanguagesSetting = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/languages'
+      url: `${payload}/languages`
     };
 
     dispatch(action({ request }));
@@ -22,11 +23,12 @@ export const getCountriesSetting = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/countries'
+      url: `${payload}/countries`
     };
 
     dispatch(action({ request }));
@@ -38,11 +40,12 @@ export const getRegionsSetting = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/regions'
+      url: `${payload}/regions`
     };
 
     dispatch(action({ request }));
@@ -54,11 +57,12 @@ export const getCategoriesSetting = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/categories'
+      url: `${payload}/categories`
     };
 
     dispatch(action({ request }));

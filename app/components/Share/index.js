@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
+import { NavigationEvents } from 'react-navigation';
 // import moment from 'moment';
 
 import Header from '../Reusables/Header';
@@ -44,9 +45,6 @@ export default class Share extends React.Component {
 
   componentDidMount() {
     this.onRefresh();
-    this.props.navigation.addListener('willFocus', () => {
-      this.onRefresh();
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -168,6 +166,9 @@ export default class Share extends React.Component {
 
     return (
       <SafeArea>
+        <NavigationEvents
+          onWillFocus={() => this.onRefresh()}
+        />
         <Header
           title={'Chia sẻ'}
           navigation={navigation}
@@ -257,6 +258,8 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   wrapArticle: {
-    padding: Scale.getSize(15)
+    paddingTop: Scale.getSize(15),
+    paddingHorizontal: Scale.getSize(15),
+    paddingBottom: 60
   }
 });

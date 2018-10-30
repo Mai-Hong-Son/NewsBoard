@@ -7,6 +7,7 @@ import axiosMiddleware from './axiosMiddleware';
 import { middleware } from './../../app/components/AppNavigator/index';
 import { navReducer, mainRouter } from './../../app/components/AppNavigator/reducer';
 import {
+  localhost,
   tokenAccess,
   userInfo,
   languages,
@@ -19,9 +20,8 @@ import {
   categories,
   summaryDetail,
   saveArticleStatus,
-  articles,
+  // articles,
   myArticles,
-  statusRerender,
   subjects,
   issues,
   users,
@@ -56,7 +56,7 @@ const config = {
     'postDetail',
     'summaryDetail',
     'saveArticleStatus',
-    'articles',
+    // 'articles',
     'myArticles',
     'subjects',
     'issues',
@@ -68,8 +68,7 @@ const config = {
     'articleShareForMe',
     'deleteArticleStatus',
     'deleteArticleShareByMe',
-    'deleteArticleShareForMe',
-    'statusRerender'
+    'deleteArticleShareForMe'
   ]
 };
 
@@ -80,6 +79,7 @@ export default function buildStore() {
     navReducer,
     mainRouter,
     tokenAccess,
+    localhost,
     userInfo,
     languages,
     regions,
@@ -91,9 +91,8 @@ export default function buildStore() {
     categories,
     summaryDetail,
     saveArticleStatus,
-    articles,
+    // articles,
     myArticles,
-    statusRerender,
     subjects,
     issues,
     users,

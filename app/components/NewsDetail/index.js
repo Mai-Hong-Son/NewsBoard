@@ -17,9 +17,10 @@ import _ from 'lodash';
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
-import SafeArea from '../../theme/SafeArea';
+// import SafeArea from '../../theme/SafeArea';
 import Header from '../Reusables/Header';
 import { Loading } from '../Reusables/Loading';
+import { emptyImage } from '../News/ArticleView/ArticleLarge';
 
 @connect(
   state => ({
@@ -296,8 +297,8 @@ export default class NewsDetail extends React.PureComponent {
               <Image 
                 style={{ height: 250, width: '100%' }}
                 resizeMode='cover'
-                source={(image === undefined || image === '') ? require('../../assets/images/3.jpg') : {
-                  uri: image,
+                source={{
+                  uri: (image === undefined || image === '') ? emptyImage : image,
                   height: 250
                 }}
               />)}
@@ -355,8 +356,8 @@ const styles = StyleSheet.create({
   wrapContentStyle: {
     width: '100%',
     paddingHorizontal: Scale.getSize(15),
-    paddingTop: Scale.getSize(15)
-    // paddingBottom: 100
+    paddingTop: Scale.getSize(15),
+    paddingBottom: 100
   },
   wrapSourceStyle: {
     flexDirection: 'row',

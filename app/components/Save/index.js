@@ -7,6 +7,7 @@ import {
   FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationEvents } from 'react-navigation';
 // import Icon from 'react-native-vector-icons/Ionicons';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
@@ -20,37 +21,28 @@ import SafeArea from '../../theme/SafeArea';
 
 @connect(
   state => ({
-    myArticles: state.myArticles,
-    statusRerender: state.statusRerender
+    myArticles: state.myArticles
   }),
   { ...commonActions }
 )
 export default class Save extends React.Component {
   state = {
     changeView: true,
-    isLoading: true,
-    isFistime: false
+    isLoading: true
   }
 
   componentDidMount() {
-    this.setState({
-      isFistime: true
-    }, () => this.onRefresh());
+    this.onRefresh();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { myArticles: { data: dataAticles }, statusRerender } = nextProps;
-    const { isLoading, isFistime } = this.state;
+    const { myArticles: { data: dataAticles } } = nextProps;
+    const { isLoading } = this.state;
 
-    if (dataAticles.results && isLoading && isFistime) {
+    if (dataAticles.results && isLoading) {
       this.setState({
-        isLoading: false,
-        isFistime: false
+        isLoading: false
       });
-    }
-
-    if (statusRerender !== this.props.statusRerender && !isFistime) {
-      this.onRefresh();
     }
   }
 
@@ -62,8 +54,7 @@ export default class Save extends React.Component {
 
   onRefresh = () => {
     this.setState({
-      isLoading: true,
-      isFistime: true
+      isLoading: true
     });
 
     this.props.getMyArticles();
@@ -101,6 +92,9 @@ export default class Save extends React.Component {
 
     return (
       <SafeArea>
+        <NavigationEvents
+          onWillFocus={() => this.onRefresh()}
+        />
         <Header
           title={'Lưu trữ'}
           iconName={this.state.changeView ? 'th-list' : 'th-large'}
@@ -142,7 +136,9 @@ const styles = StyleSheet.create({
     elevation: Scale.getSize(1)
   },
   wrapArticle: {
-    padding: Scale.getSize(15)
+    paddingTop: Scale.getSize(15),
+    paddingHorizontal: Scale.getSize(15),
+    paddingBottom: 60
   },
   txtCategoryStyle: {
     paddingLeft: Scale.getSize(10),

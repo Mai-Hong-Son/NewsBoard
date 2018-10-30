@@ -1,4 +1,4 @@
-import { tokenAccess, userInfo } from './auth';
+import { tokenAccess, userInfo, localhost } from './auth';
 import { languages, regions, countries, sources } from './serviceApi/dataFilters';
 import { summaries } from './serviceApi/summaries';
 import { articlesSource } from './serviceApi/articlesSource';
@@ -25,13 +25,6 @@ import {
   categoriesSetting
 } from './serviceApi/dataFiltersSetting';
 
-const statusRerender = (state = null, action) => {
-  if (action.type === 'Navigation/DRAWER_CLOSED') {
-    return Date.now();
-  }
-  return state;
-};
-
 export {
   tokenAccess,
   userInfo,
@@ -47,7 +40,6 @@ export {
   saveArticleStatus,
   articles,
   myArticles,
-  statusRerender,
   subjects,
   issues,
   users,
@@ -62,5 +54,6 @@ export {
   languagesSetting,
   countriesSetting,
   regionsSetting,
-  categoriesSetting
+  categoriesSetting,
+  localhost
 };

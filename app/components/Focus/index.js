@@ -8,6 +8,7 @@ import {
   FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -34,9 +35,6 @@ export default class Focus extends React.Component {
 
   componentDidMount() {
     this.onRefresh();
-    this.props.navigation.addListener('willFocus', () => {
-      this.onRefresh();
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -135,6 +133,9 @@ export default class Focus extends React.Component {
 
     return (
       <SafeArea>
+        <NavigationEvents
+          onWillFocus={() => this.onRefresh()}
+        />
         <Header
           title={'Tiêu điểm'}
           navigation={navigation}
@@ -187,7 +188,8 @@ const styles = StyleSheet.create({
   },
   wrapContentFlatlist: {
     paddingTop: Scale.getSize(10),
-    paddingHorizontal: Scale.getSize(15)
+    paddingHorizontal: Scale.getSize(15),
+    paddingBottom: 60
   },
   wrapItem: {
     flex: 1,

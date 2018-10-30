@@ -6,11 +6,12 @@ export const getSubjects = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/subjects'
+      url: `${payload}/subjects`
     };
 
     dispatch(action({ request }));

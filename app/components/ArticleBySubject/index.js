@@ -44,9 +44,9 @@ export default class ArticleBySubject extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { articlesSource: { data } } = nextProps;
+    const { articlesSource: { error } } = nextProps;
 
-    if (data.length !== 0) {
+    if (!error) {
       this.setState({
         isLoading: false,
         isLoadmore: false

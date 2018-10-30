@@ -6,11 +6,12 @@ export const getPostDetail = postId => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: `/post/${postId}`
+      url: `${payload}/post/${postId}`
     };
 
     dispatch(action({ request }));

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
+import moment from 'moment';
 
 import Header from '../../Reusables/Header';
 import platform from '../../../theme/platform';
@@ -62,7 +63,7 @@ export default class SummaryDetail extends React.PureComponent {
               <View style={styles.wrapTag}>
                 <Text style={styles.txtName}>{creator}</Text>
               </View>
-              <Text style={styles.txtSourceStyle}>{` - ${updated_time}`}</Text>
+              <Text style={styles.txtSourceStyle}>{` - ${moment(updated_time).format('DD/MM/YYYY - hh:mm:ss')}`}</Text>
             </View>
             <HTML
               html={description.replace(/(\r\n|\n|\r)/gm, ' ')}

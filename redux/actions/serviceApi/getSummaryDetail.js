@@ -6,11 +6,12 @@ export const getSummaryDetail = (id) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: `/summary/${id}`
+      url: `${payload}/summary/${id}`
     };
 
     dispatch(action({ request }));

@@ -1,23 +1,26 @@
 import { createAction } from 'redux-actions';
 import { buildHeaders } from '../utils';
 
-// export const saveLocalhost = (localhost) => {
-//   const actionSuccess = createAction('SAVE_LOCALHOST:SUCCESS');
-//   const actionError = createAction('SAVE_LOCALHOST:ERROR');
+export const saveLocalhost = (localhost) => {
+  const actionSuccess = createAction('SAVE_LOCALHOST:SUCCESS');
+  const actionError = createAction('SAVE_LOCALHOST:ERROR');
 
-//   return async dispatch => {
-//     try {
-//       await dispatch(actionSuccess({ payload: localhost }));
-//     } catch (err) {
-//       dispatch(actionError());
-//     }
-//   };
-// };
+  return async dispatch => {
+    try {
+      await dispatch(actionSuccess({ payload: localhost }));
+    } catch (err) {
+      dispatch(actionError());
+    }
+  };
+};
 
 export const login = account => {
   const action = createAction('LOGIN');
 
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { payload } = state.localhost.data;
+
     const request = {
       data: account,
       headers: {
@@ -25,7 +28,7 @@ export const login = account => {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      url: '/api-token-auth'
+      url: `${payload}/api-token-auth`
     };
 
     dispatch(action({ request, client: 'default' }));
@@ -50,11 +53,12 @@ export const getUserInfo = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/user_info'
+      url: `${payload}/user_info`
     };
 
     dispatch(action({ request, client: 'default' }));

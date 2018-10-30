@@ -6,12 +6,13 @@ export const saveArticle = article => {
 
   return async (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       data: [article],
       headers: buildHeaders(state),
       method: 'POST',
-      url: '/v4/cart'
+      url: `${payload}/v4/cart`
     };
 
     dispatch(action({ request }));
@@ -23,11 +24,12 @@ export const deleteArticleSave = id => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'DELETE',
-      url: `/v4/cart/${id}`
+      url: `${payload}/v4/cart/${id}`
     };
 
     dispatch(action({ request }));

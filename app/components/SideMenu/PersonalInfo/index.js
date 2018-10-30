@@ -3,8 +3,7 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,
-  AsyncStorage
+  StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
 import OneSignal from 'react-native-onesignal';
@@ -16,7 +15,8 @@ import Scale from '../../../theme/scale';
 @connect(
   state => ({
     userInfo: state.userInfo,
-    mainRouter: state.mainRouter
+    mainRouter: state.mainRouter,
+    localhost: state.localhost
   }),
   { ...commonActions }
 )
@@ -40,7 +40,12 @@ export default class PersonalInfo extends React.PureComponent {
     if (!error && this.state.loading) {
       const { id } = data;
 
-      this._retrieveData(id);
+      // this._retrieveData(id);
+      OneSignal.sendTags({ ip: this.props.localhost.data.payload.replace('http://', '').replace(':8080', ''), user_id: id });
+      OneSignal.inFocusDisplaying(2);
+      OneSignal.addEventListener('opened', (openResult) => this.onOpened(openResult, this.props));
+      OneSignal.configure();
+
       this.setState({
         userData: data,
         loading: false
@@ -67,20 +72,20 @@ export default class PersonalInfo extends React.PureComponent {
     }
   }
 
-  _retrieveData = async (id) => {
-    try {
-      const value = await AsyncStorage.getItem('localhost');
-      if (value !== null) {
-        // We have data!!
-        OneSignal.sendTags({ ip: value.replace('http://', '').replace(':8080', ''), user_id: id });
-        OneSignal.inFocusDisplaying(2);
-        OneSignal.addEventListener('opened', (openResult) => this.onOpened(openResult, this.props));
-        OneSignal.configure();
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
+  // _retrieveData = async (id) => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('localhost');
+  //     if (value !== null) {
+  //       // We have data!!
+  //       OneSignal.sendTags({ ip: value.replace('http://', '').replace(':8080', ''), user_id: id });
+  //       OneSignal.inFocusDisplaying(2);
+  //       OneSignal.addEventListener('opened', (openResult) => this.onOpened(openResult, this.props));
+  //       OneSignal.configure();
+  //     }
+  //   } catch (error) {
+  //     // Error retrieving data
+  //   }
+  // };
 
   render() {
     const { loading, userData } = this.state;

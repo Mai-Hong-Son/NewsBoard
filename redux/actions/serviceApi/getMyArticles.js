@@ -6,11 +6,12 @@ export const getMyArticles = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v4/cart'
+      url: `${payload}/v4/cart`
     };
     dispatch(action({ request }));
   };

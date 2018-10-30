@@ -6,11 +6,12 @@ export const getIssues = () => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       method: 'GET',
-      url: '/v4/issues?limit=10&offset=0'
+      url: `${payload}/v4/issues?limit=10&offset=0`
     };
 
     dispatch(action({ request }));
@@ -22,12 +23,13 @@ export const createIssues = (issue) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       data: issue,
       method: 'POST',
-      url: '/v4/issues'
+      url: `${payload}/v4/issues`
     };
 
     dispatch(action({ request }));
@@ -39,12 +41,13 @@ export const updateIssues = (id, issue) => {
 
   return (dispatch, getState) => {
     const state = getState();
+    const { payload } = state.localhost.data;
 
     const request = {
       headers: buildHeaders(state),
       data: issue,
       method: 'PUT',
-      url: `/v4/issues/${id}`
+      url: `${payload}/v4/issues/${id}`
     };
 
     dispatch(action({ request }));
