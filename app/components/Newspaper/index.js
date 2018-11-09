@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import I18n from 'react-native-i18n';
 
 import Header from '../Reusables/Header';
 import images from '../../assets/images';
@@ -109,7 +110,7 @@ export default class Newspaper extends React.Component {
 
     return (
       <SafeArea>
-        <Header title={'Tin tham khảo'} navigation={navigation} />
+        <Header title={I18n.t('summary.title')} navigation={navigation} />
         <FlatList
           data={data}
           renderItem={this.renderSummaryItem}

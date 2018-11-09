@@ -10,6 +10,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
+import I18n from 'react-native-i18n';
 
 import SafeArea from '../../../theme/SafeArea';
 import FullGradient from '../../Reusables/FullGradient';
@@ -72,32 +73,32 @@ export default class FilterSetting extends React.PureComponent {
     } = this.props;
 
     switch (title) {
-      case 'Danh mục':
+      case I18n.t('filterMenu.category'):
         this.setState({
           dataSource: dataCategory
         });
         break;
-      case 'Ngôn ngữ':
+      case I18n.t('filterMenu.language'):
         this.setState({
           dataSource: dataLang
         });
         break;
-      case 'Quốc gia':
+      case I18n.t('filterMenu.country'):
         this.setState({
           dataSource: dataCountry
         });
         break;
-      case 'Khu vực':
+      case I18n.t('filterMenu.region'):
         this.setState({
           dataSource: dataRegion
         });
         break;
-      case 'Loại nguồn':
+      case I18n.t('filterMenu.sourceType'):
         this.setState({
           dataSource: sourceTypeData
         });
         break;
-      case 'Danh mục nhận thông báo':
+      case I18n.t('filterMenu.subjectNotif'):
         this.setState({
           dataSource: dataSubjects
         });
@@ -184,7 +185,7 @@ export default class FilterSetting extends React.PureComponent {
           <View style={styles.containerFooter}>
             <TouchableOpacity onPress={this.onSubmit}>
               <FullGradient containerStyle={styles.buttonOk}>
-                <Text style={styles.txtOK}>{'Xác nhận'}</Text>
+                <Text style={styles.txtOK}>{I18n.t('modal.confirm')}</Text>
               </FullGradient>
             </TouchableOpacity>
           </View>

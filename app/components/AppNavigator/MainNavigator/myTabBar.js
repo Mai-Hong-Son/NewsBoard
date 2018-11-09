@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+
 import FullGradient from '../../Reusables/FullGradient';
 import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';

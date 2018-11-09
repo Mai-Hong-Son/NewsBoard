@@ -146,7 +146,7 @@ export default class ArticlesByCategory extends React.Component {
         <Header
           type='stack'
           title={categoryFilter.name}
-          iconName={this.state.changeView ? 'th-list' : 'th-large'}
+          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
           navigation={navigation}
           onPress={this.onPress}
         />

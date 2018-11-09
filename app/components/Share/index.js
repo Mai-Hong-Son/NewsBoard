@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
 import { NavigationEvents } from 'react-navigation';
+import I18n from 'react-native-i18n';
 // import moment from 'moment';
 
 import Header from '../Reusables/Header';
@@ -74,8 +75,8 @@ export default class Share extends React.Component {
       !deleteArticleShareForMe.error &&
       !deleteArticleShareByMe.error) {
       Alert.alert(
-        'Thông báo',
-        'Xóa bài thành công',
+        I18n.t('alert.title'),
+        I18n.t('alert.deleteSuccess'),
         [
           {
             text: 'OK',
@@ -170,10 +171,10 @@ export default class Share extends React.Component {
           onWillFocus={() => this.onRefresh()}
         />
         <Header
-          title={'Chia sẻ'}
+          title={I18n.t('share.title')}
           navigation={navigation}
           onPress={this.onPress}
-          iconName={this.state.changeView ? 'th-list' : 'th-large'}
+          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
         />
         <ScrollView
           horizontal
@@ -186,12 +187,12 @@ export default class Share extends React.Component {
         >
           <TouchableWithoutFeedback onPress={this.onChooseTabLeft}>
             <View style={[styles.tabStyle, { borderBottomColor: isTabLeft ? 'red' : platform.primaryBlue }]}>
-              <Text style={styles.txtTabStyle}>{'ĐƯỢC CHIA SẺ'}</Text>
+              <Text style={styles.txtTabStyle}>{I18n.t('share.shareToMe').toUpperCase()}</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onChooseTabRight}>
             <View style={[styles.tabStyle, { borderBottomColor: isTabRight ? 'red' : platform.primaryBlue }]}>
-              <Text style={styles.txtTabStyle}>{'ĐÃ CHIA SẺ'}</Text>
+              <Text style={styles.txtTabStyle}>{I18n.t('share.shareFromMe').toUpperCase()}</Text>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>

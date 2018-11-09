@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Menu,
   MenuOptions,
@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import CheckBox from 'react-native-check-box';
 import Modal from 'react-native-modal';
 import RadioForm from 'react-native-simple-radio-button';
+import I18n from 'react-native-i18n';
 
 import FullGradient from '../FullGradient';
 
@@ -94,8 +95,8 @@ export default class Header extends React.PureComponent {
   render() {
     const { navigation, title, iconName, type, hasSearch, iconMenu, users, colorSave } = this.props;
     const { showModal } = this.state;
-    const iconLeft = type !== 'stack' ? 'align-justify' : 'angle-left';
-    const sizeBtnLeft = type !== 'stack' ? Scale.getSize(25) : Scale.getSize(40);
+    const iconLeft = type !== 'stack' ? 'ios-menu' : 'ios-arrow-back';
+    const sizeBtnLeft = type !== 'stack' ? Scale.getSize(35) : Scale.getSize(40);
 
     return (
       <FullGradient
@@ -121,7 +122,7 @@ export default class Header extends React.PureComponent {
               onPress={() => { this.props.onSearch(); }}
             >
               <Icon
-                name={hasSearch ? 'search' : null}
+                name={hasSearch ? 'ios-search' : null}
                 color={platform.containerBg}
                 size={Scale.getSize(21)}
               />
@@ -138,23 +139,28 @@ export default class Header extends React.PureComponent {
                 <MenuTrigger>
                   <View style={{ paddingLeft: 30 }}>
                     <Icon
-                      name='ellipsis-v'
+                      name='ios-more'
                       color={platform.containerBg}
                       size={Scale.getSize(35)}
                     />
                   </View>
                 </MenuTrigger>
-                <MenuOptions>
-                  <MenuOption onSelect={this.onShowModalPriority}>
-                    <Text style={styles.txtOptionMenu}>{'Chia sẻ'}</Text>
-                  </MenuOption>
-                  <MenuOption onSelect={() => this.props.onCopy()}>
-                    <Text style={styles.txtOptionMenu}>{'Sao chép liên kết'}</Text>
-                  </MenuOption>
-                  {/* <MenuOption onSelect={() => this.props.onTranslate()}>
-                    <Text style={styles.txtOptionMenu}>{'Dịch sang tiếng anh'}</Text>
-                  </MenuOption> */}
-                </MenuOptions>
+                {this.props.type === 'stored' ? 
+                  <MenuOptions>
+                    <MenuOption onSelect={() => this.props.deleteAll()}>
+                      <Text style={styles.txtOptionMenu}>{I18n.t('save.deleteAll')}</Text>
+                    </MenuOption>
+                  </MenuOptions> : <MenuOptions>
+                    <MenuOption onSelect={this.onShowModalPriority}>
+                      <Text style={styles.txtOptionMenu}>{I18n.t('share.title')}</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={() => this.props.onCopy()}>
+                      <Text style={styles.txtOptionMenu}>{I18n.t('copyLink.content')}</Text>
+                    </MenuOption>
+                    {/* <MenuOption onSelect={() => this.props.onTranslate()}>
+                      <Text style={styles.txtOptionMenu}>{'Dịch sang tiếng anh'}</Text>
+                    </MenuOption> */}
+                  </MenuOptions>}
               </Menu>) : null}
           </View>
         </View>
@@ -163,7 +169,7 @@ export default class Header extends React.PureComponent {
           onBackdropPress={this.onShowModalPriority}
         >
           <View style={styles.wrapModalBox}>
-            <Text style={styles.txtCheckboxGroup}>{'Chọn mức độ: '}</Text>
+            <Text style={styles.txtCheckboxGroup}>{I18n.t('modal.level')}</Text>
             <View style={{ paddingVertical: 15 }}>
               <RadioForm
                 radio_props={priorityData}
@@ -173,7 +179,7 @@ export default class Header extends React.PureComponent {
                 onPress={(value) => { this.setState({ priority: value }); }}
               />
             </View>
-            <Text style={styles.txtCheckboxGroup}>{'Chia sẻ tới: '}</Text>
+            <Text style={styles.txtCheckboxGroup}>{I18n.t('modal.shareTo')}</Text>
             <FlatList
               data={users.data}
               numColumns={2}
@@ -184,10 +190,10 @@ export default class Header extends React.PureComponent {
             <View style={styles.footerModal}>
               <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity onPress={this.onShowModalPriority}>
-                  <Text style={styles.txtButtonConfirm}>{'Hủy'}</Text>
+                  <Text style={styles.txtButtonConfirm}>{I18n.t('modal.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.onShareArticle}>
-                  <Text style={styles.txtButtonConfirm}>{'OK'}</Text>
+                  <Text style={styles.txtButtonConfirm}>{I18n.t('modal.confirm')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -203,7 +209,7 @@ const styles = StyleSheet.create({
     height: (platform.platform === 'ios' && !platform.isIphoneX) ? Scale.getSize(80) : Scale.getSize(60),
     width: '100%',
     justifyContent: 'flex-end',
-    paddingBottom: Scale.getSize(15)
+    paddingBottom: Scale.getSize(10)
   },
   wrapContentHeader: {
     flexDirection: 'row',
@@ -243,7 +249,8 @@ const styles = StyleSheet.create({
   txtCheckboxGroup: {
     fontSize: Scale.getSize(18),
     fontWeight: '600',
-    color: platform.primaryBlue
+    color: platform.primaryBlue,
+    paddingBottom: Scale.getSize(15)
   },
   txtButtonConfirm: {
     fontSize: Scale.getSize(18),

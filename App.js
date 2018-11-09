@@ -15,7 +15,7 @@ const { store } = buildStore();
 
 export default class App extends React.Component {
   async componentDidMount() {
-    // SplashScreen.hide();
+    // console.warn('tesst');
   }
 
   render() {

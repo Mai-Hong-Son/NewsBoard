@@ -5,12 +5,16 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  FlatList
+  FlatList,
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
+import I18n from 'react-native-i18n';
+import Modal from 'react-native-modal';
 
 import Header from '../Reusables/Header';
 import SafeArea from '../../theme/SafeArea';
@@ -18,41 +22,81 @@ import * as commonActions from '../../../redux/actions';
 import platform from '../../theme/platform';
 import Scale from '../../theme/scale';
 
+function getItemsByArrayId(arr1, arr2) {
+  const arr3 = [];
+
+  for (let i = 0; i < arr2.length; i++) {
+    for (let j = 0; j < arr1.length; j++) {
+      if (arr1[j].id === arr2[i]) {
+        arr3.push(arr1[j]);
+      }
+    }
+  }
+
+  return arr3.length === 0 ? arr1 : arr3;
+}
+
 @connect(
   state => ({
     issues: state.issues,
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    users: state.users,
+    updateIssue: state.updateIssue
   }),
   { ...commonActions }
 )
 export default class Focus extends React.Component {
   state = {
+    item: null,
     isTabLeft: true,
     isTabRight: false,
     data: [],
-    loading: true
+    loading: true,
+    showModal: false,
+    onClickDelete: false
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.getUsers();
     this.onRefresh();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { issues: { data, error }, userInfo: { data: { id } } } = nextProps;
-    const { isTabLeft, isTabRight } = this.state;
+    const { issues: { data, error }, userInfo: { data: { id } }, updateIssue: { error: errUpdate } } = nextProps;
+    const { isTabLeft, isTabRight, onClickDelete } = this.state;
 
-    if (!error) {
+    if (!error && !onClickDelete) {
       if (isTabLeft && !isTabRight) {
         this.setState({
-          data: data.filter(item => item.created_by !== id),
-          loading: false
+          data: data.filter(item => item.created_by !== id && !item.deleted),
+          loading: false,
+          onClickDelete: false
         });
       } else if (!isTabLeft && isTabRight) {
         this.setState({
           loading: false,
-          data: data.filter(item => item.created_by === id)
+          data: data.filter(item => item.created_by === id && !item.deleted),
+          onClickDelete: false
         });
       }
+    }
+
+    if (onClickDelete && !errUpdate) {
+      Alert.alert(
+        I18n.t('alert.title'),
+        I18n.t('alert.deleteSuccess'),
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              this.setState({
+                onClickDelete: false
+              }, () => this.onRefresh());
+            }
+          }
+        ],
+        { cancelable: false }
+      );
     }
   }
 
@@ -68,7 +112,7 @@ export default class Focus extends React.Component {
     this.setState({
       isTabLeft: true,
       isTabRight: false,
-      data: data.filter(item => item.created_by !== id)
+      data: data.filter(item => item.created_by !== id && !item.deleted)
     });
   }
 
@@ -78,7 +122,7 @@ export default class Focus extends React.Component {
     this.setState({
       isTabLeft: false,
       isTabRight: true,
-      data: data.filter(item => item.created_by === id)
+      data: data.filter(item => item.created_by === id && !item.deleted)
     });
   }
 
@@ -86,7 +130,7 @@ export default class Focus extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     navigate('IssuesDetail', {
-      titleHeader: 'Thêm tiêu điểm',
+      titleHeader: I18n.t('issues.add'),
       dataSaved: {
         title: '',
         description: '',
@@ -99,25 +143,86 @@ export default class Focus extends React.Component {
     });
   }
 
+  onDeleteIssue = () => {
+    const { item } = this.state;
+    const {
+      id,
+      title,
+      description,
+      created_time,
+      duedate,
+      completed,
+      starred,
+      important,
+      tags,
+      assignees
+    } = item;
+    this.setState({
+      onClickDelete: true,
+      showModal: !this.state.showModal
+    }, () => {
+      this.props.updateIssues(id, {
+        id: '',
+        title,
+        description,
+        created_time,
+        duedate,
+        completed,
+        starred,
+        important,
+        deleted: true,
+        tags,
+        assignees
+      });
+    });
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  showModalAsign = () => this.setState({ showModal: !this.state.showModal });
+
+  renderListUserReceive(assignees) {
+    const { users: { data: listUser } } = this.props;
+    const result = getItemsByArrayId(listUser, assignees);
+
+    return `${result.map(item => (`${this.capitalizeFirstLetter(item.username)}`))}`;
+  }
+
   renderItem = ({ item }) => {
-    const { title, description, created_time, completed } = item;
-    const { navigation: { navigate }, userInfo: { data } } = this.props;
+    const { title, description, created_time, completed, created_by, assignees, id } = item;
+    const { navigation: { navigate }, userInfo: { data }, users: { data: listUser } } = this.props;
+    const nameUserCreate = listUser.filter(it => it.id === created_by)[0];
+    const { isTabLeft, isTabRight } = this.state;
 
     return (
       <TouchableWithoutFeedback
         onPress={() => navigate('IssuesDetail', {
-          titleHeader: 'Chỉnh sửa tiêu điểm',
+          titleHeader: I18n.t('issues.update'),
           dataSaved: item,
           type: 'update'
         })}
+        onLongPress={() => {
+          this.setState({
+            item
+          }, () => {
+            if (!isTabLeft && isTabRight) {
+              this.showModalAsign();
+            }
+          });
+        }}
       >
         <View style={styles.wrapItemView}>
           <View style={styles.contentRightStyle}>
             <Text style={styles.txtContentRight}>{data.username.slice(0, 1).toUpperCase()}</Text>
           </View>
           <View style={styles.wrapItem}>
-            <View>
+            <View style={{ paddingRight: 10 }}>
               <Text style={styles.txtTitle}>{title}</Text>
+              <Text style={styles.txtTimeTitle} numberOfLines={1}>
+                {nameUserCreate ? this.capitalizeFirstLetter(nameUserCreate.username) : this.renderListUserReceive(assignees)}
+              </Text>
               <Text style={styles.txtTimeTitle}>{moment(created_time).fromNow()}</Text>
             </View>
             {completed ? <Icon name='ios-checkmark-circle' color={'#00cc66'} size={Scale.getSize(25)} /> : null}
@@ -137,9 +242,9 @@ export default class Focus extends React.Component {
           onWillFocus={() => this.onRefresh()}
         />
         <Header
-          title={'Tiêu điểm'}
+          title={I18n.t('issues.title')}
           navigation={navigation}
-          iconName={'plus-square'}
+          iconName={'ios-add-circle'}
           onPress={this.onPressAdd}
         />
         <ScrollView
@@ -153,12 +258,12 @@ export default class Focus extends React.Component {
         >
           <TouchableWithoutFeedback onPress={this.onChooseTabLeft}>
             <View style={[styles.tabStyle, { borderBottomColor: isTabLeft ? 'red' : platform.primaryBlue }]}>
-              <Text style={styles.txtTabStyle}>{'ĐƯỢC GIAO'}</Text>
+              <Text style={styles.txtTabStyle}>{I18n.t('issues.sendToMe').toUpperCase()}</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onChooseTabRight}>
             <View style={[styles.tabStyle, { borderBottomColor: isTabRight ? 'red' : platform.primaryBlue }]}>
-              <Text style={styles.txtTabStyle}>{'ĐÃ GIAO'}</Text>
+              <Text style={styles.txtTabStyle}>{I18n.t('issues.sendFromMe').toUpperCase()}</Text>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -171,6 +276,16 @@ export default class Focus extends React.Component {
           onRefresh={this.onRefresh}
           showsVerticalScrollIndicator={false}
         />
+        <Modal
+          isVisible={this.state.showModal}
+          onBackdropPress={this.showModalAsign}
+        >
+          <View style={{ backgroundColor: '#fff' }}>
+            <TouchableOpacity onPress={this.onDeleteIssue}>
+              <Text style={{ fontSize: Scale.getSize(16), color: '#000', padding: Scale.getSize(10) }}>{'Xóa tiêu điểm'}</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </SafeArea>
     );
   }
@@ -200,6 +315,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     paddingVertical: 5,
     paddingLeft: 15,
+    paddingRight: 25,
     paddingTop: 15
   },
   txtTitle: {

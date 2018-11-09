@@ -10,6 +10,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
+import I18n from 'react-native-i18n';
 
 import SafeArea from '../../../theme/SafeArea';
 import FullGradient from '../../Reusables/FullGradient';
@@ -67,19 +68,19 @@ export default class Filter extends React.PureComponent {
     const { state: { params: { title, dataAccess } } } = this.props.navigation;
 
     switch (title) {
-      case 'Ngôn ngữ':
+      case I18n.t('filterMenu.language'):
         this.props.getLanguages();
         break;
-      case 'Quốc gia':
+      case I18n.t('filterMenu.country'):
         this.props.getCountries();
         break;
-      case 'Khu vực':
+      case I18n.t('filterMenu.region'):
         this.props.getRegions();
         break;
-      case 'Nguồn':
+      case I18n.t('filterMenu.source'):
         this.props.getSources(dataAccess);
         break;
-      case 'Loại nguồn':
+      case I18n.t('filterMenu.sourceType'):
         this.props.getUserInfo();
         break;
       default:
@@ -92,31 +93,31 @@ export default class Filter extends React.PureComponent {
     let dataTemp = [];
 
     switch (title) {
-      case 'Ngôn ngữ':
+      case I18n.t('filterMenu.language'):
         {
           const { languages: { data } } = nextProps;
           dataTemp = data;
         }
         break;
-      case 'Quốc gia':
+      case I18n.t('filterMenu.country'):
         {
           const { countries: { data } } = nextProps;
           dataTemp = data;
         }
         break;
-      case 'Khu vực':
+      case I18n.t('filterMenu.region'):
         {
           const { regions: { data } } = nextProps;
           dataTemp = data;
         }
         break;
-      case 'Nguồn':
+      case I18n.t('filterMenu.source'):
         {
           const { sources: { data } } = nextProps;
           dataTemp = data;
         }
         break;
-      case 'Loại nguồn':
+      case I18n.t('filterMenu.sourceType'):
         {
           const { userInfo: { data: { settings } } } = nextProps;
           dataTemp = getItemsByArrayId(sourceTypeData, settings.sourcetype);
@@ -209,7 +210,7 @@ export default class Filter extends React.PureComponent {
           <View style={styles.containerFooter}>
             <TouchableOpacity onPress={this.onSubmit}>
               <FullGradient containerStyle={styles.buttonOk}>
-                <Text style={styles.txtOK}>{'Xác nhận'}</Text>
+                <Text style={styles.txtOK}>{I18n.t('modal.confirm')}</Text>
               </FullGradient>
             </TouchableOpacity>
           </View>

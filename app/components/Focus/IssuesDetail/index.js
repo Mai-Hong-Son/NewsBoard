@@ -15,6 +15,7 @@ import CheckBox from 'react-native-check-box';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
+import I18n from 'react-native-i18n';
 
 import SafeArea from '../../../theme/SafeArea';
 import FullGradient from '../../Reusables/FullGradient';
@@ -51,9 +52,9 @@ export default class IssuesDetail extends React.PureComponent {
     };
   }
 
-  async componentDidMount() {
-    await this.props.getUsers();
-  }
+  // async componentDidMount() {
+  //   await this.props.getUsers();
+  // }
 
   componentWillReceiveProps(nextProps) {
     const { updateIssue: { error: errUpdate }, createIssue: { error: errCreate } } = nextProps;
@@ -61,8 +62,8 @@ export default class IssuesDetail extends React.PureComponent {
 
     if (!errUpdate && isClick && !errCreate) {
       Alert.alert(
-        'Thông báo',
-        'Lưu thành công!',
+        I18n.t('alert.title'),
+        I18n.t('alert.saveContent'),
         [
           {
             text: 'OK',
@@ -207,7 +208,7 @@ export default class IssuesDetail extends React.PureComponent {
 
         <ScrollView contentContainerStyle={styles.wrapForm}>
           <View style={styles.wrapTextinput}>
-            <Text style={styles.txtTitleTextInput}>{'Tiêu đề:'}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.title')}</Text>
             <TextInput
               onChangeText={(text) => this.setState({ title: text })}
               value={title}
@@ -216,7 +217,7 @@ export default class IssuesDetail extends React.PureComponent {
             />
           </View>
           <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleTextInput}>{'Ngày bắt đầu: '}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.fromDate')}</Text>
             <View style={styles.boxTxtDate}>
               <Text style={styles.txtTitleDate}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
             </View>
@@ -225,7 +226,7 @@ export default class IssuesDetail extends React.PureComponent {
             </TouchableOpacity>
           </View>
           <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleTextInput}>{'Ngày kết thúc: '}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.toDate')}</Text>
             <View style={styles.boxTxtDate}>
               <Text style={styles.txtTitleDate}>{moment(toDate).format('DD/MM/YYYY')}</Text>
             </View>
@@ -234,7 +235,7 @@ export default class IssuesDetail extends React.PureComponent {
             </TouchableOpacity>
           </View>
           <View style={styles.wrapDate}>
-            <Text style={styles.txtTitleTextInput}>{'Giao cho: '}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.sendTo')}</Text>
             <View style={styles.boxTxtDate}>
               {peopleAsign.map(item =>
                 (
@@ -250,7 +251,7 @@ export default class IssuesDetail extends React.PureComponent {
             </TouchableOpacity>
           </View>
           <View style={[styles.wrapTextinput, { height: 200 }]}>
-            <Text style={styles.txtTitleTextInput}>{'Mô tả:'}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.description')}</Text>
             <TextInput
               onChangeText={(text) => this.setState({ description: text })}
               value={description}
@@ -259,7 +260,7 @@ export default class IssuesDetail extends React.PureComponent {
             />
           </View>
           {type === 'create' ? null : (<View style={styles.wrapDate}>
-            <Text style={styles.txtTitleTextInput}>{'Hoàn thành: '}</Text>
+            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.complicate')}</Text>
             <CheckBox
               style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
               onClick={() => this.setState({ isComplete: !isComplete })}
@@ -270,17 +271,17 @@ export default class IssuesDetail extends React.PureComponent {
           </View>)}
         </ScrollView>
         <DateTimePicker
-          titleIOS={'Chọn thời gian bắt đầu'}
-          confirmTextIOS={'Xác nhận'}
-          cancelTextIOS={'Hủy'}
+          titleIOS={I18n.t('filterMenu.fromDate')}
+          confirmTextIOS={I18n.t('modal.confirm')}
+          cancelTextIOS={I18n.t('modal.cancel')}
           isVisible={this.state.startDateTimePickerVisible}
           onConfirm={this.handleStartDatePicked}
           onCancel={this.hideStartDateTimePicker}
         />
         <DateTimePicker
-          titleIOS={'Chọn thời gian kết thúc'}
-          confirmTextIOS={'Xác nhận'}
-          cancelTextIOS={'Hủy'}
+          titleIOS={I18n.t('filterMenu.fromDate')}
+          confirmTextIOS={I18n.t('modal.confirm')}
+          cancelTextIOS={I18n.t('modal.cancel')}
           isVisible={this.state.endDateTimePickerVisible}
           onConfirm={this.handleEndDatePicked}
           onCancel={this.hideEndDateTimePicker}
@@ -290,6 +291,15 @@ export default class IssuesDetail extends React.PureComponent {
           onBackdropPress={this.showModalAsign}
         >
           <View style={{ backgroundColor: '#fff', height: '40%' }}>
+            <View style={{ paddingLeft: Scale.getSize(15), paddingVertical: Scale.getSize(15) }}>
+              <Text style={{
+                fontSize: Scale.getSize(18),
+                fontWeight: '700',
+                color: platform.primaryBlue
+              }}
+              >{'Giao cho:'}</Text>
+            </View>
+
             <FlatList
               data={users.data}
               renderItem={this.renderCheckbox}
@@ -298,13 +308,22 @@ export default class IssuesDetail extends React.PureComponent {
             
             <View style={{ alignItems: 'flex-end', paddingRight: Scale.getSize(15), paddingVertical: Scale.getSize(15) }}>
               <TouchableOpacity onPress={this.showModalAsign}>
-                <Text 
+                <View
                   style={{
-                    fontSize: Scale.getSize(18),
-                    fontWeight: '700',
-                    color: platform.primaryBlue 
+                    backgroundColor: platform.primaryBlue,
+                    paddingVertical: Scale.getSize(7),
+                    paddingHorizontal: Scale.getSize(15),
+                    borderRadius: 5
                   }}
-                >{'XONG'}</Text>
+                >
+                  <Text 
+                    style={{
+                      fontSize: Scale.getSize(18),
+                      fontWeight: '700',
+                      color: '#fff' 
+                    }}
+                  >{'Xong'}</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>

@@ -86,12 +86,12 @@ export default class SummaryDetail extends React.PureComponent {
                   textAlign: 'justify'
                 },
                 span: {
-                  fontSize: Scale.getSize(26),
+                  // fontSize: Scale.getSize(26),
                   color: '#000',
                   textAlign: 'justify'
                 },
-                img: { overflow: 'visible' },
-                div: { alignItems: 'center' }
+                img: { overflow: 'visible' }
+                // div: { alignItems: 'center' }
               }}
             />
           </View>

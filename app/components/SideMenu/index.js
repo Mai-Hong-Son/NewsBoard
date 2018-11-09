@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 // import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import OneSignal from 'react-native-onesignal';
+import I18n from 'react-native-i18n';
 
 import FullGradient from '../Reusables/FullGradient';
 import PersonalInfo from './PersonalInfo';
@@ -93,12 +94,12 @@ export default class SideMenu extends React.PureComponent {
 
   onLogout = () => {
     Alert.alert(
-      'Thông báo',
-      'Bạn muốn đăng xuất ứng dụng?',
+      I18n.t('sidemenu.alertTitle'),
+      I18n.t('sidemenu.alertLogout'),
       [
-        { text: 'Hủy', onPress: () => null },
+        { text: I18n.t('modal.cancel'), onPress: () => null },
         {
-          text: 'Đồng ý',
+          text: I18n.t('modal.confirm'),
           onPress: () => this.setState({
             isClickLogout: true
           }, () => this.props.logout())
@@ -174,13 +175,13 @@ export default class SideMenu extends React.PureComponent {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Setting')}>
             <View style={styles.contentFooter}>
               <Icon name='ios-cog' size={Scale.getSize(35)} color={'#fff'} />
-              <Text style={styles.txtFooterStyle}>{'Cài đặt'}</Text>
+              <Text style={styles.txtFooterStyle}>{I18n.t('sidemenu.setting')}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.onLogout}>
             <View style={styles.contentFooter}>
               <Icon name='ios-log-out' size={Scale.getSize(35)} color={'#fff'} />
-              <Text style={styles.txtFooterStyle}>{'Đăng xuất'}</Text>
+              <Text style={styles.txtFooterStyle}>{I18n.t('sidemenu.logout')}</Text>
             </View>
           </TouchableOpacity>
         </View>

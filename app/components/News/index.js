@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import I18n from 'react-native-i18n';
 
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
@@ -28,19 +29,13 @@ import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import { buildHeaders } from '../../../redux/utils';
 
-const LANGUAGE_FILTER = 'Ngôn ngữ';
-const NATION_FILTER = 'Quốc gia';
-const AREA_FILTER = 'Khu vực';
-const SOURCE_FILTER = 'Nguồn';
-const SEARCH = 'Tìm kiếm';
-const SOURCE_TYPE_FILTER = 'Loại nguồn';
-
 @connect(
   state => ({
     categories: state.categories,
     mainRouter: state.mainRouter,
     localhost: state.localhost,
-    tokenAccess: state.tokenAccess
+    tokenAccess: state.tokenAccess,
+    language: state.language
   }),
   { ...commonActions }
 )
@@ -50,7 +45,6 @@ export default class News extends React.Component {
     isLoading: true,
     startDateTimePickerVisible: false,
     endDateTimePickerVisible: false,
-    toggleButtonPicker: true,
     dataArticles: null,
 
     fromDate: '',
@@ -107,16 +101,12 @@ export default class News extends React.Component {
     });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { categories: { data: dataCategories } } = nextProps;
-  //   const { isLoading, dataArticles } = this.state;
+  componentWillReceiveProps(nextProps) {
+    const { language: { reloadScreen: prevReloaded } } = this.props;
+    const { language: { reloadScreen: nextReloaded } } = nextProps;
 
-  //   if (dataArticles && isLoading && dataCategories.length !== 0) {
-  //     this.setState({
-  //       isLoading: false
-  //     });
-  //   }
-  // }
+    if (prevReloaded !== nextReloaded) this.onRefresh();
+  }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
@@ -161,6 +151,13 @@ export default class News extends React.Component {
   }
 
   onNavigateFilter = (title) => {
+    const LANGUAGE_FILTER = I18n.t('filterMenu.language');
+    const NATION_FILTER = I18n.t('filterMenu.country');
+    const AREA_FILTER = I18n.t('filterMenu.region');
+    const SOURCE_FILTER = I18n.t('filterMenu.source');
+    const SEARCH = I18n.t('filterMenu.search');
+    const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
+    
     switch (title) {
       case LANGUAGE_FILTER:
         this.props.navigation.navigate('Filter', {
@@ -268,7 +265,7 @@ export default class News extends React.Component {
               time,
               sourcetype
             } = this.state;
-            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, from, to, time, sourcetype);
+            this.getAticlesAfterFilter(source, domain, category, country, region, lang, search.replace('“', '"').replace('”', '"'), from, to, time, sourcetype);
           }
         });
         break;
@@ -403,8 +400,7 @@ export default class News extends React.Component {
 
   handleStartDatePicked = (date) => {
     this.setState({
-      fromDate: moment(date).format('YYYY-MM-DDTHH:mm:ss'),
-      toggleButtonPicker: !this.state.toggleButtonPicker
+      fromDate: moment(date).format('YYYY-MM-DDTHH:mm:ss')
     });
 
     this.hideStartDateTimePicker();
@@ -412,8 +408,7 @@ export default class News extends React.Component {
 
   handleEndDatePicked = (date) => {
     this.setState({
-      toDate: moment(date).format('YYYY-MM-DDTHH:mm:ss'),
-      toggleButtonPicker: !this.state.toggleButtonPicker
+      toDate: moment(date).format('YYYY-MM-DDTHH:mm:ss')
     }, () => {
       const {
         fromDate,
@@ -464,7 +459,7 @@ export default class News extends React.Component {
             keyExtractor={(it) => it._id.toString()}
           />
           <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { categoryFilter: { _id: category._id, name: category.name } })}>
-            <Text style={styles.txtSeeMoreStyle}>{'Xem thêm...'}</Text>
+            <Text style={styles.txtSeeMoreStyle}>{I18n.t('seeMore')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -480,7 +475,7 @@ export default class News extends React.Component {
       key={(this.state.changeView ? 'h' : 'v')}
       ListEmptyComponent={
         (<View style={styles.wrapEmptyArticles}>
-          <Text style={styles.txtEmptyArticle}>{'Không có bài viết nào phù hợp.'}</Text>
+          <Text style={styles.txtEmptyArticle}>{I18n.t('emptyScreen')}</Text>
           <Image
             style={{ height: 100, width: 100 }}
             source={require('../../assets/images/image.png')}
@@ -494,8 +489,14 @@ export default class News extends React.Component {
   )
 
   render() {
+    const LANGUAGE_FILTER = I18n.t('filterMenu.language');
+    const NATION_FILTER = I18n.t('filterMenu.country');
+    const AREA_FILTER = I18n.t('filterMenu.region');
+    const SOURCE_FILTER = I18n.t('filterMenu.source');
+    const SEARCH = I18n.t('filterMenu.search');
+    const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
     const { navigation } = this.props;
-    const { isLoading, toggleButtonPicker, dataArticles } = this.state;
+    const { isLoading, dataArticles } = this.state;
     const content = isLoading ? (
       <View style={{ marginTop: 25 }}>
         <ActivityIndicator size='large' />
@@ -506,8 +507,8 @@ export default class News extends React.Component {
       <SafeArea>
         <StatusBar barStyle={platform.isIphoneX ? 'dark-content' : 'light-content'} />
         <Header
-          title={'Tin tức'}
-          iconName={this.state.changeView ? 'th-list' : 'th-large'}
+          title={I18n.t('tabBar.news')}
+          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
           navigation={navigation}
           hasSearch
           onSearch={() => this.onNavigateFilter(SEARCH)}
@@ -515,11 +516,6 @@ export default class News extends React.Component {
         />
         <View style={styles.contentStyle}>
           <View style={styles.wrapFilterList}>
-            <TouchableOpacity onPress={toggleButtonPicker ? this.showStartDateTimePicker : this.showEndDateTimePicker}>
-              <View style={styles.btnTimePicker}>
-                <Icon name='ios-alarm' size={24} color={platform.primaryBlue} />
-              </View>
-            </TouchableOpacity>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -527,24 +523,48 @@ export default class News extends React.Component {
               <ButtonFilter title={LANGUAGE_FILTER} onPress={() => this.onNavigateFilter(LANGUAGE_FILTER)} />
               <ButtonFilter title={NATION_FILTER} onPress={() => this.onNavigateFilter(NATION_FILTER)} />
               <ButtonFilter title={AREA_FILTER} onPress={() => this.onNavigateFilter(AREA_FILTER)} />
-              <ButtonFilter title={SOURCE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_FILTER)} />
               <ButtonFilter title={SOURCE_TYPE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_TYPE_FILTER)} />
+              <ButtonFilter title={SOURCE_FILTER} onPress={() => this.onNavigateFilter(SOURCE_FILTER)} />
+              <TouchableOpacity
+                style={{ marginLeft: 10 }}
+                onPress={this.showStartDateTimePicker}
+              >
+                <View style={styles.wrapDateTime}>
+                  <Icon name='ios-alarm' size={15} color={platform.primaryBlue} style={{ marginRight: 5 }} />
+                  <Text>
+                    {this.state.fromDate === '' ?
+                      'Bắt đầu' :
+                      moment(this.state.fromDate).format('DD/MM/YYYY')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <Icon name='ios-arrow-round-forward' size={24} style={{ marginHorizontal: Scale.getSize(7) }} />
+              <TouchableOpacity onPress={this.showEndDateTimePicker}>
+                <View style={styles.wrapDateTime}>
+                  <Icon name='ios-alarm' size={15} color={platform.primaryBlue} style={{ marginRight: 5 }} />
+                  <Text>
+                    {this.state.toDate === '' ?
+                      'Kết thúc' :
+                      moment(this.state.toDate).format('DD/MM/YYYY')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </ScrollView>
           </View>
           {content}
         </View>
         <DateTimePicker
-          titleIOS={'Chọn thời gian bắt đầu'}
-          confirmTextIOS={'Xác nhận'}
-          cancelTextIOS={'Hủy'}
+          titleIOS={I18n.t('filterMenu.fromDate')}
+          confirmTextIOS={I18n.t('modal.confirm')}
+          cancelTextIOS={I18n.t('modal.cancel')}
           isVisible={this.state.startDateTimePickerVisible}
           onConfirm={this.handleStartDatePicked}
           onCancel={this.hideStartDateTimePicker}
         />
         <DateTimePicker
-          titleIOS={'Chọn thời gian kết thúc'}
-          confirmTextIOS={'Xác nhận'}
-          cancelTextIOS={'Hủy'}
+          titleIOS={I18n.t('filterMenu.toDate')}
+          confirmTextIOS={I18n.t('modal.confirm')}
+          cancelTextIOS={I18n.t('modal.cancel')}
           isVisible={this.state.endDateTimePickerVisible}
           onConfirm={this.handleEndDatePicked}
           onCancel={this.hideEndDateTimePicker}
@@ -562,10 +582,11 @@ const styles = StyleSheet.create({
   },
   wrapFilterList: {
     flexDirection: 'row',
-    paddingLeft: 10,
+    paddingRight: 15,
     paddingVertical: Scale.getSize(8),
     borderBottomWidth: 1,
-    borderBottomColor: platform.borderColor
+    borderBottomColor: platform.borderColor,
+    alignItems: 'center'
   },
   btnTimePicker: {
     paddingRight: 5
@@ -606,5 +627,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
     paddingVertical: Scale.getSize(20)
+  },
+  wrapDateTime: {
+    flexDirection: 'row',
+    padding: Scale.getSize(5),
+    borderColor: 'rgb(137,137,137)',
+    borderRadius: 5,
+    borderWidth: 1
   }
 });

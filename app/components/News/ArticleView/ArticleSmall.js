@@ -12,25 +12,34 @@ const IMAGE_SIZE = Scale.getSize(70);
 // const TXT_BOX_SIZE = platform.deviceWidth - Scale.getSize(65) - IMAGE_SIZE;
 
 export default class ArticleSmall extends React.PureComponent {
+  state = {
+    failed: false
+  }
+
   render() {
     const { source: { image, title, domain, collected_time } } = this.props;
-    let isEmptyImage = true;
+    // let isEmptyImage = true;
 
-    if (_.endsWith(image, '.png') ||
-    _.endsWith(image, '.jpg')) {
-      if (image === '/static/news.jpg') {
-        isEmptyImage = true;
-      } else {
-        isEmptyImage = false;
-      }
-    }
+    // if (_.endsWith(image, '.png') ||
+    // _.endsWith(image, '.jpg')) {
+    //   if (image === '/static/news.jpg' || _.startsWith(image, 'http://35.196.179.240/static')) {
+    //     isEmptyImage = true;
+    //   } else {
+    //     isEmptyImage = false;
+    //   }
+    // }
 
     return (
       <View style={styles.container}>
         <View style={styles.wrapImage}>
           <Image
             style={styles.image}
-            source={{ uri: isEmptyImage ? emptyImage : image }}
+            source={{ uri: this.state.failed ? emptyImage : image }}
+            onError={() => {
+              this.setState({
+                failed: true
+              });
+            }}
           />
         </View>
         <View style={styles.wrapTxtBox}>
@@ -77,7 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: '800'
   },
   wrapTxtBox: {
-    width: '80%',
+    width: '85%',
     paddingLeft: 15
   },
   titleArticle: {

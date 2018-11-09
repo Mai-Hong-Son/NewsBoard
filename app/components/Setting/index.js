@@ -6,6 +6,7 @@ import {
   Text
 } from 'react-native';
 import { connect } from 'react-redux';
+import I18n from 'react-native-i18n';
 
 import * as commonActions from '../../../redux/actions';
 import Header from '../Reusables/Header';
@@ -37,12 +38,6 @@ const sourceTypeData = [
     name: 'Minds'
   }
 ];
-
-const LANGUAGE_FILTER = 'Ngôn ngữ';
-const NATION_FILTER = 'Quốc gia';
-const AREA_FILTER = 'Khu vực';
-const CATEGORIES_FILTER = 'Danh mục';
-const SOURCE_TYPE_FILTER = 'Loại nguồn';
 
 export function getItemsByArrayId(arr1, arr2) {
   const arr3 = [];
@@ -149,6 +144,12 @@ export default class Setting extends React.PureComponent {
   }
 
   onNavigateFilter = (title) => {
+    const LANGUAGE_FILTER = I18n.t('filterMenu.language');
+    const NATION_FILTER = I18n.t('filterMenu.country');
+    const AREA_FILTER = I18n.t('filterMenu.region');
+    const CATEGORIES_FILTER = I18n.t('filterMenu.category');
+    const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
+
     switch (title) {
       case LANGUAGE_FILTER:
         this.props.navigation.navigate('FilterSetting', {
@@ -300,7 +301,7 @@ export default class Setting extends React.PureComponent {
           }
         });
         break;
-      case 'Danh mục nhận thông báo':
+      case I18n.t('filterMenu.subjectNotif'):
         this.props.navigation.navigate('FilterSetting', {
           title,
           dataFilter: this.state.subjects,
@@ -321,11 +322,16 @@ export default class Setting extends React.PureComponent {
   render() {
     const { navigation } = this.props;
     const { countries, languages, regions, sourcetype, categories, subjects } = this.state;
+    const LANGUAGE_FILTER = I18n.t('filterMenu.language');
+    const NATION_FILTER = I18n.t('filterMenu.country');
+    const AREA_FILTER = I18n.t('filterMenu.region');
+    const CATEGORIES_FILTER = I18n.t('filterMenu.category');
+    const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
 
     return (
       <SafeArea style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
-          title={'Cài đặt'}
+          title={I18n.t('setting.title')}
           type='stack'
           navigation={navigation}
         />
@@ -333,7 +339,7 @@ export default class Setting extends React.PureComponent {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainerStyle}
         >
-          <Text style={styles.txtContentTitle}>{'Nội dung'}</Text>
+          <Text style={styles.txtContentTitle}>{I18n.t('setting.content')}</Text>
           <View>
             <ItemView title={CATEGORIES_FILTER} data={categories} onPress={() => this.onNavigateFilter(CATEGORIES_FILTER)} />
             <ItemView title={LANGUAGE_FILTER} data={languages} onPress={() => this.onNavigateFilter(LANGUAGE_FILTER)} />
@@ -341,9 +347,21 @@ export default class Setting extends React.PureComponent {
             <ItemView title={AREA_FILTER} data={regions} onPress={() => this.onNavigateFilter(AREA_FILTER)} />
             <ItemView title={SOURCE_TYPE_FILTER} data={sourcetype} onPress={() => this.onNavigateFilter(SOURCE_TYPE_FILTER)} />
           </View>
-          <Text style={[styles.txtContentTitle, { paddingTop: Scale.getSize(15) }]}>{'Thông báo'}</Text>
+          <Text style={[styles.txtContentTitle, { paddingTop: Scale.getSize(15) }]}>{I18n.t('setting.notification')}</Text>
           <View>
-            <ItemView title={'Danh mục nhận thông báo'} data={subjects} onPress={() => this.onNavigateFilter('Danh mục nhận thông báo')} />
+            <ItemView
+              title={I18n.t('filterMenu.subjectNotif')}
+              data={subjects}
+              onPress={() => this.onNavigateFilter(I18n.t('filterMenu.subjectNotif'))}
+            />
+          </View>
+          <Text style={[styles.txtContentTitle, { paddingTop: Scale.getSize(15) }]}>{I18n.t('setting.more')}</Text>
+          <View>
+            <ItemView
+              title={I18n.t('setting.changeLanguage')}
+              data={[]}
+              onPress={() => { I18n.locale = 'en'; }}
+            />
           </View>
         </ScrollView>
       </SafeArea>

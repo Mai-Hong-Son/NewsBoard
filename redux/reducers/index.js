@@ -24,6 +24,7 @@ import {
   regionsSetting,
   categoriesSetting
 } from './serviceApi/dataFiltersSetting';
+import { language } from './serviceApi/translate';
 
 export {
   tokenAccess,
@@ -55,5 +56,6 @@ export {
   countriesSetting,
   regionsSetting,
   categoriesSetting,
-  localhost
+  localhost,
+  language
 };

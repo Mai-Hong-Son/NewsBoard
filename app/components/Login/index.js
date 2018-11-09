@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import I18n from 'react-native-i18n';
 // import _ from 'lodash';
 // import OneSignal from 'react-native-onesignal';
 
@@ -39,8 +40,8 @@ export default class Login extends React.PureComponent {
     this.state = {
       username: '',
       password: '',
-      // localhost: 'http://35.196.179.240:8080',
-      localhost: 'http://192.168.92.90:8080',
+      localhost: 'http://35.196.179.240:8080',
+      // localhost: 'http://192.168.92.90:8080',
       loading: false
     };
 
@@ -62,8 +63,8 @@ export default class Login extends React.PureComponent {
       this.props.navigation.replace('DrawerApp');
     } else if (this.flag) {
       Alert.alert(
-        'Cảnh báo',
-        'Đăng nhập không thành công!',
+        I18n.t('login.alertTitle'),
+        I18n.t('login.alertContent'),
         [
           { text: 'OK', onPress: () => null }
         ],
@@ -112,7 +113,7 @@ export default class Login extends React.PureComponent {
     const { username, password, loading, localhost } = this.state;
     const statusLogin = loading ?
       <ActivityIndicator color={platform.primaryBlue} /> :
-      <Text style={styles.txtLogin}>{'Đăng nhập'}</Text>;
+      <Text style={styles.txtLogin}>{I18n.t('login.title')}</Text>;
 
     return (
       <FullGradient
@@ -130,7 +131,7 @@ export default class Login extends React.PureComponent {
             placeholderTextColor={platform.inputColorPlaceholder}
             underlineColorAndroid="transparent"
             autoCapitalize='none'
-            placeholder={'Tên đăng nhập'}
+            placeholder={I18n.t('login.username')}
             onChangeText={text => this.setState({ username: text })}
             value={username}
           />
@@ -141,7 +142,7 @@ export default class Login extends React.PureComponent {
             placeholderTextColor={platform.inputColorPlaceholder}
             underlineColorAndroid="transparent"
             autoCapitalize='none'
-            placeholder={'Mật khẩu'}
+            placeholder={I18n.t('login.password')}
             secureTextEntry
             onChangeText={text => this.setState({ password: text })}
             value={password}

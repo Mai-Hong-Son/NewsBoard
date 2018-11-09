@@ -36,7 +36,8 @@ import {
   languagesSetting,
   countriesSetting,
   regionsSetting,
-  categoriesSetting
+  categoriesSetting,
+  language
 } from './../reducers/index';
 
 const config = {
@@ -107,7 +108,8 @@ export default function buildStore() {
     languagesSetting,
     countriesSetting,
     regionsSetting,
-    categoriesSetting
+    categoriesSetting,
+    language
   });
 
   const store = createStore(reducers, composeEnhancer(applyMiddleware(reduxThunk, axiosMiddleware, middleware)));

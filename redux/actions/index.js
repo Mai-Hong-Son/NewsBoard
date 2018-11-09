@@ -26,6 +26,7 @@ import {
   getRegionsSetting,
   getCategoriesSetting
 } from './serviceApi/getDataFilterSetting';
+import { changeLanguage } from './serviceApi/translate';
 
 export {
   login,
@@ -61,5 +62,6 @@ export {
   getRegionsSetting,
   getCategoriesSetting,
   postSettingNotify,
-  saveLocalhost
+  saveLocalhost,
+  changeLanguage
 };

@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     paddingLeft: 15,
     fontSize: Scale.getSize(20),
-    color: '#fff'
+    color: '#fff',
+    width: platform.deviceWidth
   }
 });

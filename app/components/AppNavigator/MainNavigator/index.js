@@ -5,6 +5,7 @@ import {
   createStackNavigator,
   createDrawerNavigator
 } from 'react-navigation';
+import I18n from 'react-native-i18n';
 
 // Menubar
 import Login from '../../Login';
@@ -35,19 +36,26 @@ import ImageUrls from '../../../assets/images';
 import { MyTabBar } from './myTabBar';
 // import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
+import en from '../../../assets/i18n/locales/en';
+import vi from '../../../assets/i18n/locales/vi';
+
+I18n.fallbacks = true;
+I18n.locale = 'vi';
+
+I18n.translations = { en, vi };
 
 export const RootTabs = createBottomTabNavigator(
   {
     News: {
       screen: News,
       navigationOptions: {
-        title: 'Tin tức'
+        title: I18n.t('tabBar.news')
       }
     },
     Focus: {
       screen: Focus,
       navigationOptions: {
-        title: 'Tiêu điểm'
+        title: I18n.t('tabBar.issue')
       }
     },
     Newspaper: {
@@ -56,13 +64,13 @@ export const RootTabs = createBottomTabNavigator(
     Share: {
       screen: Share,
       navigationOptions: {
-        title: 'Chia sẻ'
+        title: I18n.t('tabBar.share')
       }
     },
     Save: {
       screen: Save,
       navigationOptions: {
-        title: 'Lưu trữ'
+        title: I18n.t('tabBar.stored')
       }
     }
   },
@@ -88,7 +96,7 @@ export const RootTabs = createBottomTabNavigator(
     }),
     tabBarComponent: MyTabBar,
     tabBarPosition: 'bottom',
-    swipeEnabled: false,
+    swipeEnabled: true,
     lazy: true
   }
 );
@@ -140,7 +148,8 @@ export const DrawerApp = createDrawerNavigator(
     }
   }, {
     contentComponent: SideMenu,
-    drawerWidth: platform.deviceWidth - 100
+    drawerWidth: platform.deviceWidth - 100,
+    drawerLockMode: 'locked-closed'
   }
 );
 

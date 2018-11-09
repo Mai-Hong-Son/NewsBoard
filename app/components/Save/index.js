@@ -4,10 +4,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
+import I18n from 'react-native-i18n';
 // import Icon from 'react-native-vector-icons/Ionicons';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
 
@@ -18,10 +20,13 @@ import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import SafeArea from '../../theme/SafeArea';
+import { buildHeaders } from '../../../redux/utils';
 
 @connect(
   state => ({
-    myArticles: state.myArticles
+    myArticles: state.myArticles,
+    localhost: state.localhost,
+    tokenAccess: state.tokenAccess
   }),
   { ...commonActions }
 )
@@ -60,6 +65,34 @@ export default class Save extends React.Component {
     this.props.getMyArticles();
   }
 
+  deleteAll = () => {
+    const { payload } = this.props.localhost.data;
+
+    fetch(`${payload}/v4/cart/clear`, {
+      method: 'GET',
+      headers: buildHeaders(this.props)
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status) {
+          Alert.alert(
+            I18n.t('alert.title'),
+            I18n.t('alert.deleteSuccess'),
+            [
+              {
+                text: 'OK',
+                onPress: () => null
+              }
+            ],
+            { cancelable: false }
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   renderArticleItem = ({ item }) => {
     const { id } = item;
     const { navigation: { navigate } } = this.props;
@@ -96,9 +129,12 @@ export default class Save extends React.Component {
           onWillFocus={() => this.onRefresh()}
         />
         <Header
-          title={'Lưu trữ'}
-          iconName={this.state.changeView ? 'th-list' : 'th-large'}
+          title={I18n.t('save.title')}
+          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
           navigation={navigation}
+          iconMenu
+          type={'stored'}
+          deleteAll={this.deleteAll}
           onPress={this.onPress}
         />
         <View style={styles.contentStyle}>

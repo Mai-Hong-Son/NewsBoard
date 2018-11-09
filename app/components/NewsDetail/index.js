@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import _ from 'lodash';
+import I18n from 'react-native-i18n';
 
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
@@ -73,8 +74,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!error && this.state.isClickSave && !this.state.colorSave) {
       Alert.alert(
-        'Thông báo',
-        'Bạn đã lưu thành công',
+        I18n.t('alert.title'),
+        I18n.t('alert.saveContent'),
         [
           {
             text: 'OK',
@@ -90,8 +91,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!errDelete && this.state.isClickSave && this.state.colorSave) {
       Alert.alert(
-        'Thành công',
-        'Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.',
+        I18n.t('alert.success'),
+        I18n.t('alert.messageSuccess'),
         [
           {
             text: 'OK',
@@ -109,8 +110,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!errShare && this.state.onClickShare) {
       Alert.alert(
-        'Thông báo',
-        'Bạn đã chia sẻ thành công',
+        I18n.t('alert.title'),
+        I18n.t('alert.shareContent'),
         [
           {
             text: 'OK',
@@ -125,8 +126,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (errShare && this.state.onClickShare) {
       Alert.alert(
-        'Thông báo',
-        'Không chia sẻ được',
+        I18n.t('alert.title'),
+        I18n.t('alert.dontShareContent'),
         [
           {
             text: 'OK',
@@ -250,7 +251,7 @@ export default class NewsDetail extends React.PureComponent {
             title=''
             type='stack'
             navigation={navigation}
-            iconName='flag'
+            iconName='ios-flag'
             colorSave={colorSave}
             iconMenu
             onPress={this.onSaveAricle}
@@ -264,7 +265,7 @@ export default class NewsDetail extends React.PureComponent {
     }
 
     const {
-      postDetail: { data: { body, domain, title, logo, time, category, url, image, id } },
+      postDetail: { data: { body, domain, title, logo, time, category, url, image } },
       navigation,
       categories
     } = this.props;
@@ -280,7 +281,7 @@ export default class NewsDetail extends React.PureComponent {
           title=''
           type='stack'
           navigation={navigation}
-          iconName='flag'
+          iconName='ios-flag'
           colorSave={colorSave}
           iconMenu
           onPress={this.onSaveAricle}
@@ -316,11 +317,11 @@ export default class NewsDetail extends React.PureComponent {
                 <Text numberOfLines={2} style={styles.txtSourceStyle}>{` - ${time.trim().replace('|', '')}`}</Text>
               </View>
               <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
-              <HTML
+              {typeBody.trim() === '' ? <Text /> : <HTML
                 html={typeBody.replace('block', '').replace('inline-block', '').replace('inline-', '').replace('fixed', 'absolute')}
                 imagesMaxWidth={platform.deviceWidth - 100}
                 baseFontStyle={{ fontSize: Scale.getSize(24), color: '#000' }}
-                ignoredStyles={['display']}
+                ignoredStyles={['display', 'font-family', 'letter-spacing', 'mso-bidi-font-style']}
                 tagsStyles={{
                   p: {
                     paddingTop: Scale.getSize(10),
@@ -332,7 +333,7 @@ export default class NewsDetail extends React.PureComponent {
                   div: { alignItems: 'center' },
                   iframe: { width: '100%' }
                 }}
-              />
+              />}
             </View>
           </ParallaxScrollView>
         </View>
