@@ -211,7 +211,7 @@ export default class Share extends React.Component {
           isVisible={this.state.showModal}
           onBackdropPress={this.showModalAsign}
         >
-          <View style={{ backgroundColor: '#fff' }}>
+          <View style={{ backgroundColor: '#fff', borderRadius: 5 }}>
             <TouchableOpacity onPress={this.onDeleteArticle}>
               <Text style={{ fontSize: Scale.getSize(16), color: '#000', padding: Scale.getSize(10) }}>{'Xóa bài chia sẻ'}</Text>
             </TouchableOpacity>

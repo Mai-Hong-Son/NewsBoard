@@ -3,10 +3,13 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
+import Modal from 'react-native-modal';
+import RadioForm from 'react-native-simple-radio-button';
 
 import * as commonActions from '../../../redux/actions';
 import Header from '../Reusables/Header';
@@ -14,6 +17,7 @@ import SafeArea from '../../theme/SafeArea';
 import ItemView from './elements/ItemView';
 import Scale from '../../theme/scale';
 import { buildHeaders } from '../../../redux/utils';
+import platform from '../../theme/platform';
 // import { Loading } from '../../components/Reusables/Loading';
 
 const sourceTypeData = [
@@ -36,6 +40,17 @@ const sourceTypeData = [
   {
     _id: 'minds',
     name: 'Minds'
+  }
+];
+
+const languageOptions = [
+  {
+    value: 'vi',
+    label: 'Tiếng Việt'
+  },
+  {
+    value: 'en',
+    label: 'Tiếng Anh'
   }
 ];
 
@@ -82,7 +97,8 @@ const filter = (sourceArray, keyArray) => {
     categoriesSetting: state.categoriesSetting,
     subjects: state.subjects,
     localhost: state.localhost,
-    tokenAccess: state.tokenAccess
+    tokenAccess: state.tokenAccess,
+    language: state.language
   }),
   { ...commonActions }
 )
@@ -91,6 +107,8 @@ export default class Setting extends React.PureComponent {
     super(props);
 
     this.state = {
+      showModal: false,
+      languageResult: props.language.data,
       categories: [],
       countries: [],
       languages: [],
@@ -141,6 +159,12 @@ export default class Setting extends React.PureComponent {
         sourcetype: getItemsByArrayId(sourceTypeData, settings.sourcetype)
       });
     }
+  }
+
+  onShowModalPriority = () => {
+    this.setState({
+      showModal: !this.state.showModal
+    });
   }
 
   onNavigateFilter = (title) => {
@@ -320,8 +344,8 @@ export default class Setting extends React.PureComponent {
   }
 
   render() {
-    const { navigation } = this.props;
-    const { countries, languages, regions, sourcetype, categories, subjects } = this.state;
+    const { navigation, language: { data } } = this.props;
+    const { countries, languages, regions, sourcetype, categories, subjects, languageResult } = this.state;
     const LANGUAGE_FILTER = I18n.t('filterMenu.language');
     const NATION_FILTER = I18n.t('filterMenu.country');
     const AREA_FILTER = I18n.t('filterMenu.region');
@@ -357,13 +381,55 @@ export default class Setting extends React.PureComponent {
           </View>
           <Text style={[styles.txtContentTitle, { paddingTop: Scale.getSize(15) }]}>{I18n.t('setting.more')}</Text>
           <View>
-            <ItemView
-              title={I18n.t('setting.changeLanguage')}
-              data={[]}
-              onPress={() => { I18n.locale = 'en'; }}
-            />
+            <TouchableOpacity onPress={this.onShowModalPriority}>
+              <View style={styles.wrapItem}>
+                <Text style={styles.txtTitle}>{I18n.t('setting.changeLanguage')}</Text>
+                <Text style={styles.txtContent}>
+                  {languageOptions.filter(it => it.value === data)[0].label}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
+        <Modal
+          isVisible={this.state.showModal}
+          onBackdropPress={this.onShowModalPriority}
+        >
+          <View style={{ backgroundColor: '#fff', borderRadius: 5, padding: Scale.getSize(15) }}>
+            <Text style={styles.txtCheckbox}>{'Chọn ngôn ngữ'}</Text>
+            <View style={{ paddingVertical: 15 }}>
+              <RadioForm
+                radio_props={languageOptions}
+                initial={data === 'vi' ? 0 : 1}
+                formHorizontal
+                style={{ justifyContent: 'space-between' }}
+                labelStyle={styles.txtCheckbox}
+                buttonColor={platform.primaryBlue}
+                onPress={(value) => { this.setState({ languageResult: value }); }}
+              />
+            </View>
+            <View style={{ alignItems: 'flex-end', paddingTop: Scale.getSize(15) }}>
+              <TouchableOpacity onPress={() => this.props.changeLanguage(languageResult)}>
+                <View
+                  style={{
+                    backgroundColor: platform.primaryBlue,
+                    paddingVertical: Scale.getSize(7),
+                    paddingHorizontal: Scale.getSize(15),
+                    borderRadius: 5
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: Scale.getSize(18),
+                      fontWeight: '700',
+                      color: '#fff'
+                    }}
+                  >{'Xong'}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeArea>
     );
   }
@@ -379,5 +445,24 @@ const styles = StyleSheet.create({
     color: '#EE82EE'
     // borderBottomColor: 'rgb(237,237,237)',
     // borderBottomWidth: 1
+  },
+  txtCheckbox: {
+    fontSize: Scale.getSize(18),
+    fontWeight: '600'
+  },
+  wrapItem: {
+    paddingVertical: Scale.getSize(10),
+    borderBottomColor: 'rgb(237,237,237)',
+    borderBottomWidth: 1
+  },
+  txtTitle: {
+    fontSize: Scale.getSize(17),
+    color: '#000',
+    paddingBottom: Scale.getSize(8)
+  },
+  txtContent: {
+    fontSize: Scale.getSize(16),
+    color: 'rgb(137,137,137)',
+    paddingBottom: Scale.getSize(8)
   }
 });

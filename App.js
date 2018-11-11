@@ -14,9 +14,9 @@ import buildStore from './redux/store';
 const { store } = buildStore();
 
 export default class App extends React.Component {
-  async componentDidMount() {
-    // console.warn('tesst');
-  }
+  // async componentDidMount() {
+  //   console.warn(this.props);
+  // }
 
   render() {
     return (

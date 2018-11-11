@@ -67,6 +67,7 @@ export default {
     "shareContent": "Chia sẻ thành công!",
     "dontShareContent": "Chia sẻ không thành công!",
     "success": "Thành công",
+    "saveIssueContent": "Tiêu điểm đã được cập nhật",
     "messageSuccess": "Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.",
     "deleteSuccess": "Xóa thành công"
   },

@@ -6,6 +6,8 @@ import {
   createDrawerNavigator
 } from 'react-navigation';
 import I18n from 'react-native-i18n';
+import moment from 'moment';
+import 'moment/locale/vi';
 
 // Menubar
 import Login from '../../Login';
@@ -40,8 +42,6 @@ import en from '../../../assets/i18n/locales/en';
 import vi from '../../../assets/i18n/locales/vi';
 
 I18n.fallbacks = true;
-I18n.locale = 'vi';
-
 I18n.translations = { en, vi };
 
 export const RootTabs = createBottomTabNavigator(

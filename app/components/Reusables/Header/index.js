@@ -240,7 +240,8 @@ const styles = StyleSheet.create({
   wrapModalBox: {
     backgroundColor: '#fff',
     padding: 15,
-    height: '70%'
+    height: '70%',
+    borderRadius: 5
   },
   txtCheckbox: {
     fontSize: Scale.getSize(18),

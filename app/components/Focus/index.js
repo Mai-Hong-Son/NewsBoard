@@ -14,7 +14,7 @@ import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 import I18n from 'react-native-i18n';
-import Modal from 'react-native-modal';
+// import Modal from 'react-native-modal';
 
 import Header from '../Reusables/Header';
 import SafeArea from '../../theme/SafeArea';
@@ -47,7 +47,6 @@ function getItemsByArrayId(arr1, arr2) {
 )
 export default class Focus extends React.Component {
   state = {
-    item: null,
     isTabLeft: true,
     isTabRight: false,
     data: [],
@@ -143,8 +142,7 @@ export default class Focus extends React.Component {
     });
   }
 
-  onDeleteIssue = () => {
-    const { item } = this.state;
+  onDeleteIssue = (item) => {
     const {
       id,
       title,
@@ -203,15 +201,6 @@ export default class Focus extends React.Component {
           dataSaved: item,
           type: 'update'
         })}
-        onLongPress={() => {
-          this.setState({
-            item
-          }, () => {
-            if (!isTabLeft && isTabRight) {
-              this.showModalAsign();
-            }
-          });
-        }}
       >
         <View style={styles.wrapItemView}>
           <View style={styles.contentRightStyle}>
@@ -225,7 +214,29 @@ export default class Focus extends React.Component {
               </Text>
               <Text style={styles.txtTimeTitle}>{moment(created_time).fromNow()}</Text>
             </View>
-            {completed ? <Icon name='ios-checkmark-circle' color={'#00cc66'} size={Scale.getSize(25)} /> : null}
+            <View style={{ flexDirection: 'row' }}>
+              {completed ? <Icon name='ios-checkmark-circle' color={'#00cc66'} size={Scale.getSize(25)} /> : null}
+              <TouchableOpacity onPress={() => {
+                Alert.alert(
+                  'Cảnh báo',
+                  'Bạn có chắc chắn muốn xóa tiêu điểm này ?',
+                  [
+                    {
+                      text: 'Hủy',
+                      onPress: () => null
+                    },
+                    {
+                      text: 'Đồng ý',
+                      onPress: () => this.onDeleteIssue(item)
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              }}
+              >
+                <Icon name='ios-close-circle' style={{ marginLeft: 10 }} color={'red'} size={Scale.getSize(25)} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -276,16 +287,6 @@ export default class Focus extends React.Component {
           onRefresh={this.onRefresh}
           showsVerticalScrollIndicator={false}
         />
-        <Modal
-          isVisible={this.state.showModal}
-          onBackdropPress={this.showModalAsign}
-        >
-          <View style={{ backgroundColor: '#fff' }}>
-            <TouchableOpacity onPress={this.onDeleteIssue}>
-              <Text style={{ fontSize: Scale.getSize(16), color: '#000', padding: Scale.getSize(10) }}>{'Xóa tiêu điểm'}</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
       </SafeArea>
     );
   }
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     paddingVertical: 5,
     paddingLeft: 15,
-    paddingRight: 25,
+    paddingRight: 10,
     paddingTop: 15
   },
   txtTitle: {

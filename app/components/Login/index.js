@@ -13,6 +13,7 @@ import {
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
+import moment from 'moment';
 // import _ from 'lodash';
 // import OneSignal from 'react-native-onesignal';
 
@@ -25,7 +26,8 @@ import imageurls from '../../assets/images';
 
 @connect(
   state => ({
-    tokenAccess: state.tokenAccess
+    tokenAccess: state.tokenAccess,
+    language: state.language
   }),
   { ...commonActions }
 )
@@ -48,16 +50,18 @@ export default class Login extends React.PureComponent {
     this.flag = false;
   }
 
-  componentDidMount() {
-    const { tokenAccess: { data }, navigation } = this.props;
+  // componentDidMount() {
+  //   const { tokenAccess: { data }, navigation } = this.props;
 
-    if (data.token) {
-      navigation.replace('DrawerApp');
-    }
-  }
+  //   if (data.token) {
+  //     navigation.replace('DrawerApp');
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
-    const { tokenAccess: { data } } = nextProps;
+    const { tokenAccess: { data }, language } = nextProps;
+    I18n.locale = language.data;
+    moment.locale(language.data);
 
     if (data.token) {
       this.props.navigation.replace('DrawerApp');

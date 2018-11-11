@@ -62,8 +62,8 @@ export default class IssuesDetail extends React.PureComponent {
 
     if (!errUpdate && isClick && !errCreate) {
       Alert.alert(
-        I18n.t('alert.title'),
-        I18n.t('alert.saveContent'),
+        I18n.t('alert.success'),
+        I18n.t('alert.saveIssueContent'),
         [
           {
             text: 'OK',
@@ -290,7 +290,7 @@ export default class IssuesDetail extends React.PureComponent {
           isVisible={showModal}
           onBackdropPress={this.showModalAsign}
         >
-          <View style={{ backgroundColor: '#fff', height: '40%' }}>
+          <View style={{ backgroundColor: '#fff', height: '40%', borderRadius: 5 }}>
             <View style={{ paddingLeft: Scale.getSize(15), paddingVertical: Scale.getSize(15) }}>
               <Text style={{
                 fontSize: Scale.getSize(18),
