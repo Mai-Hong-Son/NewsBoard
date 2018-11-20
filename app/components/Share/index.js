@@ -34,6 +34,7 @@ import ArticleSmall from '../News/ArticleView/ArticleSmall';
 )
 export default class Share extends React.Component {
   state = {
+    isFirstime: false,
     isTabLeft: true,
     isTabRight: false,
     data: [],
@@ -45,7 +46,11 @@ export default class Share extends React.Component {
   }
 
   componentDidMount() {
-    this.onRefresh();
+    if (!this.state.isFirstime) {
+      this.setState({
+        isFirstime: true
+      }, () => this.onRefresh());
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,8 +80,8 @@ export default class Share extends React.Component {
       !deleteArticleShareForMe.error &&
       !deleteArticleShareByMe.error) {
       Alert.alert(
-        I18n.t('alert.title'),
-        I18n.t('alert.deleteSuccess'),
+        I18n.t('alert.success'),
+        I18n.t('alert.deleteShareArticle'),
         [
           {
             text: 'OK',
@@ -88,6 +93,10 @@ export default class Share extends React.Component {
         { cancelable: false }
       );
     }
+  }
+
+  componentWillUnmount() {
+    NavigationEvents.removeEventListener('onWillFocus');
   }
 
   onPress = () => {
@@ -163,12 +172,16 @@ export default class Share extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { isTabLeft, isTabRight, data, loading } = this.state;
+    const { isTabLeft, isTabRight, data, loading, isFirstime } = this.state;
 
     return (
       <SafeArea>
         <NavigationEvents
-          onWillFocus={() => this.onRefresh()}
+          onWillFocus={() => {
+            if (isFirstime) {
+              this.onRefresh();
+            }
+          }}
         />
         <Header
           title={I18n.t('share.title')}
@@ -213,7 +226,7 @@ export default class Share extends React.Component {
         >
           <View style={{ backgroundColor: '#fff', borderRadius: 5 }}>
             <TouchableOpacity onPress={this.onDeleteArticle}>
-              <Text style={{ fontSize: Scale.getSize(16), color: '#000', padding: Scale.getSize(10) }}>{'Xóa bài chia sẻ'}</Text>
+              <Text style={styles.deleteButton}>{I18n.t('share.deleteAticle')}</Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -262,5 +275,10 @@ const styles = StyleSheet.create({
     paddingTop: Scale.getSize(15),
     paddingHorizontal: Scale.getSize(15),
     paddingBottom: 60
+  },
+  deleteButton: {
+    fontSize: Scale.getSize(16),
+    color: '#000',
+    padding: Scale.getSize(10)
   }
 });

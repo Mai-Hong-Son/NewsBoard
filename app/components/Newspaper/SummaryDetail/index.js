@@ -2,13 +2,13 @@ import React from 'react';
 import {
   View,
   Text,
-  ActivityIndicator,
   StyleSheet,
   ScrollView
 } from 'react-native';
 import { connect } from 'react-redux';
 import HTML from 'react-native-render-html';
 import moment from 'moment';
+import { Gravatar } from 'react-native-gravatar';
 
 import Header from '../../Reusables/Header';
 import platform from '../../../theme/platform';
@@ -19,7 +19,9 @@ import { Loading } from '../../Reusables/Loading';
 
 @connect(
   state => ({
-    summaryDetail: state.summaryDetail
+    summaryDetail: state.summaryDetail,
+    users: state.users,
+    userInfo: state.userInfo
   }),
   { ...commonActions }
 )
@@ -47,12 +49,13 @@ export default class SummaryDetail extends React.PureComponent {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, users: { data: listUser }, userInfo: { data: userData } } = this.props;
     const { loading, summaryDetail } = this.state;
     let content = <Loading />;
 
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;
+      const userCreate = listUser.filter(it => it.username === creator)[0];
       // console.warn(description);
 
       content = (
@@ -61,6 +64,19 @@ export default class SummaryDetail extends React.PureComponent {
             <Text style={styles.titleStyle}>{title}</Text>
             <View style={styles.wrapSourceStyle}>
               <View style={styles.wrapTag}>
+                <Gravatar
+                  options={{
+                    email: userCreate ? userCreate.email : userData.email,
+                    parameters: { size: '70', d: 'mm' },
+                    secure: true
+                  }}
+                  style={{
+                    width: Scale.getSize(15),
+                    height: Scale.getSize(15),
+                    borderRadius: Scale.getSize(15) / 2,
+                    marginRight: 5
+                  }}
+                />
                 <Text style={styles.txtName}>{creator}</Text>
               </View>
               <Text style={styles.txtSourceStyle}>{` - ${moment(updated_time).format('DD/MM/YYYY - hh:mm:ss')}`}</Text>
@@ -75,20 +91,20 @@ export default class SummaryDetail extends React.PureComponent {
                   // fontSize: Scale.getSize(24),
                   color: '#000',
                   paddingTop: Scale.getSize(5),
-                  paddingBottom: Scale.getSize(5),
-                  textAlign: 'justify'
+                  paddingBottom: Scale.getSize(5)
+                  // textAlign: 'justify'
                 },
                 h1: {
                   fontSize: Scale.getSize(26),
                   paddingTop: Scale.getSize(10),
                   paddingBottom: 0,
-                  color: '#000',
-                  textAlign: 'justify'
+                  color: '#000'
+                  // textAlign: 'justify'
                 },
                 span: {
                   // fontSize: Scale.getSize(26),
-                  color: '#000',
-                  textAlign: 'justify'
+                  color: '#000'
+                  // textAlign: 'justify'
                 },
                 img: { overflow: 'visible' }
                 // div: { alignItems: 'center' }
@@ -150,7 +166,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#cc0099',
     width: 80,
-    alignItems: 'center'
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   txtName: {
     color: '#fff',

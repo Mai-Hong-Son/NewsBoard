@@ -3,82 +3,113 @@ export default {
     "username": "Username",
     "password": "Password",
     "title": "Login",
-    "alertTitle": "Warning",
-    "alertContent": "Login failed!"
+    "alertTitle": "Alert",
+    "alertContent": "Login failed, please try again or contact with administrator."
   },
+  "News": "News",
+  "Focus": "Todo",
+  "Share": "Share",
+  "Save": "Archive",
+  "Newspaper": "Note",
   "tabBar": {
     "news": "News",
-    "issue": "Issues",
+    "issue": "Todo",
     "share": "Share",
-    "stored": "Stored",
-    "summary": "Summary"
+    "stored": "Archive",
+    "summary": "Daily Summary News"
   },
   "filterMenu": {
-    "language": "Languages",
-    "country": "Countries",
-    "region": "Regions",
-    "source": "Sources",
-    "sourceType": "Source Type",
+    "language": "Language",
+    "country": "Country",
+    "region": "Region",
+    "source": "Source",
+    "sourceType": "Source type",
     "search": "Search",
-    "fromDate": "From Date",
-    "toDate": "To Date",
+    "fromDate": "From",
+    "toDate": "To",
     "category": "Category",
-    "subjectNotif": "Danh mục nhận thông báo"
+    "subjectNotif": "Topic notification setting"
   },
   "modal": {
-    "confirm": "Xác nhận",
-    "cancel": "Hủy",
-    "level": "Chọn mức độ: ",
-    "shareTo": "Chia sẻ tới: "
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "level": "Priority",
+    "shareTo": "Share with",
+    "done": "Done"
   },
-  "emptyScreen": "Không có bài viết nào phù hợp.",
-  "seeMore": "Xem thêm...",
+  "emptyScreen": "No result matched the query.",
+  "seeMore": "More",
   "sidemenu": {
-    "setting": "Cài đặt",
-    "logout": "Đăng xuất",
-    "alertTitle": "Thông báo",
-    "alertLogout": "Bạn muốn đăng xuất ứng dụng?"
+    "setting": "Setting",
+    "logout": "Logout",
+    "alertTitle": "Notification",
+    "alertLogout": "Are you sure you want to logout your account?"
   },
   "setting": {
-    "content": "Nội dung",
-    "notification": "Thông báo"
+    "title": "Setting",
+    "content": "Options",
+    "notification": "Notification",
+    "more": "More",
+    "changeLanguage": "Change language",
+    "chooseLanguage": "Choose language",
+    "vietnamese": "Vietnamese",
+    "english": "English"
   },
   "issues": {
-    "title": "Issues",
-    "sendFromMe": "Đã giao",
-    "sendToMe": "Được giao",
-    "update": "Chỉnh sửa tiêu điểm",
-    "add": "Thêm tiêu điểm"
+    "title": "Issue",
+    "sendFromMe": "Me",
+    "sendToMe": "Assign to me",
+    "update": "Update your issue",
+    "add": "Add a new issue"
   },
   "issueDetail": {
-    "title": "Tiêu đề:",
-    "fromDate": "Ngày bắt đầu: ",
-    "toDate": "Ngày kết thúc: ",
-    "sendTo": "Giao cho: ",
-    "description": "Mô tả:",
-    "complicate": "Hoàn thành: "
+    "title": "Title",
+    "fromDate": "Start date",
+    "toDate": "End date",
+    "sendTo": "Assignee",
+    "description": "Description",
+    "complicate": "Done"
   },
   "alert": {
-    "title": "Thông báo",
-    "saveContent": "Lưu thành công!",
-    "shareContent": "Chia sẻ thành công!",
-    "dontShareContent": "Chia sẻ không thành công!",
-    "success": "Thành công",
-    "messageSuccess": "Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.",
-    "deleteSuccess": "Xóa bài thành công"
+    "title": "Notification",
+    "saveContent": "Your post is archived, you can see it in Archive tab",
+    "shareContent": "Sucessfully, the post shared with a other user.",
+    "dontShareContent": "Unsucessfully, you can not share this post.",
+    "success": "Successfully",
+    "saveIssueContent": "This issue is updated.",
+    "messageSuccess": "Successfully, this post is archived in news cart.",
+    "deleteSuccess": "Successfully, this post is removed from news cart.",
+    "deleteShareArticle": "Successfully, this post is removed from news cart.",
+    "saveArticle": "Successfully, this post is unarchived.",
+    "deleteSaveArticle": "The posts are removed from storage.",
+    "emptyUsers": "Emplty",
+    "confirmDeleteIssue": "Are you sure you want to delete this issue?"
   },
   "summary": {
-    "title": "Summary"
+    "title": "Daily Summary News"
   },
   "save": {
-    "title": "Stored"
+    "title": "Archived",
+    "deleteAll": "Delete all"
   },
   "share": {
     "title": "Share",
-    "shareFromMe": "Đã chia sẻ",
-    "shareToMe": "Được chia sẻ"
+    "shareFromMe": "Share",
+    "shareToMe": "Share to me",
+    "deleteAticle": "Remove this post",
+    "normal": "Normal",
+    "critical": "Critical",
+    "important": "Important"
   },
   "copyLink": {
-    "content": "Sao chép liên kết"
+    "content": "Copy link"
+  },
+  "subjects": {
+    "eventHot": "Hot Events",
+    "event": "Events",
+    "leader": "Politicians",
+    "organization": "Organization",
+    "object": "Object",
+    "personal": "Me"
   }
 };

@@ -34,12 +34,12 @@ import { buildHeaders } from '../../../redux/utils';
     categories: state.categories,
     mainRouter: state.mainRouter,
     localhost: state.localhost,
-    tokenAccess: state.tokenAccess,
-    language: state.language
+    tokenAccess: state.tokenAccess
+    // language: state.language
   }),
   { ...commonActions }
 )
-export default class News extends React.Component {
+export default class News extends React.PureComponent {
   state = {
     changeView: true,
     isLoading: true,
@@ -101,12 +101,12 @@ export default class News extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { language: { reloadScreen: prevReloaded } } = this.props;
-    const { language: { reloadScreen: nextReloaded } } = nextProps;
+  // componentWillReceiveProps(nextProps) {
+  //   const { language: { reloadScreen: prevReloaded } } = this.props;
+  //   const { language: { reloadScreen: nextReloaded } } = nextProps;
 
-    if (prevReloaded !== nextReloaded) this.onRefresh();
-  }
+  //   if (prevReloaded !== nextReloaded) this.onRefresh();
+  // }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
@@ -129,7 +129,9 @@ export default class News extends React.Component {
       lang: langArticles,
       search: searchArticles,
       time: timeArticles,
-      sourcetype
+      sourcetype,
+      fromDate,
+      toDate
     } = this.state;
   
     this.setState({
@@ -142,8 +144,8 @@ export default class News extends React.Component {
       region: regionArticles,
       lang: langArticles,
       search: searchArticles,
-      from: '',
-      to: '',
+      from: fromDate,
+      to: toDate,
       page_number: 1,
       time: timeArticles,
       sourcetype
@@ -230,7 +232,8 @@ export default class News extends React.Component {
             category: this.state.category.map(element => element._id),
             lang: this.state.lang.map(element => element._id),
             region: this.state.region.map(element => element._id),
-            country: this.state.country.map(element => element._id)
+            country: this.state.country.map(element => element._id),
+            sourcetype: this.state.sourcetype.map(element => element._id)
           },
           onSubmit: (source) => {
             const {
@@ -401,6 +404,22 @@ export default class News extends React.Component {
   handleStartDatePicked = (date) => {
     this.setState({
       fromDate: moment(date).format('YYYY-MM-DDTHH:mm:ss')
+    }, () => {
+      const {
+        fromDate,
+        toDate,
+        source,
+        domain,
+        category,
+        country,
+        region,
+        lang,
+        search,
+        time,
+        sourcetype
+      } = this.state;
+
+      this.getAticlesAfterFilter(source, domain, category, country, region, lang, search, fromDate, toDate, time, sourcetype);
     });
 
     this.hideStartDateTimePicker();
@@ -445,6 +464,18 @@ export default class News extends React.Component {
     const { posts: { hits: { hits } }, key } = item;
     const { categories: { data }, navigation: { navigate } } = this.props;
     const category = data.find(it => it._id === key);
+    const {
+      fromDate,
+      toDate,
+      source,
+      domain,
+      lang,
+      country,
+      region,
+      search,
+      time,
+      sourcetype
+    } = this.state;
 
     return (
       <View style={styles.wrapArticle}>
@@ -458,7 +489,26 @@ export default class News extends React.Component {
             key={(this.state.changeView ? 'h' : 'v')}
             keyExtractor={(it) => it._id.toString()}
           />
-          <TouchableOpacity onPress={() => navigate('ArticlesByCategory', { categoryFilter: { _id: category._id, name: category.name } })}>
+          <TouchableOpacity onPress={() => 
+            navigate('ArticlesByCategory', {
+              categoryFilter: {
+                _id: category._id,
+                name: category.name
+              },
+              dataFilter: {
+                source,
+                domain,
+                country,
+                region,
+                lang,
+                search,
+                fromDate,
+                toDate,
+                time,
+                sourcetype
+              }
+            })}
+          >
             <Text style={styles.txtSeeMoreStyle}>{I18n.t('seeMore')}</Text>
           </TouchableOpacity>
         </View>
@@ -531,9 +581,9 @@ export default class News extends React.Component {
               >
                 <View style={styles.wrapDateTime}>
                   <Icon name='ios-alarm' size={15} color={platform.primaryBlue} style={{ marginRight: 5 }} />
-                  <Text>
+                  <Text style={{ fontSize: 13 }}>
                     {this.state.fromDate === '' ?
-                      'Bắt đầu' :
+                      I18n.t('filterMenu.fromDate') :
                       moment(this.state.fromDate).format('DD/MM/YYYY')}
                   </Text>
                 </View>
@@ -542,9 +592,9 @@ export default class News extends React.Component {
               <TouchableOpacity onPress={this.showEndDateTimePicker}>
                 <View style={styles.wrapDateTime}>
                   <Icon name='ios-alarm' size={15} color={platform.primaryBlue} style={{ marginRight: 5 }} />
-                  <Text>
+                  <Text style={{ fontSize: 13 }}>
                     {this.state.toDate === '' ?
-                      'Kết thúc' :
+                      I18n.t('filterMenu.toDate') :
                       moment(this.state.toDate).format('DD/MM/YYYY')}
                   </Text>
                 </View>
@@ -630,7 +680,7 @@ const styles = StyleSheet.create({
   },
   wrapDateTime: {
     flexDirection: 'row',
-    padding: Scale.getSize(5),
+    padding: Scale.getSize(3),
     borderColor: 'rgb(137,137,137)',
     borderRadius: 5,
     borderWidth: 1

@@ -20,33 +20,6 @@ import * as commonActions from '../../../redux/actions';
 import Scale from '../../theme/scale';
 import platform from '../../theme/platform';
 
-const topicData = [
-  {
-    id: '1',
-    name: 'NÓNG'
-  },
-  {
-    id: '2',
-    name: 'SỰ KIỆN'
-  },
-  {
-    id: '3',
-    name: 'LÃNH ĐẠO'
-  },
-  {
-    id: '4',
-    name: 'ĐỐI TƯỢNG'
-  },
-  {
-    id: '5',
-    name: 'TỔ CHỨC'
-  },
-  {
-    id: '6',
-    name: 'CÁ NHÂN'
-  }
-];
-
 @connect(
   state => ({
     subjects: state.subjects,
@@ -61,9 +34,9 @@ export default class SideMenu extends React.PureComponent {
     isClickLogout: false
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getSubjects();
-    this.props.getUsers();
+    await this.props.getUsers();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -76,10 +49,7 @@ export default class SideMenu extends React.PureComponent {
       });
     }
 
-    if (!errLogout && this.state.isClickLogout) {
-      OneSignal.deleteTag('ip');
-      OneSignal.deleteTag('user_id');
-      
+    if (!errLogout && this.state.isClickLogout) {      
       this.setState({
         isClickLogout: false
       }, () => this.props.navigation.navigate('Login'));
@@ -102,7 +72,12 @@ export default class SideMenu extends React.PureComponent {
           text: I18n.t('modal.confirm'),
           onPress: () => this.setState({
             isClickLogout: true
-          }, () => this.props.logout())
+          }, () => {
+            OneSignal.deleteTag('ip');
+            OneSignal.deleteTag('user_id');
+            OneSignal.configure();
+            this.props.logout();
+          })
         }
       ],
       { cancelable: false }
@@ -145,7 +120,7 @@ export default class SideMenu extends React.PureComponent {
       <View>
         {
           subjectsData.filter(it => it.type === item.id).length === 0 ? null :
-            <Text style={styles.txtTypeSubject}>{item.name}</Text>
+            <Text style={styles.txtTypeSubject}>{item.name.toUpperCase()}</Text>
         }
         <FlatList
           data={subjectsData.filter(it => it.type === item.id)}
@@ -159,6 +134,32 @@ export default class SideMenu extends React.PureComponent {
 
   render() {
     const { loading } = this.state;
+    const topicData = [
+      {
+        id: '2',
+        name: I18n.t('subjects.eventHot')
+      },
+      {
+        id: '3',
+        name: I18n.t('subjects.event')
+      },
+      {
+        id: '6',
+        name: I18n.t('subjects.leader')
+      },
+      {
+        id: '5',
+        name: I18n.t('subjects.organization')
+      },
+      {
+        id: '4',
+        name: I18n.t('subjects.object')
+      },
+      {
+        id: '7',
+        name: I18n.t('subjects.personal')
+      }
+    ];
 
     return (
       <FullGradient containerStyle={styles.container}>

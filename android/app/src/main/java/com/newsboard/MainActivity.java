@@ -1,4 +1,4 @@
-package com.newsboard;
+package com.semiapp.newsboard;
 
 import com.facebook.react.ReactActivity;
 

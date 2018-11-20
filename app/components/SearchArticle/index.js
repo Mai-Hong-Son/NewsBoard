@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import platform from '../../theme/platform';
 import SafeArea from '../../theme/SafeArea';
@@ -38,7 +38,7 @@ export default class SearchArticle extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity style={{ height: '100%', justifyContent: 'center' }} onPress={() => navigation.goBack()}>
-            <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
+            <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
           </TouchableOpacity>
           <View style={{ height: '100%', justifyContent: 'center' }}>
             <TextInput

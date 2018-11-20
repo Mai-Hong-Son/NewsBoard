@@ -8,7 +8,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 
@@ -174,7 +174,7 @@ export default class FilterSetting extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
+            <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
           </TouchableOpacity>
         </FullGradient>
         <View style={styles.container}>

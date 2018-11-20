@@ -22,6 +22,7 @@ import Scale from '../../theme/scale';
 import Header from '../Reusables/Header';
 import { Loading } from '../Reusables/Loading';
 import { emptyImage } from '../News/ArticleView/ArticleLarge';
+import images from '../../assets/images';
 
 @connect(
   state => ({
@@ -37,6 +38,7 @@ import { emptyImage } from '../News/ArticleView/ArticleLarge';
 export default class NewsDetail extends React.PureComponent {
   state = {
     loading: true,
+    failed: false,
     isClickSave: false,
     onClickShare: false,
     isTranslate: false,
@@ -74,8 +76,8 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!error && this.state.isClickSave && !this.state.colorSave) {
       Alert.alert(
-        I18n.t('alert.title'),
-        I18n.t('alert.saveContent'),
+        I18n.t('alert.success'),
+        I18n.t('alert.saveArticle'),
         [
           {
             text: 'OK',
@@ -92,7 +94,7 @@ export default class NewsDetail extends React.PureComponent {
     if (!errDelete && this.state.isClickSave && this.state.colorSave) {
       Alert.alert(
         I18n.t('alert.success'),
-        I18n.t('alert.messageSuccess'),
+        I18n.t('alert.deleteSaveArticle'),
         [
           {
             text: 'OK',
@@ -110,7 +112,7 @@ export default class NewsDetail extends React.PureComponent {
 
     if (!errShare && this.state.onClickShare) {
       Alert.alert(
-        I18n.t('alert.title'),
+        I18n.t('alert.success'),
         I18n.t('alert.shareContent'),
         [
           {
@@ -242,7 +244,7 @@ export default class NewsDetail extends React.PureComponent {
   };
 
   render() {
-    const { loading, subContent, colorSave } = this.state;
+    const { loading, subContent, colorSave, failed } = this.state;
 
     if (loading) {
       return (
@@ -251,7 +253,7 @@ export default class NewsDetail extends React.PureComponent {
             title=''
             type='stack'
             navigation={navigation}
-            iconName='ios-flag'
+            iconName='ios-bookmark'
             colorSave={colorSave}
             iconMenu
             onPress={this.onSaveAricle}
@@ -272,7 +274,7 @@ export default class NewsDetail extends React.PureComponent {
     const categoryName = categories.data.find(it => it._id === category);
 
     const typeBody = domain === 'www.youtube.com' ?
-      `<iframe src="${body}" frameborder="0" allowfullscreen></iframe>` :
+      `<iframe src="${body.replace(/<(?:.|\n)*?>/gm, '')}" frameborder="0" allowfullscreen></iframe>` :
       body;
 
     return (
@@ -281,7 +283,7 @@ export default class NewsDetail extends React.PureComponent {
           title=''
           type='stack'
           navigation={navigation}
-          iconName='ios-flag'
+          iconName='ios-bookmark'
           colorSave={colorSave}
           iconMenu
           onPress={this.onSaveAricle}
@@ -310,7 +312,15 @@ export default class NewsDetail extends React.PureComponent {
               </View>
               <Text style={styles.titleStyle}>{title.trim()}</Text>
               <View style={styles.wrapSourceStyle}>
-                <Image style={styles.logoImage} source={{ uri: logo }} />
+                <Image
+                  style={styles.logoImage}
+                  source={failed ? images.logoApp : { uri: logo }}
+                  onError={() => {
+                    this.setState({
+                      failed: true
+                    });
+                  }}
+                />
                 <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
                   <Text style={[styles.txtSourceStyle, { paddingLeft: 10 }]}>{domain.trim()}</Text>
                 </TouchableOpacity>

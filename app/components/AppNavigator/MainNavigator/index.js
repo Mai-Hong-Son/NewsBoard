@@ -6,7 +6,7 @@ import {
   createDrawerNavigator
 } from 'react-navigation';
 import I18n from 'react-native-i18n';
-import moment from 'moment';
+// import moment from 'moment';
 import 'moment/locale/vi';
 
 // Menubar
@@ -49,13 +49,13 @@ export const RootTabs = createBottomTabNavigator(
     News: {
       screen: News,
       navigationOptions: {
-        title: I18n.t('tabBar.news')
+        title: null
       }
     },
     Focus: {
       screen: Focus,
       navigationOptions: {
-        title: I18n.t('tabBar.issue')
+        title: null
       }
     },
     Newspaper: {
@@ -64,13 +64,13 @@ export const RootTabs = createBottomTabNavigator(
     Share: {
       screen: Share,
       navigationOptions: {
-        title: I18n.t('tabBar.share')
+        title: null
       }
     },
     Save: {
       screen: Save,
       navigationOptions: {
-        title: I18n.t('tabBar.stored')
+        title: null
       }
     }
   },

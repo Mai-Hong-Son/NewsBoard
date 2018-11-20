@@ -12,6 +12,7 @@ import CheckBox from 'react-native-check-box';
 import Modal from 'react-native-modal';
 import RadioForm from 'react-native-simple-radio-button';
 import I18n from 'react-native-i18n';
+import { Gravatar } from 'react-native-gravatar';
 
 import FullGradient from '../FullGradient';
 
@@ -20,21 +21,6 @@ import platform from '../../../theme/platform';
 import Scale from '../../../theme/scale';
 import * as commonActions from '../../../../redux/actions';
 
-const priorityData = [
-  {
-    value: 1,
-    label: 'Tin lưu ý'
-  },
-  {
-    value: 3,
-    label: 'Tin khẩn cấp'
-  },
-  {
-    value: 2,
-    label: 'Tin nghiêm trọng'
-  }
-];
-
 @connect(
   state => ({
     users: state.users
@@ -42,10 +28,28 @@ const priorityData = [
   { ...commonActions }
 )
 export default class Header extends React.PureComponent {
-  state = {
-    showModal: false,
-    peopleAsign: [],
-    priority: priorityData[0].value
+  constructor(props) {
+    super(props);
+    const priorityData = [
+      {
+        value: 1,
+        label: I18n.t('share.normal')
+      },
+      {
+        value: 3,
+        label: I18n.t('share.critical')
+      },
+      {
+        value: 2,
+        label: I18n.t('share.important')
+      }
+    ];
+
+    this.state = {
+      showModal: false,
+      peopleAsign: [],
+      priority: priorityData[0].value
+    };
   }
 
   onShowModalPriority = () => {
@@ -76,19 +80,33 @@ export default class Header extends React.PureComponent {
   }
 
   renderCheckboxUser = ({ item }) => {
-    const { username } = item;
-    item.checked = false;
+    const { username, email } = item;
+    // item.checked = false;
 
     return (
-      <CheckBox
-        key={item.id}
-        style={{ paddingVertical: Scale.getSize(15), width: (platform.deviceWidth - 60) / 2 }}
-        onClick={() => this.onClickUser(item)}
-        checkBoxColor={platform.checkboxBgColor}
-        rightTextStyle={styles.txtCheckbox}
-        isChecked={item.checked}
-        rightText={username}
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Gravatar
+          options={{
+            email,
+            parameters: { size: '70', d: 'mm' },
+            secure: true
+          }}
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: 10
+          }}
+        />
+        <CheckBox
+          key={item.id}
+          style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
+          onClick={() => this.onClickUser(item)}
+          checkBoxColor={platform.checkboxBgColor}
+          leftTextStyle={styles.txtCheckbox}
+          isChecked={item.checked}
+          leftText={username}
+        />
+      </View>
     );
   }
 
@@ -96,7 +114,21 @@ export default class Header extends React.PureComponent {
     const { navigation, title, iconName, type, hasSearch, iconMenu, users, colorSave } = this.props;
     const { showModal } = this.state;
     const iconLeft = type !== 'stack' ? 'ios-menu' : 'ios-arrow-back';
-    const sizeBtnLeft = type !== 'stack' ? Scale.getSize(35) : Scale.getSize(40);
+    const sizeBtnLeft = Scale.getSize(35);
+    const priorityData = [
+      {
+        value: 1,
+        label: I18n.t('share.normal')
+      },
+      {
+        value: 3,
+        label: I18n.t('share.critical')
+      },
+      {
+        value: 2,
+        label: I18n.t('share.important')
+      }
+    ];
 
     return (
       <FullGradient
@@ -131,7 +163,7 @@ export default class Header extends React.PureComponent {
               <Icon
                 name={iconName}
                 color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
-                size={iconName === 'flag' ? Scale.getSize(22) : Scale.getSize(30)}
+                size={Scale.getSize(30)}
               />
             </TouchableOpacity>
             {iconMenu ? (
@@ -182,8 +214,13 @@ export default class Header extends React.PureComponent {
             <Text style={styles.txtCheckboxGroup}>{I18n.t('modal.shareTo')}</Text>
             <FlatList
               data={users.data}
-              numColumns={2}
+              // numColumns={2}
               renderItem={this.renderCheckboxUser}
+              ListEmptyComponent={
+                <Text style={{ fontSize: Scale.getSize(16), color: 'red' }}>
+                  {I18n.t('alert.emptyUsers')}
+                </Text>
+              }
               keyExtractor={(item) => item.id.toString()}
             />
 
@@ -240,7 +277,7 @@ const styles = StyleSheet.create({
   wrapModalBox: {
     backgroundColor: '#fff',
     padding: 15,
-    height: '70%',
+    maxHeight: '70%',
     borderRadius: 5
   },
   txtCheckbox: {

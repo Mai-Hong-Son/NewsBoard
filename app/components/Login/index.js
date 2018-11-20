@@ -9,11 +9,14 @@ import {
   Image,
   Alert,
   ActivityIndicator
+  // AsyncStorage
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 import moment from 'moment';
+import 'moment/locale/en-au';
+import 'moment/locale/vi';
 // import _ from 'lodash';
 // import OneSignal from 'react-native-onesignal';
 
@@ -27,7 +30,8 @@ import imageurls from '../../assets/images';
 @connect(
   state => ({
     tokenAccess: state.tokenAccess,
-    language: state.language
+    language: state.language,
+    localhost: state.localhost
   }),
   { ...commonActions }
 )
@@ -38,11 +42,11 @@ export default class Login extends React.PureComponent {
     YellowBox.ignoreWarnings(
       ['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'
       ]);
-
+    
     this.state = {
-      username: '',
-      password: '',
-      localhost: 'http://35.196.179.240:8080',
+      username: props.tokenAccess.account.username ? props.tokenAccess.account.username : '',
+      password: props.tokenAccess.account.password ? props.tokenAccess.account.password : '',
+      localhost: !props.localhost.data.payload ? 'http://35.196.179.240:8080' : props.localhost.data.payload,
       // localhost: 'http://192.168.92.90:8080',
       loading: false
     };
@@ -50,27 +54,39 @@ export default class Login extends React.PureComponent {
     this.flag = false;
   }
 
-  // componentDidMount() {
-  //   const { tokenAccess: { data }, navigation } = this.props;
-
-  //   if (data.token) {
-  //     navigation.replace('DrawerApp');
-  //   }
-  // }
-
-  componentWillReceiveProps(nextProps) {
-    const { tokenAccess: { data }, language } = nextProps;
+  componentDidMount() {
+    const { tokenAccess: { data }, navigation, language } = this.props;
     I18n.locale = language.data;
     moment.locale(language.data);
+    // OneSignal.getTags(tags => console.warn(tags));
+
+    if (data.token) {
+      navigation.replace('DrawerApp');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { tokenAccess: { data } } = nextProps;
+
+    // if (this.props.language.data !== nextProps.language.data) {
+    //   I18n.locale = language.data;
+    //   moment.locale(language.data);
+    // }
 
     if (data.token) {
       this.props.navigation.replace('DrawerApp');
-    } else if (this.flag) {
+    } else if (this.flag && data.token !== '') {
       Alert.alert(
         I18n.t('login.alertTitle'),
         I18n.t('login.alertContent'),
         [
-          { text: 'OK', onPress: () => null }
+          {
+            text: 'OK',
+            onPress: () => {
+              this.setState({ loading: false });
+              this.flag = false;
+            }
+          }
         ],
         { cancelable: false }
       );
@@ -92,26 +108,6 @@ export default class Login extends React.PureComponent {
 
     this.props.login({ username, password });
   }
-
-  // _retrieveData = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('localhost');
-  //     if (value !== null) {
-  //       // We have data!!
-  //       if (_.endsWith(value, ':8080')) {
-  //         axiosClient.defaults.baseURL = value;
-  //         OneSignal.sendTag('ip', value.replace('http://', '').replace(':8080', ''));
-  //         if (!this.flag) {
-  //           this.props.navigation.replace('DrawerApp');
-  //         }
-  //       } else {
-  //         axiosClient.defaults.baseURL = '';
-  //       }
-  //     }
-  //   } catch (error) {
-  //     // Error retrieving data
-  //   }
-  // };
 
   render() {
     const { username, password, loading, localhost } = this.state;
@@ -164,7 +160,7 @@ export default class Login extends React.PureComponent {
         </View>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={this.onLogin}
+          onPress={() => (this.state.loading ? null : this.onLogin())}
         >
           <FullGradient
             backgroundColor={platform.buttonColorGradient}

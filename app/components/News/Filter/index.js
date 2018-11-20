@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 
@@ -185,7 +186,7 @@ export default class Filter extends React.PureComponent {
   )
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, sources } = this.props;
     const { loading, dataSource } = this.state;
     const { state: { params: { title } } } = navigation;
     const content = loading ? (
@@ -199,12 +200,24 @@ export default class Filter extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
+            <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
           </TouchableOpacity>
         </FullGradient>
         <View style={styles.container}>
           <View style={styles.wrapTitle}>
             <Text style={styles.txtTitle}>{title}</Text>
+            {title === I18n.t('filterMenu.source') ? 
+              <View style={{ flex: 1, borderBottomColor: 'rgb(137,137,137)', borderBottomWidth: 1 }}>
+                <TextInput
+                  underlineColorAndroid={'transparent'}
+                  onChangeText={text => 
+                    this.setState({ 
+                      dataSource: sources.data.filter(it => it.name.toUpperCase().includes(text.toUpperCase())) 
+                    })}
+                  selectionColor={'#fff'}
+                  style={styles.textInputStyle}
+                />
+              </View> : null}
           </View>
           {content}
           <View style={styles.containerFooter}>
@@ -227,12 +240,14 @@ const styles = StyleSheet.create({
   },
   wrapTitle: {
     paddingTop: Scale.getSize(20),
-    paddingHorizontal: Scale.getSize(15)
+    paddingHorizontal: Scale.getSize(15),
+    flexDirection: 'row'
   },
   txtTitle: {
     fontSize: Scale.getSize(20),
     fontWeight: '800',
-    color: '#000'
+    color: '#000',
+    paddingRight: 10
   },
   headerContainer: {
     height: Scale.getSize(80),
@@ -263,5 +278,12 @@ const styles = StyleSheet.create({
     fontSize: Scale.getSize(20),
     fontWeight: '700',
     color: '#fff'
+  },
+  textInputStyle: {
+    // flex: 1,
+    // paddingLeft: 15,
+    fontSize: Scale.getSize(20),
+    color: '#000',
+    padding: 0
   }
 });

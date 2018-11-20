@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import I18n from 'react-native-i18n';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import FullGradient from '../../Reusables/FullGradient';
 import Scale from '../../../theme/scale';
@@ -10,11 +12,11 @@ const BARCODE_BUTTON_MARGIN = Scale.getSize(10);
 
 export class MyTabBar extends React.Component {
   renderTabBarButton = (route, idx) => {
-    const { navigation, getLabelText, renderIcon } = this.props;
+    const { navigation, renderIcon } = this.props;
     const { state } = navigation;
     const { routes } = state;
     const color = state.index === idx ? '#4D80E6' : '#7F94A0';
-    const label = getLabelText({ route });
+    const label = I18n.t(route.key);
 
     const btnBarCode = (
       <FullGradient
@@ -41,6 +43,13 @@ export class MyTabBar extends React.Component {
         onPress={() => {
           if (routes.index !== idx) {
             navigation.navigate(route.routeName);
+            if (idx === 0) {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'HomeTab' })]
+              });
+              this.props.navigation.dispatch(resetAction);
+            }
           }
         }}
         key={route.routeName}

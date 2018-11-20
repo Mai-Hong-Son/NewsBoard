@@ -5,15 +5,14 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  FlatList,
-  TouchableOpacity,
-  Alert
+  FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 import I18n from 'react-native-i18n';
+import { Gravatar } from 'react-native-gravatar';
 // import Modal from 'react-native-modal';
 
 import Header from '../Reusables/Header';
@@ -47,56 +46,44 @@ function getItemsByArrayId(arr1, arr2) {
 )
 export default class Focus extends React.Component {
   state = {
+    isFirstime: false,
     isTabLeft: true,
     isTabRight: false,
     data: [],
     loading: true,
-    showModal: false,
-    onClickDelete: false
+    showModal: false
   }
 
-  async componentDidMount() {
-    await this.props.getUsers();
-    this.onRefresh();
+  componentDidMount() {
+    // await this.props.getUsers();
+    if (!this.state.isFirstime) {
+      this.setState({
+        isFirstime: true
+      }, () => this.onRefresh());
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { issues: { data, error }, userInfo: { data: { id } }, updateIssue: { error: errUpdate } } = nextProps;
-    const { isTabLeft, isTabRight, onClickDelete } = this.state;
+    const { issues: { data, error }, userInfo: { data: { id } } } = nextProps;
+    const { isTabLeft, isTabRight } = this.state;
 
-    if (!error && !onClickDelete) {
+    if (!error) {
       if (isTabLeft && !isTabRight) {
         this.setState({
           data: data.filter(item => item.created_by !== id && !item.deleted),
-          loading: false,
-          onClickDelete: false
+          loading: false
         });
       } else if (!isTabLeft && isTabRight) {
         this.setState({
           loading: false,
-          data: data.filter(item => item.created_by === id && !item.deleted),
-          onClickDelete: false
+          data: data.filter(item => item.created_by === id && !item.deleted)
         });
       }
     }
+  }
 
-    if (onClickDelete && !errUpdate) {
-      Alert.alert(
-        I18n.t('alert.title'),
-        I18n.t('alert.deleteSuccess'),
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              this.setState({
-                onClickDelete: false
-              }, () => this.onRefresh());
-            }
-          }
-        ],
-        { cancelable: false }
-      );
-    }
+  componentWillUnmount() {
+    NavigationEvents.removeEventListener('onWillFocus');
   }
 
   onRefresh = () => {
@@ -142,39 +129,6 @@ export default class Focus extends React.Component {
     });
   }
 
-  onDeleteIssue = (item) => {
-    const {
-      id,
-      title,
-      description,
-      created_time,
-      duedate,
-      completed,
-      starred,
-      important,
-      tags,
-      assignees
-    } = item;
-    this.setState({
-      onClickDelete: true,
-      showModal: !this.state.showModal
-    }, () => {
-      this.props.updateIssues(id, {
-        id: '',
-        title,
-        description,
-        created_time,
-        duedate,
-        completed,
-        starred,
-        important,
-        deleted: true,
-        tags,
-        assignees
-      });
-    });
-  }
-
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -189,10 +143,9 @@ export default class Focus extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const { title, description, created_time, completed, created_by, assignees, id } = item;
+    const { title, created_time, completed, created_by, assignees } = item;
     const { navigation: { navigate }, userInfo: { data }, users: { data: listUser } } = this.props;
     const nameUserCreate = listUser.filter(it => it.id === created_by)[0];
-    const { isTabLeft, isTabRight } = this.state;
 
     return (
       <TouchableWithoutFeedback
@@ -207,35 +160,29 @@ export default class Focus extends React.Component {
             <Text style={styles.txtContentRight}>{data.username.slice(0, 1).toUpperCase()}</Text>
           </View>
           <View style={styles.wrapItem}>
-            <View style={{ paddingRight: 10 }}>
+            <View style={{ paddingRight: 10, flex: 1 }}>
               <Text style={styles.txtTitle}>{title}</Text>
-              <Text style={styles.txtTimeTitle} numberOfLines={1}>
-                {nameUserCreate ? this.capitalizeFirstLetter(nameUserCreate.username) : this.renderListUserReceive(assignees)}
-              </Text>
+              <View>
+                {nameUserCreate ? <Gravatar
+                  options={{
+                    email: nameUserCreate.email,
+                    parameters: { size: '70', d: 'mm' },
+                    secure: true
+                  }}
+                  style={{
+                    width: Scale.getSize(15),
+                    height: Scale.getSize(15),
+                    borderRadius: Scale.getSize(15) / 2
+                  }}
+                /> : null}
+                <Text style={styles.txtTimeTitle} numberOfLines={1}>
+                  {nameUserCreate ? this.capitalizeFirstLetter(nameUserCreate.username) : this.renderListUserReceive(assignees)}
+                </Text>
+              </View>
               <Text style={styles.txtTimeTitle}>{moment(created_time).fromNow()}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               {completed ? <Icon name='ios-checkmark-circle' color={'#00cc66'} size={Scale.getSize(25)} /> : null}
-              <TouchableOpacity onPress={() => {
-                Alert.alert(
-                  'Cảnh báo',
-                  'Bạn có chắc chắn muốn xóa tiêu điểm này ?',
-                  [
-                    {
-                      text: 'Hủy',
-                      onPress: () => null
-                    },
-                    {
-                      text: 'Đồng ý',
-                      onPress: () => this.onDeleteIssue(item)
-                    }
-                  ],
-                  { cancelable: false }
-                );
-              }}
-              >
-                <Icon name='ios-close-circle' style={{ marginLeft: 10 }} color={'red'} size={Scale.getSize(25)} />
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -245,12 +192,16 @@ export default class Focus extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { isTabLeft, isTabRight, data, loading } = this.state;
+    const { isTabLeft, isTabRight, data, loading, isFirstime } = this.state;
 
     return (
       <SafeArea>
         <NavigationEvents
-          onWillFocus={() => this.onRefresh()}
+          onWillFocus={() => {
+            if (isFirstime) {
+              this.onRefresh();
+            }
+          }}
         />
         <Header
           title={I18n.t('issues.title')}

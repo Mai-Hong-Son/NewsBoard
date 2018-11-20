@@ -10,6 +10,10 @@ import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 import Modal from 'react-native-modal';
 import RadioForm from 'react-native-simple-radio-button';
+import moment from 'moment';
+import 'moment/locale/en-au';
+import 'moment/locale/vi';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import * as commonActions from '../../../redux/actions';
 import Header from '../Reusables/Header';
@@ -40,17 +44,6 @@ const sourceTypeData = [
   {
     _id: 'minds',
     name: 'Minds'
-  }
-];
-
-const languageOptions = [
-  {
-    value: 'vi',
-    label: 'Tiếng Việt'
-  },
-  {
-    value: 'en',
-    label: 'Tiếng Anh'
   }
 ];
 
@@ -108,6 +101,7 @@ export default class Setting extends React.PureComponent {
 
     this.state = {
       showModal: false,
+      onCLickChangeLanguage: false,
       languageResult: props.language.data,
       categories: [],
       countries: [],
@@ -139,7 +133,8 @@ export default class Setting extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { userInfo: { error, data } } = nextProps;
+    const { userInfo: { error, data }, language } = nextProps;
+    const { onCLickChangeLanguage } = this.state;
 
     if (!error && this.state.loading) {
       const {
@@ -157,6 +152,20 @@ export default class Setting extends React.PureComponent {
         languages: getItemsByArrayId(languagesSetting.data, settings.lang),
         regions: getItemsByArrayId(regionsSetting.data, settings.region),
         sourcetype: getItemsByArrayId(sourceTypeData, settings.sourcetype)
+      });
+    }
+
+    if (onCLickChangeLanguage) {
+      I18n.locale = language.data;
+      moment.locale(language.data);
+      this.setState({
+        onCLickChangeLanguage: false
+      }, () => {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'HomeTab' })]
+        });
+        this.props.navigation.dispatch(resetAction);
       });
     }
   }
@@ -351,6 +360,16 @@ export default class Setting extends React.PureComponent {
     const AREA_FILTER = I18n.t('filterMenu.region');
     const CATEGORIES_FILTER = I18n.t('filterMenu.category');
     const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
+    const languageOptions = [
+      {
+        value: 'vi',
+        label: I18n.t('setting.vietnamese')
+      },
+      {
+        value: 'en',
+        label: I18n.t('setting.english')
+      }
+    ];
 
     return (
       <SafeArea style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -396,7 +415,7 @@ export default class Setting extends React.PureComponent {
           onBackdropPress={this.onShowModalPriority}
         >
           <View style={{ backgroundColor: '#fff', borderRadius: 5, padding: Scale.getSize(15) }}>
-            <Text style={styles.txtCheckbox}>{'Chọn ngôn ngữ'}</Text>
+            <Text style={styles.txtCheckbox}>{I18n.t('setting.chooseLanguage')}</Text>
             <View style={{ paddingVertical: 15 }}>
               <RadioForm
                 radio_props={languageOptions}
@@ -409,7 +428,13 @@ export default class Setting extends React.PureComponent {
               />
             </View>
             <View style={{ alignItems: 'flex-end', paddingTop: Scale.getSize(15) }}>
-              <TouchableOpacity onPress={() => this.props.changeLanguage(languageResult)}>
+              <TouchableOpacity onPress={() => {
+                this.setState({
+                  onCLickChangeLanguage: true
+                }, () => this.props.changeLanguage(languageResult));
+                this.onShowModalPriority();
+              }}
+              >
                 <View
                   style={{
                     backgroundColor: platform.primaryBlue,
@@ -424,7 +449,7 @@ export default class Setting extends React.PureComponent {
                       fontWeight: '700',
                       color: '#fff'
                     }}
-                  >{'Xong'}</Text>
+                  >{I18n.t('modal.done')}</Text>
                 </View>
               </TouchableOpacity>
             </View>

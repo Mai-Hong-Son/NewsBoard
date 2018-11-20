@@ -1,9 +1,9 @@
-package com.newsboard;
+package com.semiapp.newsboard;
 
 import android.app.Application;
 // import org.reactnative.camera.RNCameraPackage;
 
-import com.newsboard.BuildConfig;
+import com.semiapp.newsboard.BuildConfig;
 // import com.imagepicker.ImagePickerPackage;
 
 import com.facebook.react.ReactApplication;

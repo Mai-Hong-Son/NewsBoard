@@ -2,14 +2,15 @@ import React from 'react';
 import {
   View,
   Text,
-  Image,
+  // Image,
   StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
 import OneSignal from 'react-native-onesignal';
+import { Gravatar } from 'react-native-gravatar';
 
 import * as commonActions from '../../../../redux/actions';
-import images from '../../../assets/images';
+// import images from '../../../assets/images';
 import Scale from '../../../theme/scale';
 
 @connect(
@@ -54,11 +55,15 @@ export default class PersonalInfo extends React.PureComponent {
   }
 
   onOpened(openResult, props) {
-    const { type, post } = openResult.notification.payload.additionalData;
+    const { type, post, subject } = openResult.notification.payload.additionalData;
 
     switch (type) {
       case 'news':
-        props.navigation.push('NewsDetail', { _id: post });
+        if (subject && subject === 'summaries') {
+          props.navigation.push('SummaryDetail', { id: post });
+        } else {
+          props.navigation.push('NewsDetail', { _id: post });
+        }
         break;
       case 'share':
         props.navigation.push('NewsDetail', { _id: post });
@@ -94,10 +99,18 @@ export default class PersonalInfo extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <Image
+        {/* <Image
           source={images.userImage}
           style={styles.imageSize}
           resizeMode='cover'
+        /> */}
+        <Gravatar
+          options={{
+            email: userData.email,
+            parameters: { size: '70', d: 'mm' },
+            secure: true
+          }}
+          style={styles.imageSize}
         />
         <View style={styles.wrapUserInfo}>
           <Text style={styles.txtUserName}>{userData.username}</Text>
@@ -116,7 +129,8 @@ const styles = StyleSheet.create({
   },
   imageSize: {
     width: 70,
-    height: 70
+    height: 70,
+    borderRadius: 35
   },
   wrapUserInfo: {
     paddingLeft: 15,

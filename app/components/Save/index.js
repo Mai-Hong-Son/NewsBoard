@@ -32,12 +32,17 @@ import { buildHeaders } from '../../../redux/utils';
 )
 export default class Save extends React.Component {
   state = {
+    isFirstime: false,
     changeView: true,
     isLoading: true
   }
 
   componentDidMount() {
-    this.onRefresh();
+    if (!this.state.isFirstime) {
+      this.setState({
+        isFirstime: true
+      }, () => this.onRefresh());
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,6 +54,10 @@ export default class Save extends React.Component {
         isLoading: false
       });
     }
+  }
+
+  componentWillUnmount() {
+    NavigationEvents.removeEventListener('onWillFocus');
   }
 
   onPress = () => {
@@ -76,7 +85,7 @@ export default class Save extends React.Component {
       .then((responseJson) => {
         if (responseJson.status) {
           Alert.alert(
-            I18n.t('alert.title'),
+            I18n.t('alert.success'),
             I18n.t('alert.deleteSuccess'),
             [
               {
@@ -106,7 +115,7 @@ export default class Save extends React.Component {
 
   render() {
     const { navigation, myArticles: { data: { results } } } = this.props;
-    const { isLoading } = this.state;
+    const { isLoading, isFirstime } = this.state;
     const content = isLoading ? (
       <View style={{ marginTop: 25 }}>
         <ActivityIndicator size='large' />
@@ -126,7 +135,11 @@ export default class Save extends React.Component {
     return (
       <SafeArea>
         <NavigationEvents
-          onWillFocus={() => this.onRefresh()}
+          onWillFocus={() => {
+            if (isFirstime) {
+              this.onRefresh();
+            }
+          }}
         />
         <Header
           title={I18n.t('save.title')}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import moment from 'moment';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
@@ -34,7 +34,7 @@ export default class ArticleSmall extends React.PureComponent {
         <View style={styles.wrapImage}>
           <Image
             style={styles.image}
-            source={{ uri: this.state.failed ? emptyImage : image }}
+            source={{ uri: this.state.failed || !image ? emptyImage : image }}
             onError={() => {
               this.setState({
                 failed: true

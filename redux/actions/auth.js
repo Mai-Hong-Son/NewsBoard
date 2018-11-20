@@ -23,6 +23,7 @@ export const login = account => {
 
     const request = {
       data: account,
+      account,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

@@ -17,6 +17,7 @@ import platform from '../../../theme/platform';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
 import { Loading } from '../../Reusables/Loading';
+import SafeArea from '../../../theme/SafeArea';
 
 @connect(
   state => ({
@@ -33,20 +34,20 @@ export default class ArticlesByCategory extends React.Component {
   }
 
   componentDidMount() {
-    const { state: { params: { categoryFilter } } } = this.props.navigation;
+    const { state: { params: { categoryFilter, dataFilter } } } = this.props.navigation;
 
     this.props.getArticlesSource({
-      source: [],
-      domain: [],
+      source: dataFilter.source,
+      domain: dataFilter.domain,
       category: [categoryFilter],
-      country: [],
-      region: [],
-      lang: [],
-      search: '',
+      country: dataFilter.country,
+      region: dataFilter.region,
+      lang: dataFilter.lang,
+      search: dataFilter.search,
       from: '',
       to: '',
       page_number: 1,
-      time: ''
+      time: dataFilter.time
     });
   }
 
@@ -68,45 +69,45 @@ export default class ArticlesByCategory extends React.Component {
   }
 
   onRefresh = () => {
-    const { state: { params: { categoryFilter } } } = this.props.navigation;
+    const { state: { params: { categoryFilter, dataFilter } } } = this.props.navigation;
     this.setState({
       isLoading: true
     });
 
     this.props.getArticlesSource({
-      source: [],
-      domain: [],
+      source: dataFilter.source,
+      domain: dataFilter.domain,
       category: [categoryFilter],
-      country: [],
-      region: [],
-      lang: [],
-      search: '',
+      country: dataFilter.country,
+      region: dataFilter.region,
+      lang: dataFilter.lang,
+      search: dataFilter.search,
       from: '',
       to: '',
       page_number: 1,
-      time: ''
+      time: dataFilter.time
     });
   }
 
   onEndReached = () => {
-    const { state: { params: { categoryFilter } } } = this.props.navigation;
+    const { state: { params: { categoryFilter, dataFilter } } } = this.props.navigation;
 
     this.setState({
       pageNumer: this.state.pageNumer + 1,
       isLoadmore: true
     }, () => {
       this.props.getArticlesSource({
-        source: [],
-        domain: [],
+        source: dataFilter.source,
+        domain: dataFilter.domain,
         category: [categoryFilter],
-        country: [],
-        region: [],
-        lang: [],
-        search: '',
+        country: dataFilter.country,
+        region: dataFilter.region,
+        lang: dataFilter.lang,
+        search: dataFilter.search,
         from: '',
         to: '',
         page_number: this.state.pageNumer,
-        time: ''
+        time: dataFilter.time
       });
     });
   }
@@ -142,7 +143,7 @@ export default class ArticlesByCategory extends React.Component {
     />);
 
     return (
-      <View style={styles.container}>
+      <SafeArea>
         <Header
           type='stack'
           title={categoryFilter.name}
@@ -153,7 +154,7 @@ export default class ArticlesByCategory extends React.Component {
         <View style={styles.contentStyle}>
           {content}
         </View>
-      </View>
+      </SafeArea>
     );
   }
 }

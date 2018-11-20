@@ -2,13 +2,10 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  StatusBar,
-  BackHandler,
   // ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  FlatList,
-  Text
+  FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
 

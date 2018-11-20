@@ -9,13 +9,14 @@ import {
   TextInput,
   ScrollView
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import CheckBox from 'react-native-check-box';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
+import { Gravatar } from 'react-native-gravatar';
 
 import SafeArea from '../../../theme/SafeArea';
 import FullGradient from '../../Reusables/FullGradient';
@@ -42,25 +43,25 @@ export default class IssuesDetail extends React.PureComponent {
       showModal: false,
       loadUsers: true,
       isClick: false,
+      isClickDelete: false,
 
       title: dataSaved.title,
       description: dataSaved.description,
-      fromDate: dataSaved.created_time,
-      toDate: dataSaved.duedate,
+      fromDate: dataSaved.created_time === null ? new Date() : dataSaved.created_time,
+      toDate: dataSaved.duedate === null ? new Date() : dataSaved.duedate,
       peopleAsign: dataSaved.assignees,
-      isComplete: dataSaved.completed
+      isComplete: dataSaved.completed,
+      starred: dataSaved.starred,
+      important: dataSaved.important,
+      tags: dataSaved.tags
     };
   }
 
-  // async componentDidMount() {
-  //   await this.props.getUsers();
-  // }
-
   componentWillReceiveProps(nextProps) {
     const { updateIssue: { error: errUpdate }, createIssue: { error: errCreate } } = nextProps;
-    const { isClick } = this.state;
+    const { isClick, isClickDelete } = this.state;
 
-    if (!errUpdate && isClick && !errCreate) {
+    if (!errUpdate && isClick && !errCreate && !isClickDelete) {
       Alert.alert(
         I18n.t('alert.success'),
         I18n.t('alert.saveIssueContent'),
@@ -70,6 +71,25 @@ export default class IssuesDetail extends React.PureComponent {
             onPress: () => {
               this.setState({
                 isClick: false
+              });
+              this.props.navigation.goBack();
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+
+    if (!errUpdate && isClickDelete) {
+      Alert.alert(
+        I18n.t('alert.success'),
+        I18n.t('alert.deleteSuccess'),
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              this.setState({
+                isDelete: false
               });
               this.props.navigation.goBack();
             }
@@ -98,14 +118,25 @@ export default class IssuesDetail extends React.PureComponent {
     }
   }
 
-  onSave = () => {
+  onSave = (isDelete) => {
     const { state: { params: { dataSaved, type } } } = this.props.navigation;
-    const { fromDate, toDate, peopleAsign, isComplete, title, description } = this.state;
+    const {
+      fromDate,
+      toDate,
+      peopleAsign,
+      isComplete,
+      title,
+      description,
+      starred,
+      important,
+      tags
+    } = this.state;
 
     switch (type) {
       case 'update':
         this.setState({
-          isClick: true
+          isClick: true,
+          isClickDelete: isDelete
         }, () => this.props.updateIssues(dataSaved.id, {
           id: '',
           title,
@@ -113,16 +144,17 @@ export default class IssuesDetail extends React.PureComponent {
           created_time: moment(fromDate).format('YYYY-MM-DDThh:mm:ss.sssZ'),
           duedate: moment(toDate).format('YYYY-MM-DDThh:mm:ss.sssZ'),
           completed: isComplete,
-          starred: false,
-          important: false,
-          deleted: false,
-          tags: [],
+          starred,
+          important,
+          deleted: isDelete,
+          tags,
           assignees: peopleAsign
         }));
         break;
       case 'create':
         this.setState({
-          isClick: true
+          isClick: true,
+          isClickDelete: isDelete
         }, () => this.props.createIssues({
           id: '',
           title,
@@ -130,10 +162,10 @@ export default class IssuesDetail extends React.PureComponent {
           created_time: moment(fromDate).format('YYYY-MM-DDThh:mm:ss.sssZ'),
           duedate: moment(toDate).format('YYYY-MM-DDThh:mm:ss.sssZ'),
           completed: isComplete,
-          starred: false,
-          important: false,
-          deleted: false,
-          tags: [],
+          starred,
+          important,
+          deleted: isDelete,
+          tags,
           assignees: peopleAsign
         }));
         break;
@@ -170,20 +202,34 @@ export default class IssuesDetail extends React.PureComponent {
   };
 
   renderCheckbox = ({ item }) => {
-    const { username } = item;
+    const { username, email } = item;
     // const { state: { params: { dataSaved } } } = this.props.navigation;
     const checkExsist = this.state.peopleAsign.some((el) => el === item.id);
 
     return (
-      <CheckBox
-        key={item.id}
-        style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
-        onClick={() => this.onClick(item, checkExsist)}
-        checkBoxColor={platform.checkboxBgColor}
-        rightTextStyle={styles.txtCheckbox}
-        isChecked={checkExsist}
-        rightText={username}
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Gravatar
+          options={{
+            email,
+            parameters: { size: '70', d: 'mm' },
+            secure: true
+          }}
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: 10
+          }}
+        />
+        <CheckBox
+          key={item.id}
+          style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
+          onClick={() => this.onClick(item, checkExsist)}
+          checkBoxColor={platform.checkboxBgColor}
+          leftTextStyle={styles.txtCheckbox}
+          isChecked={checkExsist}
+          leftText={username}
+        />
+      </View>
     );
   }
 
@@ -197,11 +243,11 @@ export default class IssuesDetail extends React.PureComponent {
         <FullGradient containerStyle={styles.headerContainer}>
           <View style={styles.wrapContentHeader}>
             <TouchableOpacity style={{ paddingRight: 10 }} onPress={() => navigation.goBack()}>
-              <Icon name='angle-left' size={Scale.getSize(40)} color={platform.containerBg} />
+              <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
             </TouchableOpacity>
             <Text style={styles.txtTitleHeader}>{titleHeader}</Text>
-            <TouchableOpacity onPress={this.onSave}>
-              <Icon name='save' size={Scale.getSize(30)} color={platform.containerBg} />
+            <TouchableOpacity onPress={() => this.onSave(false)}>
+              <Icon name='ios-bookmarks' size={Scale.getSize(30)} color={platform.containerBg} />
             </TouchableOpacity>
           </View>
         </FullGradient>
@@ -210,6 +256,7 @@ export default class IssuesDetail extends React.PureComponent {
           <View style={styles.wrapTextinput}>
             <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.title')}</Text>
             <TextInput
+              underlineColorAndroid={'transparent'}
               onChangeText={(text) => this.setState({ title: text })}
               value={title}
               style={styles.textInputStyle}
@@ -222,7 +269,7 @@ export default class IssuesDetail extends React.PureComponent {
               <Text style={styles.txtTitleDate}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
             </View>
             <TouchableOpacity onPress={this.showStartDateTimePicker}>
-              <Icon name='calendar' size={18} color={platform.primaryBlue} />
+              <Icon name='ios-calendar' size={20} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
           <View style={styles.wrapDate}>
@@ -231,7 +278,7 @@ export default class IssuesDetail extends React.PureComponent {
               <Text style={styles.txtTitleDate}>{moment(toDate).format('DD/MM/YYYY')}</Text>
             </View>
             <TouchableOpacity onPress={this.showEndDateTimePicker}>
-              <Icon name='calendar' size={18} color={platform.primaryBlue} />
+              <Icon name='ios-calendar' size={20} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
           <View style={styles.wrapDate}>
@@ -246,29 +293,74 @@ export default class IssuesDetail extends React.PureComponent {
                 )
               )}
             </View>
-            <TouchableOpacity onPress={this.showModalAsign}>
-              <Icon name='edit' size={30} color={platform.primaryBlue} />
+            <TouchableOpacity onPress={() => {
+              if (users.data.length === 0) {
+                Alert.alert(
+                  I18n.t('alert.title'),
+                  I18n.t('alert.emptyUsers'),
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => null
+                    }
+                  ],
+                  { cancelable: false }
+                );
+                return;
+              }
+              this.showModalAsign();
+            }}
+            >
+              <Icon name='ios-person-add' size={30} color={platform.primaryBlue} />
             </TouchableOpacity>
           </View>
-          <View style={[styles.wrapTextinput, { height: 200 }]}>
+          <View style={styles.wrapTextinput}>
             <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.description')}</Text>
             <TextInput
+              underlineColorAndroid={'transparent'}
               onChangeText={(text) => this.setState({ description: text })}
               value={description}
-              style={styles.textInputStyle}
+              style={[styles.textInputStyle, { height: 250 }]}
               multiline
             />
           </View>
-          {type === 'create' ? null : (<View style={styles.wrapDate}>
-            <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.complicate')}</Text>
-            <CheckBox
-              style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
-              onClick={() => this.setState({ isComplete: !isComplete })}
-              checkBoxColor={platform.primaryBlue}
-              rightTextStyle={styles.txtCheckbox}
-              isChecked={isComplete}
-            />
-          </View>)}
+          {type === 'create' ? null :
+            (
+              <View>
+                <View style={styles.wrapDate}>
+                  <Text style={styles.txtTitleTextInput}>{I18n.t('issueDetail.complicate')}</Text>
+                  <CheckBox
+                    style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
+                    onClick={() => this.setState({ isComplete: !isComplete })}
+                    checkBoxColor={platform.primaryBlue}
+                    rightTextStyle={styles.txtCheckbox}
+                    isChecked={isComplete}
+                  />
+                </View>
+                <TouchableOpacity onPress={() => {
+                  Alert.alert(
+                    I18n.t('alert.title'),
+                    I18n.t('alert.confirmDeleteIssue'),
+                    [
+                      {
+                        text: I18n.t('modal.cancel'),
+                        onPress: () => null
+                      },
+                      {
+                        text: I18n.t('modal.confirm'),
+                        onPress: () => this.onSave(true)
+                      }
+                    ],
+                    { cancelable: false }
+                  );
+                }}
+                >
+                  <View style={[styles.wrapDate, { justifyContent: 'center', backgroundColor: 'red' }]}>
+                    <Icon name='ios-trash' size={30} color={'#fff'} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
         </ScrollView>
         <DateTimePicker
           titleIOS={I18n.t('filterMenu.fromDate')}
@@ -279,7 +371,7 @@ export default class IssuesDetail extends React.PureComponent {
           onCancel={this.hideStartDateTimePicker}
         />
         <DateTimePicker
-          titleIOS={I18n.t('filterMenu.fromDate')}
+          titleIOS={I18n.t('filterMenu.toDate')}
           confirmTextIOS={I18n.t('modal.confirm')}
           cancelTextIOS={I18n.t('modal.cancel')}
           isVisible={this.state.endDateTimePickerVisible}
@@ -290,19 +382,21 @@ export default class IssuesDetail extends React.PureComponent {
           isVisible={showModal}
           onBackdropPress={this.showModalAsign}
         >
-          <View style={{ backgroundColor: '#fff', height: '40%', borderRadius: 5 }}>
+          <View style={{ backgroundColor: '#fff', maxHeight: '40%', borderRadius: 5 }}>
             <View style={{ paddingLeft: Scale.getSize(15), paddingVertical: Scale.getSize(15) }}>
               <Text style={{
                 fontSize: Scale.getSize(18),
                 fontWeight: '700',
                 color: platform.primaryBlue
               }}
-              >{'Giao cho:'}</Text>
+              >{I18n.t('issueDetail.sendTo')}</Text>
             </View>
 
             <FlatList
               data={users.data}
+              contentContainerStyle={{ paddingLeft: Scale.getSize(15) }}
               renderItem={this.renderCheckbox}
+              // numColumns={2}
               keyExtractor={(item) => item.id.toString()}
             />
             
@@ -322,7 +416,7 @@ export default class IssuesDetail extends React.PureComponent {
                       fontWeight: '700',
                       color: '#fff' 
                     }}
-                  >{'Xong'}</Text>
+                  >{I18n.t('modal.done')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -396,7 +490,11 @@ const styles = StyleSheet.create({
   textInputStyle: {
     fontSize: Scale.getSize(18),
     color: '#000',
-    width: platform.deviceWidth - Scale.getSize(160)
+    width: platform.deviceWidth - Scale.getSize(160),
+    padding: 0,
+    paddingTop: 0,
+    justifyContent: 'flex-start',
+    textAlignVertical: 'top'
   }
 });
 

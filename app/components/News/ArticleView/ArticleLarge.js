@@ -33,7 +33,7 @@ export default class ArticleLarge extends React.PureComponent {
         <View style={styles.wrapImage}>
           <Image
             style={styles.image}
-            source={{ uri: this.state.failed ? emptyImage : image }}
+            source={{ uri: this.state.failed || !image ? emptyImage : image }}
             onError={() => {
               this.setState({
                 failed: true
