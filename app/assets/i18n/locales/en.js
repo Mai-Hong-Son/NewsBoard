@@ -78,11 +78,12 @@ export default {
     "success": "Successfully",
     "saveIssueContent": "This issue is updated.",
     "messageSuccess": "Successfully, this post is archived in news cart.",
-    "deleteSuccess": "Successfully, this post is removed from news cart.",
+    "deleteIssueSuccess": "Successfully, this issue is removed from news cart.",
+    "deleteStoredSuccess": "Successfully, this post is removed from news cart.",
     "deleteShareArticle": "Successfully, this post is removed from news cart.",
-    "saveArticle": "Successfully, this post is unarchived.",
+    "saveArticle": "This post is archived in news cart.",
     "deleteSaveArticle": "The posts are removed from storage.",
-    "emptyUsers": "Emplty",
+    "emptyUsers": "Empty",
     "confirmDeleteIssue": "Are you sure you want to delete this issue?"
   },
   "summary": {

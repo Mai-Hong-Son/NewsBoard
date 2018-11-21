@@ -83,7 +83,7 @@ export default class IssuesDetail extends React.PureComponent {
     if (!errUpdate && isClickDelete) {
       Alert.alert(
         I18n.t('alert.success'),
-        I18n.t('alert.deleteSuccess'),
+        I18n.t('alert.deleteIssueSuccess'),
         [
           {
             text: 'OK',

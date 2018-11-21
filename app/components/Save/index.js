@@ -86,7 +86,7 @@ export default class Save extends React.Component {
         if (responseJson.status) {
           Alert.alert(
             I18n.t('alert.success'),
-            I18n.t('alert.deleteSuccess'),
+            I18n.t('alert.deleteStoredSuccess'),
             [
               {
                 text: 'OK',
@@ -143,7 +143,7 @@ export default class Save extends React.Component {
         />
         <Header
           title={I18n.t('save.title')}
-          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
+          iconName={this.state.changeView ? 'th' : 'list'}
           navigation={navigation}
           iconMenu
           type={'stored'}

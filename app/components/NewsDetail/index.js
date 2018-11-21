@@ -14,6 +14,7 @@ import HTML from 'react-native-render-html';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import _ from 'lodash';
 import I18n from 'react-native-i18n';
+import { IGNORED_TAGS } from 'react-native-render-html/src/HTMLUtils';
 
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
@@ -39,6 +40,7 @@ export default class NewsDetail extends React.PureComponent {
   state = {
     loading: true,
     failed: false,
+    failedImageCover: false,
     isClickSave: false,
     onClickShare: false,
     isTranslate: false,
@@ -244,7 +246,7 @@ export default class NewsDetail extends React.PureComponent {
   };
 
   render() {
-    const { loading, subContent, colorSave, failed } = this.state;
+    const { loading, subContent, colorSave, failed, failedImageCover } = this.state;
 
     if (loading) {
       return (
@@ -253,7 +255,7 @@ export default class NewsDetail extends React.PureComponent {
             title=''
             type='stack'
             navigation={navigation}
-            iconName='ios-bookmark'
+            iconName='bookmark'
             colorSave={colorSave}
             iconMenu
             onPress={this.onSaveAricle}
@@ -283,7 +285,7 @@ export default class NewsDetail extends React.PureComponent {
           title=''
           type='stack'
           navigation={navigation}
-          iconName='ios-bookmark'
+          iconName='bookmark'
           colorSave={colorSave}
           iconMenu
           onPress={this.onSaveAricle}
@@ -301,8 +303,13 @@ export default class NewsDetail extends React.PureComponent {
                 style={{ height: 250, width: '100%' }}
                 resizeMode='cover'
                 source={{
-                  uri: (image === undefined || image === '') ? emptyImage : image,
+                  uri: failedImageCover || !image ? emptyImage : image,
                   height: 250
+                }}
+                onError={() => {
+                  this.setState({
+                    failedImageCover: true
+                  });
                 }}
               />)}
           >
@@ -329,8 +336,10 @@ export default class NewsDetail extends React.PureComponent {
               <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
               {typeBody.trim() === '' ? <Text /> : <HTML
                 html={typeBody.replace('block', '').replace('inline-block', '').replace('inline-', '').replace('fixed', 'absolute')}
+                decodeEntities
                 imagesMaxWidth={platform.deviceWidth - 100}
                 baseFontStyle={{ fontSize: Scale.getSize(24), color: '#000' }}
+                ignoredTags={[...IGNORED_TAGS]}
                 ignoredStyles={['display', 'font-family', 'letter-spacing', 'mso-bidi-font-style']}
                 tagsStyles={{
                   p: {

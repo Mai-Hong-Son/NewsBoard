@@ -187,7 +187,7 @@ export default class Share extends React.Component {
           title={I18n.t('share.title')}
           navigation={navigation}
           onPress={this.onPress}
-          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
+          iconName={this.state.changeView ? 'th' : 'list'}
         />
         <ScrollView
           horizontal

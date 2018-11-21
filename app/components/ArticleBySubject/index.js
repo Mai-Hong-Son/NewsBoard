@@ -134,7 +134,7 @@ export default class ArticleBySubject extends React.Component {
         <Header
           type='stack'
           title={name}
-          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
+          iconName={this.state.changeView ? 'th' : 'list'}
           navigation={navigation}
           onPress={this.onPress}
         />

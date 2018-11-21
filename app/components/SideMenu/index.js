@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 // import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
-import OneSignal from 'react-native-onesignal';
+// import OneSignal from 'react-native-onesignal';
 import I18n from 'react-native-i18n';
 
 import FullGradient from '../Reusables/FullGradient';
@@ -52,7 +52,7 @@ export default class SideMenu extends React.PureComponent {
     if (!errLogout && this.state.isClickLogout) {      
       this.setState({
         isClickLogout: false
-      }, () => this.props.navigation.navigate('Login'));
+      }, () => this.props.navigation.navigate('Login', { deleteTag: true }));
     }
   }
 
@@ -73,9 +73,6 @@ export default class SideMenu extends React.PureComponent {
           onPress: () => this.setState({
             isClickLogout: true
           }, () => {
-            OneSignal.deleteTag('ip');
-            OneSignal.deleteTag('user_id');
-            OneSignal.configure();
             this.props.logout();
           })
         }

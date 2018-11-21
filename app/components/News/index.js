@@ -558,7 +558,7 @@ export default class News extends React.PureComponent {
         <StatusBar barStyle={platform.isIphoneX ? 'dark-content' : 'light-content'} />
         <Header
           title={I18n.t('tabBar.news')}
-          iconName={this.state.changeView ? 'ios-keypad' : 'ios-list-box'}
+          iconName={this.state.changeView ? 'th' : 'list'}
           navigation={navigation}
           hasSearch
           onSearch={() => this.onNavigateFilter(SEARCH)}

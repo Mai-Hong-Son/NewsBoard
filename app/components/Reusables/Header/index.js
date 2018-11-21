@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/FontAwesome';
 import {
   Menu,
   MenuOptions,
@@ -99,7 +100,11 @@ export default class Header extends React.PureComponent {
         />
         <CheckBox
           key={item.id}
-          style={{ padding: Scale.getSize(15), width: platform.deviceWidth / 2 }}
+          style={{
+            paddingHorizontal: Scale.getSize(15),
+            width: platform.deviceWidth / 2,
+            paddingVertical: Scale.getSize(7)
+          }}
           onClick={() => this.onClickUser(item)}
           checkBoxColor={platform.checkboxBgColor}
           leftTextStyle={styles.txtCheckbox}
@@ -160,10 +165,10 @@ export default class Header extends React.PureComponent {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.onPress()}>
-              <Icon
+              <Icon2
                 name={iconName}
                 color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
-                size={Scale.getSize(30)}
+                size={Scale.getSize(26)}
               />
             </TouchableOpacity>
             {iconMenu ? (
@@ -202,16 +207,17 @@ export default class Header extends React.PureComponent {
         >
           <View style={styles.wrapModalBox}>
             <Text style={styles.txtCheckboxGroup}>{I18n.t('modal.level')}</Text>
-            <View style={{ paddingVertical: 15 }}>
+            <View style={{ paddingVertical: 10 }}>
               <RadioForm
                 radio_props={priorityData}
                 initial={0}
                 labelStyle={styles.txtCheckbox}
                 buttonColor={platform.primaryBlue}
+                buttonSize={15}
                 onPress={(value) => { this.setState({ priority: value }); }}
               />
             </View>
-            <Text style={styles.txtCheckboxGroup}>{I18n.t('modal.shareTo')}</Text>
+            <Text style={[styles.txtCheckboxGroup, { paddingBottom: 10 }]}>{I18n.t('modal.shareTo')}</Text>
             <FlatList
               data={users.data}
               // numColumns={2}
@@ -287,8 +293,8 @@ const styles = StyleSheet.create({
   txtCheckboxGroup: {
     fontSize: Scale.getSize(18),
     fontWeight: '600',
-    color: platform.primaryBlue,
-    paddingBottom: Scale.getSize(15)
+    color: platform.primaryBlue
+    // paddingBottom: Scale.getSize(15)
   },
   txtButtonConfirm: {
     fontSize: Scale.getSize(18),

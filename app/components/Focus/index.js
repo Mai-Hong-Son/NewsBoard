@@ -206,7 +206,7 @@ export default class Focus extends React.Component {
         <Header
           title={I18n.t('issues.title')}
           navigation={navigation}
-          iconName={'ios-add-circle'}
+          iconName={'plus'}
           onPress={this.onPressAdd}
         />
         <ScrollView

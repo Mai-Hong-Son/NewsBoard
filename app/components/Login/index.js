@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
   // AsyncStorage
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,7 +19,7 @@ import moment from 'moment';
 import 'moment/locale/en-au';
 import 'moment/locale/vi';
 // import _ from 'lodash';
-// import OneSignal from 'react-native-onesignal';
+import OneSignal from 'react-native-onesignal';
 
 import * as commonActions from '../../../redux/actions';
 import FullGradient from '../Reusables/FullGradient';
@@ -56,9 +57,14 @@ export default class Login extends React.PureComponent {
 
   componentDidMount() {
     const { tokenAccess: { data }, navigation, language } = this.props;
+    const { state: { params: { deleteTag } } } = navigation;
     I18n.locale = language.data;
     moment.locale(language.data);
-    // OneSignal.getTags(tags => console.warn(tags));
+    if (deleteTag && deleteTag) {
+      OneSignal.deleteTag('ip');
+      OneSignal.deleteTag('user_id');
+      OneSignal.configure();
+    }
 
     if (data.token) {
       navigation.replace('DrawerApp');
@@ -66,16 +72,16 @@ export default class Login extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { tokenAccess: { data } } = nextProps;
+    const { tokenAccess: { data }, language } = nextProps;
 
-    // if (this.props.language.data !== nextProps.language.data) {
-    //   I18n.locale = language.data;
-    //   moment.locale(language.data);
-    // }
+    if (this.props.language.data !== nextProps.language.data) {
+      I18n.locale = language.data;
+      moment.locale(language.data);
+    }
 
     if (data.token) {
       this.props.navigation.replace('DrawerApp');
-    } else if (this.flag && data.token !== '') {
+    } else if (this.flag) {
       Alert.alert(
         I18n.t('login.alertTitle'),
         I18n.t('login.alertContent'),
@@ -119,56 +125,65 @@ export default class Login extends React.PureComponent {
       <FullGradient
         containerStyle={styles.container}
       >
-        <View style={styles.wrapImage}>
-          <Image
-            style={styles.image}
-            source={imageurls.logoApp}
-          />
-        </View>
-        <View style={styles.wrapTextInput}>
-          <TextInput
-            style={styles.txtInput}
-            placeholderTextColor={platform.inputColorPlaceholder}
-            underlineColorAndroid="transparent"
-            autoCapitalize='none'
-            placeholder={I18n.t('login.username')}
-            onChangeText={text => this.setState({ username: text })}
-            value={username}
-          />
-        </View>
-        <View style={styles.wrapTextInput}>
-          <TextInput
-            style={styles.txtInput}
-            placeholderTextColor={platform.inputColorPlaceholder}
-            underlineColorAndroid="transparent"
-            autoCapitalize='none'
-            placeholder={I18n.t('login.password')}
-            secureTextEntry
-            onChangeText={text => this.setState({ password: text })}
-            value={password}
-          />
-        </View>
-        <View style={styles.wrapTextInput}>
-          <TextInput
-            style={styles.txtInput}
-            placeholderTextColor={platform.inputColorPlaceholder}
-            underlineColorAndroid="transparent"
-            placeholder={'Localhost'}
-            onChangeText={text => this.setState({ localhost: text })}
-            value={localhost}
-          />
-        </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => (this.state.loading ? null : this.onLogin())}
+        <ScrollView
+          contentContainerStyle={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
         >
-          <FullGradient
-            backgroundColor={platform.buttonColorGradient}
-            containerStyle={styles.buttonLogin}
+          <View style={styles.wrapImage}>
+            <Image
+              style={styles.image}
+              source={imageurls.logoApp}
+            />
+          </View>
+          <View style={styles.wrapTextInput}>
+            <TextInput
+              style={styles.txtInput}
+              placeholderTextColor={platform.inputColorPlaceholder}
+              underlineColorAndroid="transparent"
+              autoCapitalize='none'
+              placeholder={I18n.t('login.username')}
+              onChangeText={text => this.setState({ username: text })}
+              value={username}
+            />
+          </View>
+          <View style={styles.wrapTextInput}>
+            <TextInput
+              style={styles.txtInput}
+              placeholderTextColor={platform.inputColorPlaceholder}
+              underlineColorAndroid="transparent"
+              autoCapitalize='none'
+              placeholder={I18n.t('login.password')}
+              secureTextEntry
+              onChangeText={text => this.setState({ password: text })}
+              value={password}
+            />
+          </View>
+          <View style={styles.wrapTextInput}>
+            <TextInput
+              style={styles.txtInput}
+              placeholderTextColor={platform.inputColorPlaceholder}
+              underlineColorAndroid="transparent"
+              placeholder={'Localhost'}
+              onChangeText={text => this.setState({ localhost: text })}
+              value={localhost}
+            />
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={{ width: '90%' }}
+            onPress={() => (this.state.loading ? null : this.onLogin())}
           >
-            {statusLogin}
-          </FullGradient>
-        </TouchableOpacity>
+            <FullGradient
+              backgroundColor={platform.buttonColorGradient}
+              containerStyle={styles.buttonLogin}
+            >
+              {statusLogin}
+            </FullGradient>
+          </TouchableOpacity>
+        </ScrollView>
       </FullGradient>
     );
   }
@@ -176,9 +191,7 @@ export default class Login extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    flex: 1
   },
   wrapImage: {
     paddingBottom: Scale.getSize(35)
@@ -190,7 +203,7 @@ const styles = StyleSheet.create({
   wrapTextInput: {
     paddingHorizontal: Scale.getSize(10),
     paddingVertical: platform.platform === 'ios' ? Scale.getSize(10) : 0,
-    width: platform.deviceWidth - 50,
+    width: '90%',
     borderColor: platform.containerBg,
     borderWidth: 2,
     borderRadius: platform.borderRadius,
@@ -206,7 +219,7 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     paddingVertical: Scale.getSize(15),
-    width: platform.deviceWidth - 50,
+    width: '100%',
     borderRadius: platform.borderRadius,
     marginBottom: Scale.getSize(20),
     justifyContent: 'center',

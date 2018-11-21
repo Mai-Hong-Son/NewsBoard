@@ -38,12 +38,12 @@ export default {
     "done": "Xong"
   },
   "emptyScreen": "Không có bài viết nào phù hợp.",
-  "seeMore": "Xem thêm.",
+  "seeMore": "Xem thêm",
   "sidemenu": {
     "setting": "Cài đặt",
     "logout": "Đăng xuất",
     "alertTitle": "Thông báo",
-    "alertLogout": "Bạn chắc chắn muốn đăng xuất ứng dụng?"
+    "alertLogout": "Bạn chắc chắn muốn đăng xuất khỏi ứng dụng?"
   },
   "setting": {
     "title": "Cài đặt",
@@ -78,7 +78,8 @@ export default {
     "success": "Thành công",
     "saveIssueContent": "Tiêu điểm đã được cập nhật",
     "messageSuccess": "Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.",
-    "deleteSuccess": "Bài viết đã được xóa khỏi giỏ tin.",
+    "deleteIssueSuccess": "Tiêu điểm đã được xóa.",
+    "deleteStoredSuccess": "Bài viết đã được loại bỏ khỏi giỏ tin.",
     "deleteShareArticle": "Bài viết đã được thu hồi việc chia sẻ.",
     "saveArticle": "Bài viết đã được đưa vào giỏ tin.",
     "deleteSaveArticle": "Các tin lưu trữ đã được xóa khỏi giỏ tin.",

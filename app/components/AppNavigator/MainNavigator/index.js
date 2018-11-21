@@ -42,6 +42,7 @@ import en from '../../../assets/i18n/locales/en';
 import vi from '../../../assets/i18n/locales/vi';
 
 I18n.fallbacks = true;
+I18n.defaultLocale = 'vi';
 I18n.translations = { en, vi };
 
 export const RootTabs = createBottomTabNavigator(
