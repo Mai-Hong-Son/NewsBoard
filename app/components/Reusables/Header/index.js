@@ -119,7 +119,6 @@ export default class Header extends React.PureComponent {
     const { navigation, title, iconName, type, hasSearch, iconMenu, users, colorSave } = this.props;
     const { showModal } = this.state;
     const iconLeft = type !== 'stack' ? 'ios-menu' : 'ios-arrow-back';
-    const sizeBtnLeft = Scale.getSize(35);
     const priorityData = [
       {
         value: 1,
@@ -148,7 +147,7 @@ export default class Header extends React.PureComponent {
               <Icon
                 name={iconLeft}
                 color={platform.containerBg}
-                size={sizeBtnLeft}
+                size={35}
               />
             </TouchableOpacity>
           </View>
@@ -161,14 +160,14 @@ export default class Header extends React.PureComponent {
               <Icon
                 name={hasSearch ? 'ios-search' : null}
                 color={platform.containerBg}
-                size={Scale.getSize(21)}
+                size={21}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.onPress()}>
               <Icon2
                 name={iconName}
                 color={!!colorSave && colorSave ? 'yellow' : platform.containerBg}
-                size={Scale.getSize(26)}
+                size={26}
               />
             </TouchableOpacity>
             {iconMenu ? (
@@ -178,7 +177,7 @@ export default class Header extends React.PureComponent {
                     <Icon
                       name='ios-more'
                       color={platform.containerBg}
-                      size={Scale.getSize(35)}
+                      size={35}
                     />
                   </View>
                 </MenuTrigger>
@@ -249,10 +248,10 @@ export default class Header extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    height: (platform.platform === 'ios' && !platform.isIphoneX) ? Scale.getSize(80) : Scale.getSize(60),
+    height: (platform.platform === 'ios' && !platform.isIphoneX) ? 80 : 60,
     width: '100%',
     justifyContent: 'flex-end',
-    paddingBottom: Scale.getSize(10)
+    paddingBottom: 10
   },
   wrapContentHeader: {
     flexDirection: 'row',
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
   txtNews: {
     color: platform.containerBg,
     fontWeight: platform.fontWeightTitle,
-    fontSize: Scale.getSize(16)
+    fontSize: 16
   },
   wrapBoxLeft: {
     flex: 1
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   txtOptionMenu: {
-    fontSize: Scale.getSize(18),
+    fontSize: 18,
     paddingVertical: 7,
     color: '#000'
   },

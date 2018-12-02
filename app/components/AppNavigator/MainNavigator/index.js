@@ -37,7 +37,7 @@ import ImageUrls from '../../../assets/images';
 
 import { MyTabBar } from './myTabBar';
 // import Scale from '../../../theme/scale';
-import platform from '../../../theme/platform';
+// import platform from '../../../theme/platform';
 import en from '../../../assets/i18n/locales/en';
 import vi from '../../../assets/i18n/locales/vi';
 
@@ -149,7 +149,7 @@ export const DrawerApp = createDrawerNavigator(
     }
   }, {
     contentComponent: SideMenu,
-    drawerWidth: platform.deviceWidth - 100,
+    drawerWidth: 300,
     drawerLockMode: 'locked-closed'
   }
 );

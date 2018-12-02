@@ -54,6 +54,10 @@ export default class PersonalInfo extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    OneSignal.removeEventListener('opened', (openResult) => this.onOpened(openResult, this.props));
+  }
+
   onOpened(openResult, props) {
     const { type, post, subject } = openResult.notification.payload.additionalData;
 

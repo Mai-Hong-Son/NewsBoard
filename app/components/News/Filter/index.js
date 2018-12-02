@@ -200,7 +200,7 @@ export default class Filter extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
+            <Icon name='ios-arrow-back' size={35} color={platform.containerBg} />
           </TouchableOpacity>
         </FullGradient>
         <View style={styles.container}>
@@ -250,10 +250,10 @@ const styles = StyleSheet.create({
     paddingRight: 10
   },
   headerContainer: {
-    height: Scale.getSize(80),
+    height: platform.platform === 'ios' ? 80 : 60,
     width: '100%',
     justifyContent: 'flex-end',
-    paddingBottom: Scale.getSize(15),
+    paddingBottom: 10,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#fff'

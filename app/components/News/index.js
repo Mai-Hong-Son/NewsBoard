@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
   wrapFilterList: {
     flexDirection: 'row',
     paddingRight: 15,
-    paddingVertical: Scale.getSize(8),
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: platform.borderColor,
     alignItems: 'center'
@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
   },
   wrapDateTime: {
     flexDirection: 'row',
-    padding: Scale.getSize(3),
+    padding: 3,
     borderColor: 'rgb(137,137,137)',
     borderRadius: 5,
     borderWidth: 1

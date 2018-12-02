@@ -10,11 +10,10 @@ import {
   Clipboard
 } from 'react-native';
 import { connect } from 'react-redux';
-import HTML from 'react-native-render-html';
+import MyWebView from 'react-native-webview-autoheight';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import _ from 'lodash';
 import I18n from 'react-native-i18n';
-import { IGNORED_TAGS } from 'react-native-render-html/src/HTMLUtils';
 
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
@@ -72,7 +71,7 @@ export default class NewsDetail extends React.PureComponent {
       this.setState({
         loading: false,
         subContent: subcontent,
-        colorSave: _.some(results, { 'id': id })
+        colorSave: _.some(results, { id })
       });
     }
 
@@ -254,7 +253,7 @@ export default class NewsDetail extends React.PureComponent {
           <Header
             title=''
             type='stack'
-            navigation={navigation}
+            navigation={this.props.navigation}
             iconName='bookmark'
             colorSave={colorSave}
             iconMenu
@@ -274,6 +273,39 @@ export default class NewsDetail extends React.PureComponent {
       categories
     } = this.props;
     const categoryName = categories.data.find(it => it._id === category);
+    const htmlStyle = `<style>
+                        div {
+                          width:100%;
+                          text-align: justify;
+                          font-family: Arial;
+                          font-size: 24px;
+                        }
+                        h1 {
+                          font-size: 35px;
+                        }
+                        h2 {
+                          font-size: 32px;
+                        }
+                        p {
+                          font-size: 24px;
+                        }
+                        h3 {
+                          font-size: 30px
+                        }
+                        img {
+                          width:100%;
+                        }
+                        video {
+                          width:100%;
+                        }
+                        iframe {
+                          width:100%;
+                          height: 300px;
+                        }
+                        td {
+                          font-size: 22px;
+                        }
+               </style>`;
 
     const typeBody = domain === 'www.youtube.com' ?
       `<iframe src="${body.replace(/<(?:.|\n)*?>/gm, '')}" frameborder="0" allowfullscreen></iframe>` :
@@ -293,25 +325,44 @@ export default class NewsDetail extends React.PureComponent {
           // onTranslate={() => this.onTranslate(subcontent)}
           onCopy={() => this.writeToClipboard(url)}
         />
-        <View style={{ overflow: 'hidden' }}>
+        <View
+          style={{
+            overflow: 'hidden',
+            width: '100%',
+            height: '100%'
+          }}
+        >
           <ParallaxScrollView
             keyboardShouldPersistTaps="always"
             maskColor="transparent"
-            parallaxHeaderHeight={250}
-            renderBackground={() => (
-              <Image 
-                style={{ height: 250, width: '100%' }}
-                resizeMode='cover'
-                source={{
-                  uri: failedImageCover || !image ? emptyImage : image,
-                  height: 250
-                }}
-                onError={() => {
-                  this.setState({
-                    failedImageCover: true
-                  });
-                }}
-              />)}
+            fadeOutForeground
+            parallaxHeaderHeight={300}
+            renderBackground={() => {
+              const contentHeader = domain === 'www.youtube.com' ?
+                (<View style={{ height: 300, width: '100%' }}>
+                  <MyWebView
+                    javaScriptEnabled
+                    startInLoadingState
+                    width={'100%'}
+                    scalesPageToFit={platform.platform !== 'ios'}
+                    source={{ html: htmlStyle + typeBody }}
+                  />
+                </View>) : 
+                (<Image 
+                  style={{ height: 300, width: '100%' }}
+                  resizeMode='cover'
+                  source={{
+                    uri: failedImageCover || !image ? emptyImage : image,
+                    height: 300
+                  }}
+                  onError={() => {
+                    this.setState({
+                      failedImageCover: true
+                    });
+                  }}
+                />);
+              return contentHeader;
+            }}
           >
             <View style={styles.wrapContentStyle}>
               <View style={styles.wrapTag}>
@@ -321,7 +372,7 @@ export default class NewsDetail extends React.PureComponent {
               <View style={styles.wrapSourceStyle}>
                 <Image
                   style={styles.logoImage}
-                  source={failed ? images.logoApp : { uri: logo }}
+                  source={failed || !images.logoApp ? images.logoApp : { uri: logo }}
                   onError={() => {
                     this.setState({
                       failed: true
@@ -331,28 +382,25 @@ export default class NewsDetail extends React.PureComponent {
                 <TouchableOpacity onPress={() => (url === null ? null : this.onLinking(url))}>
                   <Text style={[styles.txtSourceStyle, { paddingLeft: 10 }]}>{domain.trim()}</Text>
                 </TouchableOpacity>
-                <Text numberOfLines={2} style={styles.txtSourceStyle}>{` - ${time.trim().replace('|', '')}`}</Text>
+                <Text numberOfLines={1} style={[styles.txtSourceStyle, { width: 300 }]}>{` - ${time.trim().replace('|', '')}`}</Text>
               </View>
-              <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
-              {typeBody.trim() === '' ? <Text /> : <HTML
-                html={typeBody.replace('block', '').replace('inline-block', '').replace('inline-', '').replace('fixed', 'absolute')}
-                decodeEntities
-                imagesMaxWidth={platform.deviceWidth - 100}
-                baseFontStyle={{ fontSize: Scale.getSize(24), color: '#000' }}
-                ignoredTags={[...IGNORED_TAGS]}
-                ignoredStyles={['display', 'font-family', 'letter-spacing', 'mso-bidi-font-style']}
-                tagsStyles={{
-                  p: {
-                    paddingTop: Scale.getSize(10),
-                    paddingBottom: Scale.getSize(10),
-                    color: '#000',
-                    textAlign: 'justify'
-                  },
-                  img: { overflow: 'visible' },
-                  div: { alignItems: 'center' },
-                  iframe: { width: '100%' }
-                }}
-              />}
+              {domain !== 'www.youtube.com' ? <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
+                : <MyWebView
+                // style={{ height: 300 }}
+                  startInLoadingState
+                  width={'100%'}
+                  source={{ html: subContent }}
+                />
+              }
+              {typeBody.trim() === '' ? <Text /> : <View style={{ flex: 1 }}>
+                <MyWebView
+                  javaScriptEnabled
+                  startInLoadingState
+                  width={'100%'}
+                  scalesPageToFit={platform.platform !== 'ios'}
+                  source={{ html: htmlStyle + typeBody }}
+                />
+              </View>}
             </View>
           </ParallaxScrollView>
         </View>
@@ -369,38 +417,42 @@ const styles = StyleSheet.create({
     paddingBottom: platform.isIphoneX ? 10 : 0
   },
   titleStyle: {
-    fontSize: Scale.getSize(26),
+    fontSize: 26,
+    paddingHorizontal: 8,
     fontWeight: '700',
     color: '#000'
   },
   wrapContentStyle: {
     width: '100%',
-    paddingHorizontal: Scale.getSize(15),
+    paddingHorizontal: Scale.getSize(7),
     paddingTop: Scale.getSize(15),
     paddingBottom: 100
   },
   wrapSourceStyle: {
     flexDirection: 'row',
     paddingVertical: 5,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 8
   },
   logoImage: {
     height: Scale.getSize(18),
     width: Scale.getSize(18)
   },
   txtSourceStyle: {
-    fontSize: Scale.getSize(16),
+    fontSize: 16,
     color: 'rgb(137,137,137)',
     paddingVertical: 5
   },
   txtSubContentStyle: {
-    fontSize: Scale.getSize(24),
+    fontSize: 24,
+    paddingHorizontal: Scale.getSize(7),
     fontWeight: '600',
     color: '#000',
     textAlign: 'justify'
   },
   wrapTag: {
     marginVertical: Scale.getSize(5),
+    paddingHorizontal: 8,
     borderRadius: 5,
     alignItems: 'flex-start'
   },

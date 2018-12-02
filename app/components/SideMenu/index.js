@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 // import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import OneSignal from 'react-native-onesignal';
+import OneSignal from 'react-native-onesignal';
 import I18n from 'react-native-i18n';
 
 import FullGradient from '../Reusables/FullGradient';
@@ -52,8 +52,12 @@ export default class SideMenu extends React.PureComponent {
     if (!errLogout && this.state.isClickLogout) {      
       this.setState({
         isClickLogout: false
-      }, () => this.props.navigation.navigate('Login', { deleteTag: true }));
+      }, () => this.props.navigation.navigate('Login'));
     }
+  }
+
+  componentWillUnmount() {
+    OneSignal.removeEventListener('ids', (device) => this.onIds(device, this.props));
   }
 
   onRefresh = () => {
@@ -73,12 +77,38 @@ export default class SideMenu extends React.PureComponent {
           onPress: () => this.setState({
             isClickLogout: true
           }, () => {
-            this.props.logout();
+            OneSignal.addEventListener('ids', (device) => this.onIds(device, this.props));
+            // this.props.logout();
           })
         }
       ],
       { cancelable: false }
     );
+  }
+
+  onIds(device, props) {
+    fetch(`https://onesignal.com/api/v1/players/${device.userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        app_id: '581b287b-a830-47e9-83c9-8abe9d53f1a1',
+        tags: {
+          ip: '',
+          user_id: ''
+        }
+      })
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.success) {
+          props.logout();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   // navigateToScreen = (route, queryObject) => () => {

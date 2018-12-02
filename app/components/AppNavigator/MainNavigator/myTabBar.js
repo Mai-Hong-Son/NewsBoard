@@ -4,11 +4,10 @@ import I18n from 'react-native-i18n';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import FullGradient from '../../Reusables/FullGradient';
-import Scale from '../../../theme/scale';
 import platform from '../../../theme/platform';
 
-const TAB_BAR_HEIGHT = Scale.getSize(60);
-const BARCODE_BUTTON_MARGIN = Scale.getSize(10);
+const TAB_BAR_HEIGHT = 60;
+const BARCODE_BUTTON_MARGIN = 10;
 
 export class MyTabBar extends React.Component {
   renderTabBarButton = (route, idx) => {
@@ -108,17 +107,17 @@ const styles = StyleSheet.create({
     marginTop: BARCODE_BUTTON_MARGIN
   },
   txtTabBar: {
-    fontSize: Scale.getSize(11),
+    fontSize: 11,
     fontWeight: 'bold',
-    marginTop: Scale.getSize(4)
+    marginTop: 4
   },
   btnBarCode: {
     backgroundColor: '#4D80E6',
-    width: Scale.getSize(60),
+    width: 60,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: BARCODE_BUTTON_MARGIN,
-    height: Scale.getSize(60),
-    borderRadius: Scale.getSize(30)
+    height: 60,
+    borderRadius: 30
   }
 });

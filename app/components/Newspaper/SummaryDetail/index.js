@@ -6,12 +6,11 @@ import {
   ScrollView
 } from 'react-native';
 import { connect } from 'react-redux';
-import HTML from 'react-native-render-html';
 import moment from 'moment';
 import { Gravatar } from 'react-native-gravatar';
+import MyWebView from 'react-native-webview-autoheight';
 
 import Header from '../../Reusables/Header';
-import platform from '../../../theme/platform';
 import SafeArea from '../../../theme/SafeArea';
 import * as commonActions from '../../../../redux/actions';
 import Scale from '../../../theme/scale';
@@ -51,12 +50,32 @@ export default class SummaryDetail extends React.PureComponent {
   render() {
     const { navigation, users: { data: listUser }, userInfo: { data: userData } } = this.props;
     const { loading, summaryDetail } = this.state;
+    const htmlStyle = `<style>
+                        div {
+                          width:100%;
+                          font-family: Arial;
+                        }
+                        h2 {
+                          font-size: 48px;
+                        }
+                        h1 {
+                          font-size: 30px;
+                        }
+                        p {
+                          font-size: 25px;
+                        }
+                        h3 {
+                          font-size: 32px
+                        }
+                        img {
+                          width:98%;
+                        }
+               </style>`;
     let content = <Loading />;
 
     if (!loading) {
       const { title, description, creator, updated_time } = summaryDetail;
       const userCreate = listUser.filter(it => it.username === creator)[0];
-      // console.warn(description);
 
       content = (
         <ScrollView>
@@ -81,34 +100,10 @@ export default class SummaryDetail extends React.PureComponent {
               </View>
               <Text style={styles.txtSourceStyle}>{` - ${moment(updated_time).format('DD/MM/YYYY - hh:mm:ss')}`}</Text>
             </View>
-            <HTML
-              html={description.replace(/(\r\n|\n|\r)/gm, ' ')}
-              imagesMaxWidth={platform.deviceWidth - 100}
-              baseFontStyle={{ fontSize: Scale.getSize(26) }}
-              ignoredStyles={['font-family', 'letter-spacing', 'mso-bidi-font-style']}
-              tagsStyles={{
-                p: {
-                  // fontSize: Scale.getSize(24),
-                  color: '#000',
-                  paddingTop: Scale.getSize(5),
-                  paddingBottom: Scale.getSize(5)
-                  // textAlign: 'justify'
-                },
-                h1: {
-                  fontSize: Scale.getSize(26),
-                  paddingTop: Scale.getSize(10),
-                  paddingBottom: 0,
-                  color: '#000'
-                  // textAlign: 'justify'
-                },
-                span: {
-                  // fontSize: Scale.getSize(26),
-                  color: '#000'
-                  // textAlign: 'justify'
-                },
-                img: { overflow: 'visible' }
-                // div: { alignItems: 'center' }
-              }}
+            <MyWebView
+              startInLoadingState
+              width={'100%'}
+              source={{ html: htmlStyle + description }}
             />
           </View>
         </ScrollView>
@@ -134,17 +129,19 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   titleStyle: {
-    fontSize: Scale.getSize(27),
+    fontSize: 27,
+    paddingHorizontal: 8,
     fontWeight: '700',
     color: '#000'
   },
   wrapContentStyle: {
     width: '100%',
-    paddingHorizontal: Scale.getSize(15),
+    paddingHorizontal: Scale.getSize(7),
     paddingTop: Scale.getSize(15)
   },
   wrapSourceStyle: {
     flexDirection: 'row',
+    paddingHorizontal: 8,
     paddingVertical: Scale.getSize(5),
     alignItems: 'center'
   },
@@ -153,11 +150,11 @@ const styles = StyleSheet.create({
     width: Scale.getSize(18)
   },
   txtSourceStyle: {
-    fontSize: Scale.getSize(16),
+    fontSize: 16,
     color: 'rgb(137,137,137)'
   },
   txtSubContentStyle: {
-    fontSize: Scale.getSize(25),
+    fontSize: 25,
     fontWeight: '600'
   },
   wrapTag: {

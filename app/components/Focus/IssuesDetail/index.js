@@ -89,7 +89,7 @@ export default class IssuesDetail extends React.PureComponent {
             text: 'OK',
             onPress: () => {
               this.setState({
-                isDelete: false
+                isClickDelete: false
               });
               this.props.navigation.goBack();
             }
@@ -243,11 +243,11 @@ export default class IssuesDetail extends React.PureComponent {
         <FullGradient containerStyle={styles.headerContainer}>
           <View style={styles.wrapContentHeader}>
             <TouchableOpacity style={{ paddingRight: 10 }} onPress={() => navigation.goBack()}>
-              <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
+              <Icon name='ios-arrow-back' size={35} color={platform.containerBg} />
             </TouchableOpacity>
             <Text style={styles.txtTitleHeader}>{titleHeader}</Text>
             <TouchableOpacity onPress={() => this.onSave(false)}>
-              <Icon name='ios-bookmarks' size={Scale.getSize(30)} color={platform.containerBg} />
+              <Icon name='ios-bookmarks' size={30} color={platform.containerBg} />
             </TouchableOpacity>
           </View>
         </FullGradient>
@@ -429,10 +429,10 @@ export default class IssuesDetail extends React.PureComponent {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
+    height: platform.platform === 'ios' ? 80 : 60,
     width: '100%',
     justifyContent: 'flex-end',
-    paddingBottom: Scale.getSize(15)
+    paddingBottom: 10
   },
   txtTitleHeader: {
     fontSize: Scale.getSize(18),

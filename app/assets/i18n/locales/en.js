@@ -4,7 +4,8 @@ export default {
     "password": "Password",
     "title": "Login",
     "alertTitle": "Alert",
-    "alertContent": "Login failed, please try again or contact with administrator."
+    "alertContent": "Login failed, please try again or contact with administrator.",
+    "localhost": "OSINT address"
   },
   "News": "News",
   "Focus": "Todo",
@@ -79,7 +80,7 @@ export default {
     "saveIssueContent": "This issue is updated.",
     "messageSuccess": "Successfully, this post is archived in news cart.",
     "deleteIssueSuccess": "Successfully, this issue is removed from news cart.",
-    "deleteStoredSuccess": "Successfully, this post is removed from news cart.",
+    "deleteStoredSuccess": "Successfully, All posts have been removed from news cart.",
     "deleteShareArticle": "Successfully, this post is removed from news cart.",
     "saveArticle": "This post is archived in news cart.",
     "deleteSaveArticle": "The posts are removed from storage.",

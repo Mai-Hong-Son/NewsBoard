@@ -38,7 +38,7 @@ export default class SearchArticle extends React.PureComponent {
       <SafeArea>
         <FullGradient containerStyle={styles.headerContainer}>
           <TouchableOpacity style={{ height: '100%', justifyContent: 'center' }} onPress={() => navigation.goBack()}>
-            <Icon name='ios-arrow-back' size={Scale.getSize(35)} color={platform.containerBg} />
+            <Icon name='ios-arrow-back' size={35} color={platform.containerBg} />
           </TouchableOpacity>
           <View style={{ height: '100%', justifyContent: 'center' }}>
             <TextInput
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: platform.containerBg
   },
   headerContainer: {
-    height: platform.platform === 'ios' ? Scale.getSize(80) : Scale.getSize(60),
+    height: platform.platform === 'ios' ? 80 : 60,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   textInputStyle: {
     // flex: 1,
     paddingLeft: 15,
-    fontSize: Scale.getSize(20),
+    fontSize: 20,
     color: '#fff',
     width: platform.deviceWidth
   }

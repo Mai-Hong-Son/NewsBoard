@@ -4,7 +4,8 @@ export default {
     "password": "Mật khẩu",
     "title": "Đăng nhập",
     "alertTitle": "Cảnh báo",
-    "alertContent": "Đăng nhập không thành công, vui lòng kiểm tra lại tài khoản hoặc liên hệ với quản trị viên."
+    "alertContent": "Đăng nhập không thành công, vui lòng kiểm tra lại tài khoản hoặc liên hệ với quản trị viên.",
+    "localhost": "Địa chỉ máy chủ OSINT"
   },
   "News": "Tin tức",
   "Focus": "Tiêu điểm",
@@ -79,7 +80,7 @@ export default {
     "saveIssueContent": "Tiêu điểm đã được cập nhật",
     "messageSuccess": "Bài viết đã được loại bỏ danh sách lưu trữ của giỏ tin.",
     "deleteIssueSuccess": "Tiêu điểm đã được xóa.",
-    "deleteStoredSuccess": "Bài viết đã được loại bỏ khỏi giỏ tin.",
+    "deleteStoredSuccess": "Tất cả bài viết đã được loại bỏ khỏi giỏ tin.",
     "deleteShareArticle": "Bài viết đã được thu hồi việc chia sẻ.",
     "saveArticle": "Bài viết đã được đưa vào giỏ tin.",
     "deleteSaveArticle": "Các tin lưu trữ đã được xóa khỏi giỏ tin.",

@@ -9,5 +9,7 @@ export default {
   logoApp: require('./NewsboardLogo.jpg'),
   emptyImage: 'http://www.elanclearwater.com/wp-content/uploads/2016/04/placeholder.png',
   summaryImage: require('./news.jpg'),
-  userImage: require('./userImage.png')
+  userImage: require('./userImage.png'),
+  vietnam: require('./vietnam.jpg'),
+  usa: require('./usa.jpg')
 };

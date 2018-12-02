@@ -14,6 +14,7 @@ export default class Scale {
       fontSize = Dimensions.get('window').height;
     }
 
-    return (size * fontSize) / IPHONE_8_DEVICE_WIDTH;
+    // return (size * fontSize) / IPHONE_8_DEVICE_WIDTH;
+    return size;
   }
 }
