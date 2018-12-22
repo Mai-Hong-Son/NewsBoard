@@ -112,19 +112,23 @@ export default class NewsDetail extends React.PureComponent {
     }
 
     if (!errShare && this.state.onClickShare) {
-      Alert.alert(
-        I18n.t('alert.success'),
-        I18n.t('alert.shareContent'),
-        [
-          {
-            text: 'OK',
-            onPress: () => this.setState({
-              onClickShare: false
-            })
-          }
-        ],
-        { cancelable: false }
-      );
+      this.setState({
+        onClickShare: false
+      });
+      console.warn('success');
+      // Alert.alert(
+      //   I18n.t('alert.success'),
+      //   I18n.t('alert.shareContent'),
+      //   [
+      //     {
+      //       text: 'OK',
+      //       onPress: () => this.setState({
+      //         onClickShare: false
+      //       })
+      //     }
+      //   ],
+      //   { cancelable: false }
+      // );
     }
 
     if (errShare && this.state.onClickShare) {
@@ -337,6 +341,7 @@ export default class NewsDetail extends React.PureComponent {
             maskColor="transparent"
             fadeOutForeground
             parallaxHeaderHeight={300}
+            backgroundScrollSpeed={2}
             renderBackground={() => {
               const contentHeader = domain === 'www.youtube.com' ?
                 (<View style={{ height: 300, width: '100%' }}>
@@ -347,8 +352,8 @@ export default class NewsDetail extends React.PureComponent {
                     scalesPageToFit={platform.platform !== 'ios'}
                     source={{ html: htmlStyle + typeBody }}
                   />
-                </View>) : 
-                (<Image 
+                </View>) :
+                (<Image
                   style={{ height: 300, width: '100%' }}
                   resizeMode='cover'
                   source={{
@@ -386,13 +391,13 @@ export default class NewsDetail extends React.PureComponent {
               </View>
               {domain !== 'www.youtube.com' ? <Text style={styles.txtSubContentStyle}>{subContent.replace(/<(?:.|\n)*?>/gm, '').trim()}</Text>
                 : <MyWebView
-                // style={{ height: 300 }}
+                  // style={{ height: 300 }}
                   startInLoadingState
                   width={'100%'}
                   source={{ html: subContent }}
                 />
               }
-              {typeBody.trim() === '' ? <Text /> : <View style={{ flex: 1 }}>
+              {typeBody.trim() === '' || domain === 'www.youtube.com' ? <Text /> : <View style={{ flex: 1 }}>
                 <MyWebView
                   javaScriptEnabled
                   startInLoadingState

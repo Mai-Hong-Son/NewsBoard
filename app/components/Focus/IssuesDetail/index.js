@@ -71,8 +71,7 @@ export default class IssuesDetail extends React.PureComponent {
             onPress: () => {
               this.setState({
                 isClick: false
-              });
-              this.props.navigation.goBack();
+              }, () => this.props.navigation.goBack());
             }
           }
         ],
@@ -90,8 +89,7 @@ export default class IssuesDetail extends React.PureComponent {
             onPress: () => {
               this.setState({
                 isClickDelete: false
-              });
-              this.props.navigation.goBack();
+              }, () => this.props.navigation.goBack());
             }
           }
         ],

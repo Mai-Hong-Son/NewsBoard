@@ -8,7 +8,7 @@ import {
   Alert
 } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
+// import { NavigationEvents } from 'react-navigation';
 import I18n from 'react-native-i18n';
 // import Icon from 'react-native-vector-icons/Ionicons';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -43,6 +43,15 @@ export default class Save extends React.Component {
         isFirstime: true
       }, () => this.onRefresh());
     }
+
+    this.willFocus = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        if (this.state.isFirstime) {
+          this.onRefresh();
+        }
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,7 +66,7 @@ export default class Save extends React.Component {
   }
 
   componentWillUnmount() {
-    NavigationEvents.removeEventListener('onWillFocus');
+    this.willFocus.remove();
   }
 
   onPress = () => {
@@ -115,7 +124,7 @@ export default class Save extends React.Component {
 
   render() {
     const { navigation, myArticles: { data: { results } } } = this.props;
-    const { isLoading, isFirstime } = this.state;
+    const { isLoading } = this.state;
     const content = isLoading ? (
       <View style={{ marginTop: 25 }}>
         <ActivityIndicator size='large' />
@@ -134,13 +143,13 @@ export default class Save extends React.Component {
 
     return (
       <SafeArea>
-        <NavigationEvents
+        {/* <NavigationEvents
           onWillFocus={() => {
             if (isFirstime) {
               this.onRefresh();
             }
           }}
-        />
+        /> */}
         <Header
           title={I18n.t('save.title')}
           iconName={this.state.changeView ? 'th' : 'list'}

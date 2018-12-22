@@ -5,7 +5,7 @@ export default {
     "title": "Login",
     "alertTitle": "Alert",
     "alertContent": "Login failed, please try again or contact with administrator.",
-    "localhost": "OSINT address"
+    "localhost": "Address"
   },
   "News": "News",
   "Focus": "Todo",

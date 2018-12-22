@@ -6,13 +6,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 // import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import OneSignal from 'react-native-onesignal';
 import I18n from 'react-native-i18n';
+import Modal from 'react-native-modal';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import FullGradient from '../Reusables/FullGradient';
 import PersonalInfo from './PersonalInfo';
@@ -31,7 +34,8 @@ export default class SideMenu extends React.PureComponent {
   state = {
     loading: true,
     subjectsData: [],
-    isClickLogout: false
+    isClickLogout: false,
+    showModal: false
   };
 
   async componentDidMount() {
@@ -49,10 +53,17 @@ export default class SideMenu extends React.PureComponent {
       });
     }
 
-    if (!errLogout && this.state.isClickLogout) {      
+    if (!errLogout && this.state.isClickLogout) {
       this.setState({
         isClickLogout: false
-      }, () => this.props.navigation.navigate('Login'));
+      }, () => {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'Login' })],
+          key: this.props.navigation.dangerouslyGetParent().state.key
+        });
+        this.props.navigation.dispatch(resetAction);
+      });
     }
   }
 
@@ -78,6 +89,7 @@ export default class SideMenu extends React.PureComponent {
             isClickLogout: true
           }, () => {
             OneSignal.addEventListener('ids', (device) => this.onIds(device, this.props));
+            this.onShowModalLoading();
             // this.props.logout();
           })
         }
@@ -117,6 +129,11 @@ export default class SideMenu extends React.PureComponent {
   //   });
   //   this.props.navigation.dispatch(navigateAction);
   // }
+  onShowModalLoading = () => {
+    this.setState({
+      showModal: !this.state.showModal
+    });
+  }
 
   renderItem = ({ item }) => {
     const { name, matched_count, avatar, search_query, notify } = item;
@@ -213,6 +230,14 @@ export default class SideMenu extends React.PureComponent {
             </View>
           </TouchableOpacity>
         </View>
+        <Modal
+          isVisible={this.state.showModal}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <ActivityIndicator size='large' />
+            <Text style={{ color: '#fff' }}>{'Logout...'}</Text>
+          </View>
+        </Modal>
       </FullGradient >
     );
   }

@@ -54,8 +54,15 @@ export default class Header extends React.PureComponent {
   }
 
   onShowModalPriority = () => {
+    const { users: { data } } = this.props;
+
+    data.forEach(element => {
+      delete element.checked;
+    });
+
     this.setState({
-      showModal: !this.state.showModal
+      showModal: !this.state.showModal,
+      peopleAsign: []
     });
   }
 
@@ -181,7 +188,7 @@ export default class Header extends React.PureComponent {
                     />
                   </View>
                 </MenuTrigger>
-                {this.props.type === 'stored' ? 
+                {this.props.type === 'stored' ?
                   <MenuOptions>
                     <MenuOption onSelect={() => this.props.deleteAll()}>
                       <Text style={styles.txtOptionMenu}>{I18n.t('save.deleteAll')}</Text>

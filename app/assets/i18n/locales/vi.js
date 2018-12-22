@@ -5,7 +5,7 @@ export default {
     "title": "Đăng nhập",
     "alertTitle": "Cảnh báo",
     "alertContent": "Đăng nhập không thành công, vui lòng kiểm tra lại tài khoản hoặc liên hệ với quản trị viên.",
-    "localhost": "Địa chỉ máy chủ OSINT"
+    "localhost": "Địa chỉ máy chủ"
   },
   "News": "Tin tức",
   "Focus": "Tiêu điểm",

@@ -45,12 +45,12 @@ export default class Login extends React.PureComponent {
     YellowBox.ignoreWarnings(
       ['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'
       ]);
-    
+
     this.state = {
       username: props.tokenAccess.account.username ? props.tokenAccess.account.username : '',
       password: props.tokenAccess.account.password ? props.tokenAccess.account.password : '',
       localhost: !props.localhost.data.payload ? 'http://35.196.179.240:8080' : props.localhost.data.payload,
-      // localhost: 'http://192.168.92.90:8080',
+      // localhost: !props.localhost.data.payload ? 'http://192.168.92.90:8080' : props.localhost.data.payload,
       loading: false,
       showChoseLanguage: false,
       currentLanguage: props.language.data,
@@ -72,6 +72,12 @@ export default class Login extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     const { tokenAccess: { data }, language } = nextProps;
+    if (this.props.tokenAccess.account !== nextProps.tokenAccess.account) {
+      this.setState({
+        username: nextProps.tokenAccess.account.username,
+        password: nextProps.tokenAccess.account.password
+      });
+    }
 
     if (this.props.language.data !== nextProps.language.data) {
       I18n.locale = language.data;
@@ -160,7 +166,7 @@ export default class Login extends React.PureComponent {
                 <Icon style={{ paddingLeft: 4 }} name='ios-arrow-down' size={25} color={platform.primaryBlue} />
               </View>
             </TouchableWithoutFeedback>
-            {this.state.showChoseLanguage ? 
+            {this.state.showChoseLanguage ?
               <View style={styles.wrapChoseImage}>
                 <TouchableWithoutFeedback onPress={() => this.onChangeLanguage('vi')}>
                   <Image

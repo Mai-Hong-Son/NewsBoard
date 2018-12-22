@@ -42,13 +42,13 @@ export class MyTabBar extends React.Component {
         onPress={() => {
           if (routes.index !== idx) {
             navigation.navigate(route.routeName);
-            if (idx === 0) {
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'HomeTab' })]
-              });
-              this.props.navigation.dispatch(resetAction);
-            }
+            // if (idx === 0) {
+            //   const resetAction = StackActions.reset({
+            //     index: 0,
+            //     actions: [NavigationActions.navigate({ routeName: 'HomeTab' })]
+            //   });
+            //   this.props.navigation.dispatch(resetAction);
+            // }
           }
         }}
         key={route.routeName}

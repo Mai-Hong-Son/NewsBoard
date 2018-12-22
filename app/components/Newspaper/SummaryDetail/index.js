@@ -92,8 +92,7 @@ export default class SummaryDetail extends React.PureComponent {
                   style={{
                     width: Scale.getSize(15),
                     height: Scale.getSize(15),
-                    borderRadius: Scale.getSize(15) / 2,
-                    marginRight: 5
+                    borderRadius: Scale.getSize(15) / 2
                   }}
                 />
                 <Text style={styles.txtName}>{creator}</Text>
@@ -158,13 +157,14 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   wrapTag: {
-    padding: Scale.getSize(5),
+    padding: Scale.getSize(7),
     marginVertical: Scale.getSize(5),
     borderRadius: 5,
     backgroundColor: '#cc0099',
     width: 80,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   txtName: {
     color: '#fff',

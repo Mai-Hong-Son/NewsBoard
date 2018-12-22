@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
-import { NavigationEvents } from 'react-navigation';
+// import { NavigationEvents } from 'react-navigation';
 import I18n from 'react-native-i18n';
 // import moment from 'moment';
 
@@ -51,6 +51,15 @@ export default class Share extends React.Component {
         isFirstime: true
       }, () => this.onRefresh());
     }
+
+    this.willFocus = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        if (this.state.isFirstime) {
+          this.onRefresh();
+        }
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,24 +88,27 @@ export default class Share extends React.Component {
     if (onClickDelete &&
       !deleteArticleShareForMe.error &&
       !deleteArticleShareByMe.error) {
-      Alert.alert(
-        I18n.t('alert.success'),
-        I18n.t('alert.deleteShareArticle'),
-        [
-          {
-            text: 'OK',
-            onPress: () => this.setState({
-              onClickDelete: false
-            }, () => this.onRefresh())
-          }
-        ],
-        { cancelable: false }
-      );
+      this.setState({
+        onClickDelete: false
+      }, () => this.onRefresh());
+      // Alert.alert(
+      //   I18n.t('alert.success'),
+      //   I18n.t('alert.deleteShareArticle'),
+      //   [
+      //     {
+      //       text: 'OK',
+      //       onPress: () => this.setState({
+      //         onClickDelete: false
+      //       }, () => this.onRefresh())
+      //     }
+      //   ],
+      //   { cancelable: false }
+      // );
     }
   }
 
   componentWillUnmount() {
-    NavigationEvents.removeEventListener('onWillFocus');
+    this.willFocus.remove();
   }
 
   onPress = () => {
@@ -172,17 +184,17 @@ export default class Share extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { isTabLeft, isTabRight, data, loading, isFirstime } = this.state;
+    const { isTabLeft, isTabRight, data, loading } = this.state;
 
     return (
       <SafeArea>
-        <NavigationEvents
+        {/* <NavigationEvents
           onWillFocus={() => {
             if (isFirstime) {
               this.onRefresh();
             }
           }}
-        />
+        /> */}
         <Header
           title={I18n.t('share.title')}
           navigation={navigation}

@@ -8,7 +8,7 @@ import {
   FlatList
 } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
+// import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 import I18n from 'react-native-i18n';
@@ -61,6 +61,15 @@ export default class Focus extends React.Component {
         isFirstime: true
       }, () => this.onRefresh());
     }
+
+    this.willFocus = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        if (this.state.isFirstime) {
+          this.onRefresh();
+        }
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -83,7 +92,7 @@ export default class Focus extends React.Component {
   }
 
   componentWillUnmount() {
-    NavigationEvents.removeEventListener('onWillFocus');
+    this.willFocus.remove();
   }
 
   onRefresh = () => {
@@ -192,17 +201,17 @@ export default class Focus extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { isTabLeft, isTabRight, data, loading, isFirstime } = this.state;
+    const { isTabLeft, isTabRight, data, loading } = this.state;
 
     return (
       <SafeArea>
-        <NavigationEvents
+        {/* <NavigationEvents
           onWillFocus={() => {
             if (isFirstime) {
               this.onRefresh();
             }
           }}
-        />
+        /> */}
         <Header
           title={I18n.t('issues.title')}
           navigation={navigation}
