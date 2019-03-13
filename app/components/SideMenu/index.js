@@ -57,6 +57,7 @@ export default class SideMenu extends React.PureComponent {
       this.setState({
         isClickLogout: false
       }, () => {
+        // this.onShowModalLoading();
         const resetAction = StackActions.reset({
           index: 0,
           actions: [NavigationActions.navigate({ routeName: 'Login' })],

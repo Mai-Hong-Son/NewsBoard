@@ -37,7 +37,8 @@ import {
   countriesSetting,
   regionsSetting,
   categoriesSetting,
-  language
+  language,
+  isLoadNews
 } from './../reducers/index';
 
 const config = {
@@ -69,7 +70,8 @@ const config = {
     'articleShareForMe',
     'deleteArticleStatus',
     'deleteArticleShareByMe',
-    'deleteArticleShareForMe'
+    'deleteArticleShareForMe',
+    'isLoadNews'
   ]
 };
 
@@ -109,7 +111,8 @@ export default function buildStore() {
     countriesSetting,
     regionsSetting,
     categoriesSetting,
-    language
+    language,
+    isLoadNews
   });
 
   const store = createStore(reducers, composeEnhancer(applyMiddleware(reduxThunk, axiosMiddleware, middleware)));

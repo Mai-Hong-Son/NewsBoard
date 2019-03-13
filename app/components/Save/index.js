@@ -99,7 +99,7 @@ export default class Save extends React.Component {
             [
               {
                 text: 'OK',
-                onPress: () => null
+                onPress: () => this.onRefresh()
               }
             ],
             { cancelable: false }

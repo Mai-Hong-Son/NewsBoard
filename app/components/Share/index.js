@@ -6,13 +6,13 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   FlatList,
-  TouchableOpacity,
-  Alert
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
 // import { NavigationEvents } from 'react-navigation';
 import I18n from 'react-native-i18n';
+import Toast from 'react-native-easy-toast';
 // import moment from 'moment';
 
 import Header from '../Reusables/Header';
@@ -91,19 +91,7 @@ export default class Share extends React.Component {
       this.setState({
         onClickDelete: false
       }, () => this.onRefresh());
-      // Alert.alert(
-      //   I18n.t('alert.success'),
-      //   I18n.t('alert.deleteShareArticle'),
-      //   [
-      //     {
-      //       text: 'OK',
-      //       onPress: () => this.setState({
-      //         onClickDelete: false
-      //       }, () => this.onRefresh())
-      //     }
-      //   ],
-      //   { cancelable: false }
-      // );
+      this.refs.toast.show(I18n.t('alert.deleteShareArticle'), 1000);
     }
   }
 
@@ -166,15 +154,19 @@ export default class Share extends React.Component {
 
   renderArticleItem = ({ item }) => {
     const { id, unique_id } = item;
+    const { isTabLeft, isTabRight } = this.state;
     const { navigation: { navigate } } = this.props;
 
     return (
       <TouchableOpacity
         onPress={() => navigate('NewsDetail', { _id: id })}
         onLongPress={() => {
-          this.setState({
-            uniqueId: unique_id
-          }, () => this.showModalAsign());
+          if (!isTabLeft && isTabRight) {
+            this.setState({
+              uniqueId: unique_id
+            }, () => this.showModalAsign());
+          }
+          return null;
         }}
       >
         {this.state.changeView ? <ArticleSmall source={item} /> : <ArticleLarge source={item} />}
@@ -188,13 +180,6 @@ export default class Share extends React.Component {
 
     return (
       <SafeArea>
-        {/* <NavigationEvents
-          onWillFocus={() => {
-            if (isFirstime) {
-              this.onRefresh();
-            }
-          }}
-        /> */}
         <Header
           title={I18n.t('share.title')}
           navigation={navigation}
@@ -242,6 +227,7 @@ export default class Share extends React.Component {
             </TouchableOpacity>
           </View>
         </Modal>
+        <Toast ref="toast" />
       </SafeArea>
     );
   }

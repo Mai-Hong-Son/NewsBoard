@@ -49,8 +49,8 @@ export default class Login extends React.PureComponent {
     this.state = {
       username: props.tokenAccess.account.username ? props.tokenAccess.account.username : '',
       password: props.tokenAccess.account.password ? props.tokenAccess.account.password : '',
-      localhost: !props.localhost.data.payload ? 'http://35.196.179.240:8080' : props.localhost.data.payload,
-      // localhost: !props.localhost.data.payload ? 'http://192.168.92.90:8080' : props.localhost.data.payload,
+      // localhost: !props.localhost.data.payload ? 'http://35.196.179.240:8080' : props.localhost.data.payload,
+      localhost: !props.localhost.data.payload ? 'http://192.168.92.90:8080' : props.localhost.data.payload,
       loading: false,
       showChoseLanguage: false,
       currentLanguage: props.language.data,

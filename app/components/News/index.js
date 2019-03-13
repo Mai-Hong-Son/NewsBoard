@@ -34,7 +34,8 @@ import { buildHeaders } from '../../../redux/utils';
     categories: state.categories,
     mainRouter: state.mainRouter,
     localhost: state.localhost,
-    tokenAccess: state.tokenAccess
+    tokenAccess: state.tokenAccess,
+    isLoadNews: state.isLoadNews
     // language: state.language
   }),
   { ...commonActions }
@@ -101,12 +102,29 @@ export default class News extends React.PureComponent {
     });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { language: { reloadScreen: prevReloaded } } = this.props;
-  //   const { language: { reloadScreen: nextReloaded } } = nextProps;
+  componentWillReceiveProps(nextProps) {
+    const { isLoadNews: { status: prevStatus } } = this.props;
+    const { isLoadNews: { status: nextStatus } } = nextProps;
 
-  //   if (prevReloaded !== nextReloaded) this.onRefresh();
-  // }
+    if (prevStatus !== nextStatus) {
+      this.setState({
+        isLoading: true
+      }, () => this.getArticles({
+        source: [],
+        domain: [],
+        category: [],
+        country: [],
+        region: [],
+        lang: [],
+        search: '',
+        from: '',
+        to: '',
+        page_number: 1,
+        time: '',
+        sourcetype: []
+      }));
+    }
+  }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('backPress');
@@ -133,7 +151,7 @@ export default class News extends React.PureComponent {
       fromDate,
       toDate
     } = this.state;
-  
+
     this.setState({
       isLoading: true
     }, () => this.getArticles({
@@ -159,7 +177,7 @@ export default class News extends React.PureComponent {
     const SOURCE_FILTER = I18n.t('filterMenu.source');
     const SEARCH = I18n.t('filterMenu.search');
     const SOURCE_TYPE_FILTER = I18n.t('filterMenu.sourceType');
-    
+
     switch (title) {
       case LANGUAGE_FILTER:
         this.props.navigation.navigate('Filter', {
@@ -489,7 +507,7 @@ export default class News extends React.PureComponent {
             key={(this.state.changeView ? 'h' : 'v')}
             keyExtractor={(it) => it._id.toString()}
           />
-          <TouchableOpacity onPress={() => 
+          <TouchableOpacity onPress={() =>
             navigate('ArticlesByCategory', {
               categoryFilter: {
                 _id: category._id,

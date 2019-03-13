@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   Image,
-  Alert,
   TouchableOpacity,
   Linking,
   Clipboard
@@ -14,6 +13,7 @@ import MyWebView from 'react-native-webview-autoheight';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import _ from 'lodash';
 import I18n from 'react-native-i18n';
+import Toast from 'react-native-easy-toast';
 
 import platform from '../../theme/platform';
 import * as commonActions from '../../../redux/actions';
@@ -76,75 +76,33 @@ export default class NewsDetail extends React.PureComponent {
     }
 
     if (!error && this.state.isClickSave && !this.state.colorSave) {
-      Alert.alert(
-        I18n.t('alert.success'),
-        I18n.t('alert.saveArticle'),
-        [
-          {
-            text: 'OK',
-            onPress: () => this.setState({
-              isClickSave: false,
-              colorSave: true
-            })
-          }
-        ],
-        { cancelable: false }
-      );
+      this.setState({
+        isClickSave: false,
+        colorSave: true
+      });
+      this.refs.toast.show(I18n.t('alert.saveArticle'), 1000);
     }
 
     if (!errDelete && this.state.isClickSave && this.state.colorSave) {
-      Alert.alert(
-        I18n.t('alert.success'),
-        I18n.t('alert.deleteSaveArticle'),
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              this.setState({
-                isClickSave: false,
-                colorSave: false
-              });
-            }
-          }
-        ],
-        { cancelable: false }
-      );
+      this.setState({
+        isClickSave: false,
+        colorSave: false
+      });
+      this.refs.toast.show(I18n.t('alert.deleteSaveArticle'), 1000);
     }
 
     if (!errShare && this.state.onClickShare) {
       this.setState({
         onClickShare: false
       });
-      console.warn('success');
-      // Alert.alert(
-      //   I18n.t('alert.success'),
-      //   I18n.t('alert.shareContent'),
-      //   [
-      //     {
-      //       text: 'OK',
-      //       onPress: () => this.setState({
-      //         onClickShare: false
-      //       })
-      //     }
-      //   ],
-      //   { cancelable: false }
-      // );
+      this.refs.toast.show(I18n.t('alert.shareContent'), 1000);
     }
 
     if (errShare && this.state.onClickShare) {
-      Alert.alert(
-        I18n.t('alert.title'),
-        I18n.t('alert.dontShareContent'),
-        [
-          {
-            text: 'OK',
-            onPress: () => this.setState({
-              onClickShare: false
-            })
-          }
-        ],
-        { cancelable: false }
-      );
+      this.setState({
+        onClickShare: false
+      });
+      this.refs.toast.show(I18n.t('alert.dontShareContent'), 1000);
     }
   }
 
@@ -409,6 +367,7 @@ export default class NewsDetail extends React.PureComponent {
             </View>
           </ParallaxScrollView>
         </View>
+        <Toast ref="toast" />
       </View >
     );
   }

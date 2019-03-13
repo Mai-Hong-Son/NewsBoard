@@ -26,6 +26,13 @@ import {
 } from './serviceApi/dataFiltersSetting';
 import { language } from './serviceApi/translate';
 
+const isLoadNews = (state = { status: false }, action) => {
+  if (action.type === 'Navigation/NAVIGATE') {
+    return { ...state, status: true };
+  }
+  return { ...state, status: false };
+};
+
 export {
   tokenAccess,
   userInfo,
@@ -57,5 +64,6 @@ export {
   regionsSetting,
   categoriesSetting,
   localhost,
-  language
+  language,
+  isLoadNews
 };
